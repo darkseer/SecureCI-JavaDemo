@@ -68,7 +68,7 @@
 							<directoryIncluded>false</directoryIncluded>
 							<sources>
 								<source>
-									<location>target/coveros-sample.war</location>
+									<location>target/hangman.war</location>
 								</source>
 							</sources>
 						</mapping>
@@ -128,7 +128,7 @@
 		</plugins>
 	</reporting>
 
-	<name>SampleMavenApp</name>
+	<name>hangman</name>
 	<description>A sample web application to demonstrate how to use some of the tools in a Maven application.</description>
 	<url>http://www.coveros.com</url>
 	<licenses>

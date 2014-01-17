@@ -153,10 +153,21 @@
 		<url>https://secureci/hudson/</url>
 	</ciManagement>
 	<scm>
-		<connection>scm:svn:https://secureci/svn/secureci/browser/branches/sample-maven</connection>
-		<developerConnection>scm:svn:https://secureci/svn/secureci/browser/branches/sample-maven</developerConnection>
+		<connection>scm:git:ssh://build@coveros.secureci.com/var/lib/git/coveros_opensource_ci_cd</connection>
+		<developerConnection>scm:git:ssh://build@coveros.secureci.com/var/lib/git/coveros_opensource_ci_cd</developerConnection>
 
 		<url>https://secureci/trac/secureci/browser/branches/sample-maven</url>
 	</scm>
-
+	<distributionManagement>
+		<repository>
+			<id>test</id>
+			<name>test</name>
+			<url>https://jenkins.darkseer.org/nexus/content/repositories/Releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>dev</id>
+			<name>dev</name>
+			<url>https://jenkins.darkseer.org/nexus/content/repositories/Snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>

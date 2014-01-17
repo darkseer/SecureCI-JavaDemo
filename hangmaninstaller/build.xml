@@ -179,7 +179,7 @@
 	<target name="provisionvm">
 		<delete file="params.txt" failonerror="false" />
 		<parallel>
-			<puppetprovisioner vm.name="tomcat" />
+			<puppetprovisioner vm.name="WEB" />
 		</parallel>
 	</target>
 
@@ -191,8 +191,8 @@
 		</exec>
 		<curlquery node.name="${WEB}" key="ipaddress_eth0:" result.store="WEBIP" />
 		<curlquery node.name="${WEB}" key="ec2_public_ipv4:" result.store="EXTWEBIP" />
-		<echo message="DBIP: ${WEBIP}" />
-		<echo message="EXTDBIP: ${EXTWEBIP}" />
+		<echo message="WEBIP: ${WEBIP}" />
+		<echo message="EXTWEBIP: ${EXTWEBIP}" />
 		<parallel>
 			<nodecopy node.fqdn="${EXTWEBIP}" node.dest="/etc/yum.repos.d" local.src="nexus.repo" />
 			<nodecopy node.fqdn="${EXTWEBIP}" node.dest="/etc/yum.conf" local.src="yum.conf" />

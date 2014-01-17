@@ -204,8 +204,7 @@
 <target name="provisionvm">
 	<delete file="params.txt" failonerror="false" />
 	<parallel>
-		<puppetprovisioner vm.name="DB" />
-		<puppetprovisioner vm.name="WEB" />
+		<puppetprovisioner vm.name="tomcat" />
 	</parallel>
 </target>
 

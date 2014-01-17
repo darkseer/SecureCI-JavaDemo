@@ -162,12 +162,12 @@
 		<repository>
 			<id>test</id>
 			<name>test</name>
-			<url>https://jenkins.darkseer.org/nexus/content/repositories/Releases</url>
+			<url>https://jenkins.darkseer.org/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>dev</id>
 			<name>dev</name>
-			<url>https://jenkins.darkseer.org/nexus/content/repositories/Snapshots</url>
+			<url>https://jenkins.darkseer.org/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>

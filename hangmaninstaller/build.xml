@@ -1,0 +1,270 @@
+<?xml version="1.0"?>
+<!DOCTYPE ant>
+
+<project name="asset" default="test">
+	<property environment="env" />
+	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}" />
+	<!-- Windows vs. Linux -->
+	<property name="author" value="http://www.coveros.com/" />
+	<property name="version" value="0.09" />
+
+	<!-- Earlier build.properties take precedence -->
+	<!-- Load local build.properties first so they override anything defined later -->
+	<property file="local.build.properties" />
+	<!-- not in version control, so useful for passwords -->
+	<property file="${user.name}-${env.HOSTNAME}.build.properties" />
+	<property file="${user.name}.build.properties" />
+	<property file="${env.HOSTNAME}.build.properties" />
+	<property name="at" value="@"/>
+	<!-- source directories -->
+	<property name="lib.dir" location="lib" />
+
+	<!-- target directories -->
+	<property name="build.dir" location="build" />
+	<property name="rpm.build.dir" location="${build.dir}/rpm" />
+
+	<!-- paths -->
+	<path id="svn.classpath">
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${lib.dir}" />
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+	
+	
+	<!-- ant contrib -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="svn.classpath"/>
+	
+	<!-- Debug targets to show variables -->
+	<target name="debug" depends="debug-verbose, debug-quiet" description="Display environment and variables">
+		<echo message="User: ${user.name}" />
+		<echo message="Host: ${env.HOSTNAME}" />
+	</target>
+
+	<!-- ant -Dverbose=true debug -->
+	<target name="debug-verbose" if="verbose">
+		<echoproperties />
+	</target>
+
+	<target name="debug-quiet" unless="verbose">
+		<echoproperties>
+			<propertyset negate="true">
+				<propertyref prefix="env." />
+				<propertyref prefix="java." />
+				<propertyref prefix="sun." />
+				<propertyref prefix="os." />
+				<propertyref prefix="ant." />
+				<propertyref prefix="user." />
+				<propertyref prefix="file." />
+				<propertyref prefix="awt." />
+				<propertyref prefix="path." />
+				<propertyref prefix="line." />
+			</propertyset>
+		</echoproperties>
+	</target>
+
+	<!-- Cleanup -->
+	<target name="clean" description="Cleans out previous builds">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- Package -->
+
+<target name="builddir" description="create destination for zip file">
+		<mkdir dir="${build.dir}" />
+</target> 
+ 
+  <target name="test" depends="clean,builddir" description="Creates the test asset">
+  	<property name="propname" value="" />
+  	<sequential>
+  		<createasset prop.name="${prop.name}" part.name="master" />
+  		<delete dir="stage" />
+  		<mkdir dir="stage" />
+  		<exec executable="ssh" output="stage/all.tar" error="/dev/null" >
+  			<arg value="-o" />
+  			<arg value="StrictHostKeyChecking=no" />
+  			<arg value="-i" />
+  			<arg value="key" />
+  			<arg value="host" />
+  			<arg value="some remote command" />
+  		</exec>
+  		<exec executable="split" >
+  			<arg value="-b"/>
+  			<arg value="524288000"/>
+  			<arg value="stage/all.tar"/>
+  			<arg value="stage/asset_part_"/>
+  		</exec>
+	<shellscript shell="bash" dir="stage">
+			i=1
+			for file in asset_part_*
+			do
+			 mv $file asset_part_${i}
+			 i=$(( i + 1 ))
+			done
+	</shellscript>
+    <foreach target="looptask" param="file.name" inheritall="true">
+    	<path>
+      		<fileset dir="something" casesensitive="yes">
+        		<include name="filepattern*"/>
+      		</fileset>
+    	</path>	
+    </foreach>
+  	</sequential>
+  </target>	
+
+<target name="looptask" >
+
+    <sequential>
+
+    </sequential>
+
+</target>
+
+	<macrodef name="repeattask" description="something">
+		<attribute name="asset.name" default="default" />
+		<attribute name="part.name" default="default" />
+		<sequential>
+
+		</sequential>
+
+
+	</macrodef>
+	<macrodef name="curlquery">
+		<attribute name="node.name" default="default" />
+		<attribute name="result.store" default="default" />
+		<attribute name="key" default="default" />
+		<sequential>
+			<var name="for.grep" unset="true"/>
+			<exec executable="/usr/bin/curl" outputproperty="for.grep" >
+				<arg value="-k" />
+				<arg value="-K" />
+				<arg value="puppetrest.conf" />
+				<arg value="https://192.168.1.10:8140/production/facts/@{node.name}" />
+			</exec>
+			<var name="for.sed" unset="true"/>
+			<exec executable="grep" inputstring="${for.grep}" outputproperty="for.sed" >
+				<arg value="@{key}" />
+			</exec>
+			<propertyregex property="@{result.store}"
+						   input="${for.sed}"
+						   regexp=".*@{key}."
+						   replace=""
+						   global="true" 
+						   override="true" />
+		</sequential>
+	</macrodef>
+	<macrodef name="nodecopy">
+		<attribute name="node.fqdn" default="default" />
+		<attribute name="node.dest" default="default" />
+		<attribute name="local.src" default="default" />
+		<sequential>
+			<scp file="@{local.src}"
+				todir="root${at}@{node.fqdn}:@{node.dest}"
+				trust="true"
+				keyfile="test4.pem"
+			/>
+		</sequential>
+	</macrodef>
+	<macrodef name="nodeexec">
+		<attribute name="node.fqdn" default="default" />
+		<attribute name="command" default="default" />
+		<sequential>
+			<sshexec host="@{node.fqdn}"
+							username="root"
+							keyfile="test4.pem"
+						  	trust="true"
+							command="@{command}"
+			/>
+		</sequential>
+	</macrodef>
+	<macrodef name="puppetprovisioner">
+		<attribute name="vm.name" default="default" />
+		
+		<sequential>
+			  <sshexec host="192.168.1.10"
+				username="root"
+				keyfile="puppet.key"
+			  	trust="true"
+			  	append="true"
+			  	output="params.txt"
+				command="puppet node_aws bootstrap --region us-east-1 --image ami-0d79c864 --login root --keyfile /root/test4.pem --keyname test4 --type t1.micro --installer-payload=http://darkseer.org/puppet-enterprise-2.5.3-el-6-x86_64.tar.gz --installer-answers /root/agent_only --install-script puppet-enterprise-http --puppet-version 2.5.3 --server dspuppet.dyndns.org --debug --trace 2>/dev/null| grep &quot;Caching certificate_request for&quot; | sed -e 's/^.*Caching certificate_request for /@{vm.name}=/g'| sed -e 's/....$//g'" />
+		</sequential>
+	</macrodef>
+	<macrodef name="classifynode">
+		<attribute name="node.name" default="default" />
+		<attribute name="node.group" default="default" />
+		<sequential>
+			  <sshexec host="192.168.1.10"
+				username="root"
+				keyfile="puppet.key"
+			  	trust="true"
+			  	append="true"
+				command="/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production node:groups name=@{node.name} groups=@{node.group}" />
+		</sequential>
+	</macrodef>
+<target name="provisionvm">
+	<delete file="params.txt" failonerror="false" />
+	<parallel>
+		<puppetprovisioner vm.name="DB" />
+		<puppetprovisioner vm.name="WEB" />
+	</parallel>
+</target>
+
+<target name="createlampstack">
+	<loadproperties srcFile="params.txt"/>
+	<chmod file="./signed.sh" perm="a+x"/>
+	<exec executable="./signed.sh">
+		<arg value="${DB}" />
+		<arg value="${WEB}" />
+	</exec>
+	<curlquery node.name="${DB}" key="ipaddress_eth0:" result.store="DBIP" />
+	<curlquery node.name="${DB}" key="ec2_public_ipv4:" result.store="EXTDBIP" />
+	<curlquery node.name="${WEB}" key="ipaddress_eth0:" result.store="WEBIP" />
+	<curlquery node.name="${WEB}" key="ec2_public_ipv4:" result.store="EXTWEBIP" />
+	<echo message="DBIP: ${DBIP}" />
+	<echo message="EXTDBIP: ${EXTDBIP}" />
+	<echo message="WEBIP: ${WEBIP}" />
+	<echo message="EXTWEBIP: ${EXTWEBIP}" />
+	<parallel>
+		<nodecopy node.fqdn="${EXTWEBIP}" node.dest="/etc/yum.repos.d"  local.src="demo.repo" />
+		<nodecopy node.fqdn="${EXTDBIP}" node.dest="/etc/yum.repos.d"  local.src="demo.repo" />
+	</parallel>
+	<parallel>
+		<echo message="Facter.add(:dbip) do setcode do Facter::Util::Resolution.exec('echo &quot;${DBIP}&quot;').chomp end end" file="db.rb" />
+		<echo message="Facter.add(:webip) do setcode do Facter::Util::Resolution.exec('echo &quot;${WEBIP}&quot;').chomp end end" file="web.rb" />
+	</parallel>
+	<parallel>
+		<nodecopy node.fqdn="${EXTDBIP}" node.dest="/opt/puppet/lib/ruby/site_ruby/1.8/facter"  local.src="db.rb" />
+		<nodecopy node.fqdn="${EXTDBIP}" node.dest="/opt/puppet/lib/ruby/site_ruby/1.8/facter"  local.src="web.rb" />	
+		<nodecopy node.fqdn="${EXTWEBIP}" node.dest="/opt/puppet/lib/ruby/site_ruby/1.8/facter"  local.src="db.rb" />
+		<nodecopy node.fqdn="${EXTWEBIP}" node.dest="/opt/puppet/lib/ruby/site_ruby/1.8/facter"  local.src="web.rb" />
+		<nodeexec node.fqdn="${EXTDBIP}" command="yum clean metadata"/>
+		<nodeexec node.fqdn="${EXTWEBIP}" command="yum clean metadata"/>
+		<classifynode node.name="${DB}" node.group="drupal_database" />
+		<classifynode node.name="${WEB}" node.group="drupal_app" />
+	</parallel>
+	<parallel>
+		<nodeexec node.fqdn="${EXTDBIP}" command="/etc/init.d/pe-mcollective restart" />
+		<nodeexec node.fqdn="${EXTDBIP}" command="/etc/init.d/pe-puppet restart" />
+		<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-mcollective restart" />
+		<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-puppet restart" />
+	</parallel>
+	<echo file="params_test.txt" >DB=${DB}
+		
+	</echo>
+	<echo file="params_test.txt" append="true" >WEB=${WEB}
+		
+	</echo>
+	<echo file="params_test.txt" append="true" >WEBIP=${WEBIP}
+		
+	</echo>
+	<echo file="params_test.txt" append="true" >EXTWEBIP=${EXTWEBIP}
+		
+	</echo>
+	<echo file="params_test.txt" append="true" >DBIP=${DBIP}
+		
+	</echo>
+	<echo file="params_test.txt" append="true" >EXTDBIP=${EXTDBIP}
+		
+	</echo>
+</target>
+</project>

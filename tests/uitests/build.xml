@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<!DOCTYPE ant>
+
+<project name="puppet-deploy" default="drupal-demo">
+	<property environment="env" />
+	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}" />
+	<!-- Windows vs. Linux -->
+	<property name="author" value="http://darkseer.org/" />
+	<property name="version" value="0.9" />
+	
+	<!-- Earlier build.properties take precedence -->
+	<!-- Load local build.properties first so they override anything defined later -->
+	<property file="local.build.properties" />
+	<!-- not in version control, so useful for passwords -->
+	<property file="${user.name}-${env.HOSTNAME}.build.properties" />
+	<property file="${user.name}.build.properties" />
+	<property file="${env.HOSTNAME}.build.properties" />
+	<property name="spec.file" location="${ant.project.name}-${project}.spec" />
+
+	<!-- source directories -->
+	<property name="lib.dir" location="lib" />
+	<property name="readme.file" location="README-${ant.project.name}-${project}.txt" />
+
+	<!-- target directories -->
+	<property name="build.dir" location="build" />
+	<property name="zip.file" location="${build.dir}/${ant.project.name}-${project}.zip" />
+	<property name="classes.dir" location="${build.dir}/classes" />
+	<property name="rpm.build.dir" location="${build.dir}/rpm" />
+	<property name="srcdist.build.dir" location="${build.dir}/srcdist/${ant.project.name}-${project}-${version}" />
+	<property name="srcdist.file" location="${build.dir}/${ant.project.name}-${project}-${version}.tar.gz" />
+
+	<!-- report output directories -->
+	<property name="report.dir" location="${build.dir}/reports" />
+
+	<!-- Compiler options -->
+	<property name="compiler.nowarn" value="off" />
+	<property name="compiler.debug" value="true" />
+	<property name="compiler.debuglevel" value="lines,vars,source" />
+	<property name="compiler.deprecation" value="true" />
+
+	<!-- paths -->
+	<path id="test.classpath">
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${lib.dir}" />
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+
+	<!-- Tasks -->
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="test.classpath" />
+
+	<!-- Debug targets to show variables -->
+	<target name="debug" depends="debug-verbose, debug-quiet" description="Display environment and variables">
+		<echo message="User: ${user.name}" />
+		<echo message="Host: ${env.HOSTNAME}" />
+	</target>
+
+	<!-- ant -Dverbose=true debug -->
+	<target name="debug-verbose" if="verbose">
+		<echoproperties />
+	</target>
+
+	<target name="debug-quiet" unless="verbose">
+		<echoproperties>
+			<propertyset negate="true">
+				<propertyref prefix="env." />
+				<propertyref prefix="java." />
+				<propertyref prefix="sun." />
+				<propertyref prefix="os." />
+				<propertyref prefix="ant." />
+				<propertyref prefix="user." />
+				<propertyref prefix="file." />
+				<propertyref prefix="awt." />
+				<propertyref prefix="path." />
+				<propertyref prefix="line." />
+			</propertyset>
+		</echoproperties>
+	</target>
+
+	<!-- Cleanup -->
+	<target name="clean" description="Cleans out previous builds">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- Package -->
+
+	<target name="build-spec" >
+		<mkdir dir="${rpm.build.dir}/SPECS" />
+
+		<copy file="${spec.file}" tofile="${rpm.build.dir}/SPECS/${ant.project.name}-${project}.spec" overwrite="true">
+			<filterset>
+				<filter token="svnRev" value="${build.number}" />
+				<filter token="version" value="${version}" />
+				<filter token="readme.file" value="README-${ant.project.name}-${project}.txt" />
+				<filter token="project.name" value="${ant.project.name}-${project}" />
+			</filterset>
+		</copy>
+	</target>
+
+
+	<macrodef name="srcdist">
+		<attribute name="puppetdir" default="default value"/>
+		<attribute name="readmefile" default="default value"/>
+		<attribute name="srcdistfile" default="default value"/>
+		<attribute name="srcdistbuilddir" default="default value"/>
+		<attribute name="readmedst" default="@{srcdistbuilddir}"/>
+		<sequential>
+			<mkdir dir="@{srcdistbuilddir}" />
+			<copy todir="@{srcdistbuilddir}">
+				<fileset dir="@{puppetdir}" />
+			</copy>
+			<delete dir="@{srcdistbuilddir}/build" quiet="true" />
+			<copy file="@{readmefile}" todir="@{readmedst}" overwrite="true">
+				<filterset>
+					<filter token="svnRev" value="${build.number}" />
+					<filter token="version" value="${version}" />
+				</filterset>
+			</copy>
+			<tar destfile="@{srcdistfile}" basedir="@{srcdistbuilddir}/.." compression="gzip" />
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="buildspec">
+		<attribute name="specfile" default="default value"/>
+		<attribute name="srcdistfile" default="default value"/>
+		<attribute name="rpmpostfix" default="default value"/>
+		<sequential>
+			<mkdir dir="${rpm.build.dir}/SPECS" />
+			<copy file="@{specfile}" tofile="${rpm.build.dir}/SPECS/@{specfile}" overwrite="true">
+				<filterset>
+					<filter token="svnRev" value="${build.number}" />
+					<filter token="version" value="${version}" />
+					<filter token="readme.file" value="README-${ant.project.name}-@{rpmpostfix}.txt" />
+					<filter token="project.name" value="${ant.project.name}-@{rpmpostfix}" />
+				</filterset>
+			</copy>
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="buildrpm" description="Package release an RPM">
+		<attribute name="specfile" default="default value"/>
+		<attribute name="srcdistfile" default="default value"/>
+		<sequential>
+			<mkdir dir="${rpm.build.dir}/SOURCES" />
+			<mkdir dir="${rpm.build.dir}/SPECS" />
+			<mkdir dir="${rpm.build.dir}/BUILD" />
+			<mkdir dir="${rpm.build.dir}/RPMS" />
+			<mkdir dir="${rpm.build.dir}/RPMS/noarch" />
+			<mkdir dir="${rpm.build.dir}/RPMS/i386" />
+			<mkdir dir="${rpm.build.dir}/RPMS/x86_64" />
+			<mkdir dir="${rpm.build.dir}/SRPMS" />
+
+			<copy file="@{srcdistfile}" todir="${rpm.build.dir}/SOURCES" overwrite="true" />
+
+			<rpm specFile="@{specfile}" topDir="${rpm.build.dir}" command="-ba" failOnError="true" />
+			<copy file="@{srcdistfile}" todir="${build.dir}" flatten="true" overwrite="true" />
+			<copy todir="${build.dir}" flatten="true" overwrite="true">
+				<fileset dir="${rpm.build.dir}/RPMS" includes="**/*.rpm" />
+				<fileset dir="${rpm.build.dir}/BUILD" includes="**/README-*.txt" />
+			</copy>
+		</sequential>
+	</macrodef>
+
+
+	
+	<target name="drupal-demo" depends="clean" description="Create source distribution">
+		<property name="targetname" value="drupal-demo" />
+		<srcdist puppetdir="${targetname}" readmedst="${build.dir}/srcdist/${ant.project.name}-${targetname}-${version}" readmefile="README-${ant.project.name}-${targetname}.txt" srcdistfile="${build.dir}/${ant.project.name}-${targetname}-${version}.tar.gz" srcdistbuilddir="${build.dir}/srcdist/${ant.project.name}-${targetname}-${version}" />
+		<buildspec rpmpostfix="${targetname}" specfile="${ant.project.name}-${targetname}.spec" />
+		<buildrpm specfile="${ant.project.name}-${targetname}.spec" srcdistfile="${build.dir}/${ant.project.name}-${targetname}-${version}.tar.gz" />
+	</target>
+	
+	<target name="drupal-demo-database" depends="clean" description="Create source distribution">
+		<property name="targetname" value="drupal-demo-database" />
+		<srcdist puppetdir="${targetname}" readmedst="${build.dir}/srcdist/${ant.project.name}-${targetname}-${version}" readmefile="README-${ant.project.name}-${targetname}.txt" srcdistfile="${build.dir}/${ant.project.name}-${targetname}-${version}.tar.gz" srcdistbuilddir="${build.dir}/srcdist/${ant.project.name}-${targetname}-${version}" />
+		<buildspec rpmpostfix="${targetname}" specfile="${ant.project.name}-${targetname}.spec" />
+		<buildrpm specfile="${ant.project.name}-${targetname}.spec" srcdistfile="${build.dir}/${ant.project.name}-${targetname}-${version}.tar.gz" />
+	</target>
+
+</project>

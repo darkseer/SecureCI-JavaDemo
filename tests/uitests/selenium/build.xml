@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE ant>
+
+<project name="unit testing" default="test">
+	<property name="src" value="./src" />
+	<property name="lib" value="./lib" />
+	<property name="classes" value="./classes" />
+	<property name="test.class.name" value="com.coveros.tests.login" />
+	<property name="test.reports" value="./reports" />
+
+	<path id="test.classpath">
+	  <pathelement location="${classes}" />
+	  <fileset dir="${lib}">
+	    <include name="**/*.jar"/>
+	  </fileset>
+	</path>
+	<target name="clean-report" >
+		  <delete>
+		    <fileset dir="reports/" />
+		  </delete>
+	</target>
+	<target name="test-build" >
+		<javac srcdir="${src}" destdir="${classes}" >
+			<classpath refid="test.classpath"/>
+		</javac>
+	</target>
+	<target name="test-jar"  depends="test-build" >
+		 <jar destfile="./lib/test.jar" basedir="${classes}"/>
+	</target>	
+	<target name="test" depends="test-jar" >
+	  <junit fork="yes" haltonfailure="no">
+	  	<jvmarg value="-Dweb.url=${ec2web.url}" />
+	    <test name="${test.class.name}" />
+	    <formatter type="plain" usefile="false" />
+	    <classpath refid="test.classpath" />
+	  </junit>
+	</target>
+	<target name="test-html" depends="test,clean-report" >
+	  <junit fork="yes" printsummary="no" haltonfailure="no">
+	  	<jvmarg value="-Dweb.url=${ec2web.url}" />
+	    <batchtest fork="yes" todir="${test.reports}" >
+	      <fileset dir="${classes}">
+	        <include name="**/*.class" />
+	      </fileset>
+	    </batchtest>
+	    <formatter type="xml" />
+	    <classpath refid="test.classpath" />
+	  </junit>
+
+	  <junitreport todir="${test.reports}">
+	    <fileset dir="${test.reports}">
+	      <include name="TEST-*.xml" />
+	    </fileset>
+	    <report todir="${test.reports}" />
+	  </junitreport>
+	</target>
+		  
+</project>

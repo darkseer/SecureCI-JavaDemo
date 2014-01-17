@@ -5,7 +5,7 @@ class apache {
   }
   file {
     "/etc/httpd/conf.d/proxy_ajp.conf":
-      content => template("apache/proxy_ajp.conf.erb")
+      content => template("apache/proxy_ajp.conf.erb"),
       require => Package["httpd"]
   }
 }

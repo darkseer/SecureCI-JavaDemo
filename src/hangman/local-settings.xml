@@ -61,6 +61,8 @@
       <id>nexus</id>
       <mirrorOf>*</mirrorOf>
       <url>https://jenkins.darkseer.org/nexus/content/groups/public</url>
+      <username>jenkins</username>
+      <password>coveros#123</password>
     </mirror>
   </mirrors>
   <activeProfiles>

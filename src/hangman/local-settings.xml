@@ -60,7 +60,7 @@
       <!--This sends everything else to /public -->
       <id>nexus</id>
       <mirrorOf>*</mirrorOf>
-      <url>http://jenkins.darkseer.org/nexus/content/groups/public</url>
+      <url>https://jenkins.darkseer.org/nexus/content/groups/public</url>
     </mirror>
   </mirrors>
   <activeProfiles>
@@ -69,12 +69,12 @@
   </activeProfiles>
   <servers>
     <server>
-       <id>Snapshot</id>
+       <id>dev</id>
         <username>jenkins</username>
         <password>coveros#123</password>
     </server>
     <server>
-       <id>Release</id>
+       <id>test</id>
     	<username>jenkins</username>
         <password>coveros#123</password>
   </server>

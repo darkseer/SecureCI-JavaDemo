@@ -186,7 +186,7 @@
 			  	trust="true"
 			  	append="true"
 			  	output="params.txt"
-			    command="puppet node_aws bootstrap --region us-east-1 --image ami-05291a6c --login root  --keyfile /root/centos_ci_demo_template_key.pem  --keyname centos_ci_demo_template_key --type t1.micro --installer-payload=http://darkseer.org/puppet-enterprise-2.5.3-el-6-x86_64.tar.gz --installer-answers /root/agent_only --install-script puppet-enterprise-http --puppet-version 2.5.3 --server puppetmaster.darkseer.org --debug --trace" />
+			    command="puppet node_aws bootstrap --region us-east-1 --image ami-05291a6c --login root  --keyfile /root/centos_ci_demo_template_key.pem  --keyname centos_ci_demo_template_key --type t1.micro --installer-payload=http://darkseer.org/puppet-enterprise-2.5.3-el-6-x86_64.tar.gz --installer-answers /root/agent_only --install-script puppet-enterprise-http --puppet-version 2.5.3 --server puppetmaster.darkseer.org --debug --trace  2>/dev/null| grep &quot;Caching certificate_request for&quot; | sed -e 's/^.*Caching certificate_request for /@{vm.name}=/g'| sed -e 's/....$//g'" />
 		</sequential>
 	</macrodef>
 	<macrodef name="classifynode">

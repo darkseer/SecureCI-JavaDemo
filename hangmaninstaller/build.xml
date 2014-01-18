@@ -206,15 +206,12 @@
 			<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-mcollective restart" />
 			<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-puppet restart" />
 		</parallel>
-
-		<echo file="params_test.txt" append="true">WEB=${WEB}
-		
-	</echo>
-		<echo file="params_test.txt" append="true">WEBIP=${WEBIP}
-		
-	</echo>
-		<echo file="params_test.txt" append="true">EXTWEBIP=${EXTWEBIP}
-		
-	</echo>
+<!-- white space matters do not autoformat the echo blocks -->
+<echo file="params_test.txt" append="true">WEB=${WEB}
+</echo>
+<echo file="params_test.txt" append="true">WEBIP=${WEBIP}
+</echo>
+<echo file="params_test.txt" append="true">EXTWEBIP=${EXTWEBIP}
+</echo>
 	</target>
 </project>

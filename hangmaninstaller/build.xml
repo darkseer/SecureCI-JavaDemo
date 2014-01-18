@@ -183,7 +183,7 @@
 		</parallel>
 	</target>
 
-	<target name="createlampstack">
+	<target name="createtomcatstack">
 		<loadproperties srcFile="params.txt" />
 		<chmod file="./signed.sh" perm="a+x" />
 		<exec executable="./signed.sh">

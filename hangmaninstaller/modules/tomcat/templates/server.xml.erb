@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="8005" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
+  <Listener className="org.apache.catalina.core.JasperListener" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+        <Service name="Catalina">
+
+                <!-- HTTP connector -->
+                <!--
+                <Connector port="9980" protocol="HTTP/1.1" maxHttpHeaderSize="8192"
+                        maxThreads="150" minSpareThreads="25"
+                        enableLookups="false" acceptCount="100" connectionTimeout="20000" 
+                        disableUploadTimeout="true" />
+                -->
+
+                <!-- AJP connector -->
+                <Connector port="8009" address="127.0.0.1" protocol="AJP/1.3" URIEncoding="UTF-8" />
+
+                <Engine name="Catalina" defaultHost="localhost">
+                        <Host name="localhost" appBase="webapps" unpackWARs="true"
+                                autoDeploy="true">
+                                <Valve className="org.apache.catalina.valves.AccessLogValve"
+                                        directory="logs" prefix="localhost_access_log." suffix=".txt"
+                                        pattern="%h %l %u %t &quot;%r&quot; %s %b" resolveHosts="false" />
+                        </Host>
+                </Engine>
+        </Service>
+</Server>

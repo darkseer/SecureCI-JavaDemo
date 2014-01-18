@@ -9,50 +9,59 @@
 	<property name="test.reports" value="./reports" />
 
 	<path id="test.classpath">
-	  <pathelement location="${classes}" />
-	  <fileset dir="${lib}">
-	    <include name="**/*.jar"/>
-	  </fileset>
+		<pathelement location="${classes}" />
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
 	</path>
-	<target name="clean-report" >
-		  <delete>
-		    <fileset dir="reports/" />
-		  </delete>
+	<target name="clean-report">
+		<delete>
+			<fileset dir="reports/" />
+		</delete>
 	</target>
-	<target name="test-build" >
-		<javac srcdir="${src}" destdir="${classes}" >
-			<classpath refid="test.classpath"/>
+	<target name="test-build">
+		<javac srcdir="${src}" destdir="${classes}">
+			<classpath refid="test.classpath" />
 		</javac>
 	</target>
-	<target name="test-jar"  depends="test-build" >
-		 <jar destfile="./lib/test.jar" basedir="${classes}"/>
-	</target>	
-	<target name="test" depends="test-jar" >
-	  <junit fork="yes" haltonfailure="no">
-	  	<jvmarg value="-Dweb.url=${ec2web.url}" />
-	    <test name="${test.class.name}" />
-	    <formatter type="plain" usefile="false" />
-	    <classpath refid="test.classpath" />
-	  </junit>
+	<target name="test-jar" depends="test-build">
+		<jar destfile="./lib/test.jar" basedir="${classes}" />
 	</target>
-	<target name="test-html" depends="test,clean-report" >
-	  <junit fork="yes" printsummary="no" haltonfailure="no">
-	  	<jvmarg value="-Dweb.url=${ec2web.url}" />
-	    <batchtest fork="yes" todir="${test.reports}" >
-	      <fileset dir="${classes}">
-	        <include name="**/*.class" />
-	      </fileset>
-	    </batchtest>
-	    <formatter type="xml" />
-	    <classpath refid="test.classpath" />
-	  </junit>
+	<target name="webup">
+		<loadproperties srcFile="params_test.txt" />
+		<chmod file="./webup.sh" perm="a+x" />
+		<exec executable="./webup.sh">
+			<arg value="http://${$EXTWEBIP}/hangman" />
+		</exec>
+	</target>
+	<target name="test" depends="test-jar,webup">
+		<loadproperties srcFile="params_test.txt" />
+		<junit fork="yes" haltonfailure="no">
+			<jvmarg value="-Dweb.url=http://${$EXTWEBIP}/" />
+			<test name="${test.class.name}" />
+			<formatter type="plain" usefile="false" />
+			<classpath refid="test.classpath" />
+		</junit>
+	</target>
+	<target name="test-html" depends="test,clean-report,webup">
+		<loadproperties srcFile="params_test.txt" />
+		<junit fork="yes" printsummary="no" haltonfailure="no">
+			<jvmarg value="-Dweb.url=http://${$EXTWEBIP}/" />
+			<batchtest fork="yes" todir="${test.reports}">
+				<fileset dir="${classes}">
+					<include name="**/*.class" />
+				</fileset>
+			</batchtest>
+			<formatter type="xml" />
+			<classpath refid="test.classpath" />
+		</junit>
 
-	  <junitreport todir="${test.reports}">
-	    <fileset dir="${test.reports}">
-	      <include name="TEST-*.xml" />
-	    </fileset>
-	    <report todir="${test.reports}" />
-	  </junitreport>
+		<junitreport todir="${test.reports}">
+			<fileset dir="${test.reports}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${test.reports}" />
+		</junitreport>
 	</target>
-		  
+
 </project>

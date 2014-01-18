@@ -12,19 +12,17 @@ public class login {
 
 	@Before
 	public void setUp() throws Exception {
-		selenium = new DefaultSelenium("192.168.1.22", 4444, "*firefox", (String)System.getProperty ("web.url"));
+		selenium = new DefaultSelenium("selenium.darkseer.org", 4444, "*firefox", (String)System.getProperty ("web.url"));
 		selenium.start();
 	}
 
 	@Test
 	public void testLogin() throws Exception {
-		selenium.open("/");
-		selenium.type("id=edit-name", "admin");
-		selenium.type("id=edit-pass", "test#123");
-		selenium.click("id=edit-submit");
-		selenium.waitForPageToLoad("30000");
-		assertTrue("Failed to find front page marker.", selenium.isTextPresent("test"));
-		selenium.click("link=Log out");
+
+		selenium.open("/hangman/");
+		assertTrue("Failed to find front page marker.", selenium.isTextPresent("Hangedman"));
+		selenium.type("id=letter", "a");
+		selenium.click("name=submit");
 		selenium.waitForPageToLoad("30000");
 	}
 

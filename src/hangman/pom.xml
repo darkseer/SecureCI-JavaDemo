@@ -63,8 +63,8 @@
 					<mappings>
 						<mapping>
 							<directory>/var/lib/tomcat6/webapps/</directory>
-							<username>root</username>
-							<groupname>root</groupname>
+							<username>tomcat</username>
+							<groupname>tomcat</groupname>
 							<directoryIncluded>false</directoryIncluded>
 							<sources>
 								<source>

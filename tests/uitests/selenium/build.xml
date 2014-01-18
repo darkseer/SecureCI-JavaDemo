@@ -15,7 +15,7 @@
 		</fileset>
 	</path>
 	<target name="clean-report">
-		<delete dir="${test.reports}" failonerror="false"/>
+		<delete dir="${test.reports}" />
 		<mkdir dir="${test.reports}"/>
 	</target>
 	<target name="test-build">

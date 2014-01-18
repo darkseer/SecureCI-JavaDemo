@@ -35,32 +35,27 @@
 			<arg value="http://${EXTWEBIP}/hangman" />
 		</exec>
 	</target>
-	<target name="test" depends="test-jar,webup">
-		<loadproperties srcFile="params_test.txt" />
-		<mkdir dir="${test.reports}"/>
-		<junit fork="yes" haltonfailure="no">
-			<jvmarg value="-Dweb.url=http://${EXTWEBIP}/" />
-			<test name="${test.class.name}" />
-			<formatter type="plain" usefile="false" />
-			<classpath refid="test.classpath" />
-		</junit>
-	</target>
-	<target name="test-html" depends="clean-report,webup,test-jar">
-		<loadproperties srcFile="params_test.txt" />
-		<mkdir dir="${test.reports}"/>
-		<junit fork="yes" printsummary="no" haltonfailure="no">
-			<jvmarg value="-Dweb.url=http://${EXTWEBIP}/" />
-			<test name="${test.class.name}" />
-			<formatter type="xml" />
-			<classpath refid="test.classpath" />
-		</junit>
+    <target name="test" depends="test-jar,webup">
+            <loadproperties srcFile="params_test.txt" />
+            <mkdir dir="${test.reports}"/>
+            <junit fork="yes" haltonfailure="no">
+                    <jvmarg value="-Dweb.url=http://${EXTWEBIP}/" />
+                    <test name="${test.class.name}" />
+                    <formatter type="plain" usefile="false" />
+                    <formatter type="xml" />
+                    <classpath refid="test.classpath" />
+            </junit>
+    </target>
+    <target name="test-html" depends="clean-report,webup,test">
+            <loadproperties srcFile="params_test.txt" />
+            <mkdir dir="${test.reports}"/>
+            <junitreport todir="${test.reports}">
+                    <fileset dir=".">
+                            <include name="TEST-*.xml" />
+                    </fileset>
+                    <report todir="${test.reports}" />
+            </junitreport>
+    </target>
 
-		<junitreport todir="${test.reports}">
-			<fileset dir="${test.reports}">
-				<include name="TEST-*.xml" />
-			</fileset>
-			<report todir="${test.reports}" />
-		</junitreport>
-	</target>
 
 </project>

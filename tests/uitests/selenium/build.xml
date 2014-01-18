@@ -32,7 +32,7 @@
 		<loadproperties srcFile="params_test.txt" />
 		<chmod file="./web_up.sh" perm="a+x" />
 		<exec executable="./web_up.sh">
-			<arg value="http://${$EXTWEBIP}/hangman" />
+			<arg value="http://${EXTWEBIP}/hangman" />
 		</exec>
 	</target>
 	<target name="test" depends="test-jar,webup">
@@ -48,7 +48,7 @@
 		<loadproperties srcFile="params_test.txt" />
 		<mkdir dir="${test.reports}"/>
 		<junit fork="yes" printsummary="no" haltonfailure="no">
-			<jvmarg value="-Dweb.url=http://${$EXTWEBIP}/" />
+			<jvmarg value="-Dweb.url=http://${EXTWEBIP}/" />
 			<batchtest fork="yes" todir="${test.reports}">
 				<fileset dir="${classes}">
 					<include name="**/*.class" />

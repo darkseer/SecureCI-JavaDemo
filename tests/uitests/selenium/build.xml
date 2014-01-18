@@ -30,8 +30,8 @@
 	</target>
 	<target name="webup">
 		<loadproperties srcFile="params_test.txt" />
-		<chmod file="./webup.sh" perm="a+x" />
-		<exec executable="./webup.sh">
+		<chmod file="./web_up.sh" perm="a+x" />
+		<exec executable="./web_up.sh">
 			<arg value="http://${$EXTWEBIP}/hangman" />
 		</exec>
 	</target>

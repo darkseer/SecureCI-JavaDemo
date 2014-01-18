@@ -6,7 +6,7 @@ class tomcat {
   file{
     "/etc/tomcat6/server.xml":
       content=>template("tomcat/server.xml.erb"),
-      notify=>Service["tomcat"]
+      notify=>Service["tomcat6"]
   }
   service{
     "tomcat6":

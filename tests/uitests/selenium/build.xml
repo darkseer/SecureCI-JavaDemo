@@ -45,16 +45,12 @@
 			<classpath refid="test.classpath" />
 		</junit>
 	</target>
-	<target name="test-html" depends="test,clean-report,webup">
+	<target name="test-html" depends="clean-report,webup">
 		<loadproperties srcFile="params_test.txt" />
 		<mkdir dir="${test.reports}"/>
 		<junit fork="yes" printsummary="no" haltonfailure="no">
 			<jvmarg value="-Dweb.url=http://${EXTWEBIP}/" />
-			<batchtest fork="yes" todir="${test.reports}">
-				<fileset dir="${classes}">
-					<include name="**/*.class" />
-				</fileset>
-			</batchtest>
+			<test name="${test.class.name}" />
 			<formatter type="xml" />
 			<classpath refid="test.classpath" />
 		</junit>

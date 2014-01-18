@@ -6,7 +6,7 @@
 	<property name="lib" value="./lib" />
 	<property name="classes" value="./classes" />
 	<property name="test.class.name" value="com.coveros.tests.login" />
-	<property name="test.reports" value="./reports" />
+	<property name="test.reports" value="reports" />
 
 	<path id="test.classpath">
 		<pathelement location="${classes}" />

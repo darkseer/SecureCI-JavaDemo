@@ -38,7 +38,7 @@
 	<target name="test" depends="test-jar,webup">
 		<loadproperties srcFile="params_test.txt" />
 		<junit fork="yes" haltonfailure="no">
-			<jvmarg value="-Dweb.url=http://${$EXTWEBIP}/" />
+			<jvmarg value="-Dweb.url=http://${EXTWEBIP}/" />
 			<test name="${test.class.name}" />
 			<formatter type="plain" usefile="false" />
 			<classpath refid="test.classpath" />

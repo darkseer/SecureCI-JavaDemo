@@ -4,12 +4,12 @@ class tomcat {
       ensure=>"latest"
   }
   file{
-    "/var/lib/tomcat/conf/server.xml":
+    "/etc/tomcat6/server.xml":
       content=>template("tomcat/server.xml.erb"),
       notify=>Service["tomcat"]
   }
   service{
-    "tomcat":
+    "tomcat6":
       ensure=>running,
       enable=>true
   }

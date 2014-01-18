@@ -205,9 +205,7 @@
 			<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-mcollective restart" />
 			<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-puppet restart" />
 		</parallel>
-		<echo file="params_test.txt">DB=${DB}
-		
-	</echo>
+
 		<echo file="params_test.txt" append="true">WEB=${WEB}
 		
 	</echo>

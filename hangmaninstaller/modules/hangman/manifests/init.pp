@@ -4,6 +4,5 @@ class hangman {
     "hangman":
       ensure=>latest,
       require=>Class["tomcat"],
-      notify=>Package["tomcat"]
   }  
 }

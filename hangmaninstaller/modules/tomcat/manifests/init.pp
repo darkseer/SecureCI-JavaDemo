@@ -6,6 +6,7 @@ class tomcat {
   service{
     "tomcat6":
       ensure=>running,
-      enable=>true
+      enable=>true,
+      notify=>Class["apache"]
   }
 }

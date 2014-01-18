@@ -185,6 +185,7 @@
 
 	<target name="createtomcatstack">
 		<loadproperties srcFile="params.txt" />
+		<delete file="params_test.txt" failonerror="false" />
 		<chmod file="./signed.sh" perm="a+x" />
 		<exec executable="./signed.sh">
 			<arg value="${WEB}" />

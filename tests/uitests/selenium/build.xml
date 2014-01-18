@@ -45,6 +45,7 @@
 	</target>
 	<target name="test-html" depends="test,clean-report,webup">
 		<loadproperties srcFile="params_test.txt" />
+		<mkdir dir="${test.reports}"/>
 		<junit fork="yes" printsummary="no" haltonfailure="no">
 			<jvmarg value="-Dweb.url=http://${$EXTWEBIP}/" />
 			<batchtest fork="yes" todir="${test.reports}">

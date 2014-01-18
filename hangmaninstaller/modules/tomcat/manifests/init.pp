@@ -3,11 +3,6 @@ class tomcat {
     "tomcat6":
       ensure=>"latest"
   }
-  file{
-    "/etc/tomcat6/server.xml":
-      content=>template("tomcat/server.xml.erb"),
-      notify=>Service["tomcat6"]
-  }
   service{
     "tomcat6":
       ensure=>running,

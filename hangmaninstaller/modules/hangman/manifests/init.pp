@@ -1,8 +1,9 @@
 class hangman {
+  require tomcat
   package {
     "hangman":
       ensure=>latest,
-      require=>Package["tomcat"],
-      notify=>Service["tomcat"]
+      require=>Class["tomcat"],
+      notify=>Package["tomcat"]
   }  
 }

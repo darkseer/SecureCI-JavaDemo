@@ -184,7 +184,6 @@
 			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" command="(cd /etc/ansible/; git pull)" />
 			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" command="/bin/chmod 600 /etc/ansible/ansible.key" />
 			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" append="true" output="params.txt" command="ansible localhost -m ec2 -a &quot;image=ami-05291a6c  aws_access_key=AKIAIPBUWI3WL4MY6DHA aws_secret_key=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 instance_type=t1.micro key_name=centos_ci_demo_template_key region=us-east-1 group=centos_ci_demo_template wait=yes&quot; -c local | /bin/grep public_dns_name | /bin/sed -e 's/.*: &quot;\(ec2.*\)&quot;.*/WEB=\1/g'" />
-			<sleep seconds="400"/>
 		</sequential>
 	</macrodef>
 	<target name="provisionvm">

@@ -87,7 +87,7 @@
 	<body>
 		<div id="page">
 		  <div id="header">
-		    <h1>Hangedman</h1>
+		    <h1>Hansafeman</h1>
 		  </div>
 		  
 		  <div id="body" class="wrapper">

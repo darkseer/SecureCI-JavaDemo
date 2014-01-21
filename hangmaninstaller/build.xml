@@ -180,7 +180,10 @@
 		<attribute name="vm.name" default="default" />
 
 		<sequential>
-			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" append="true" output="params.txt" command="ansible localhost -m ec2 -a &quot;image=ami-05291a6c  aws_access_key=AKIAIPBUWI3WL4MY6DHA aws_secret_key=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 instance_type=t1.micro key_name=centos_ci_demo_template_key region=us-east-1 group=centos_ci_demo_template wait=yes&quot; -c local" />
+			<chmod file="puppet.key" perm="600" />
+			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" command="(cd /etc/ansible/; git pull)" />
+			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" command="/bin/chmod 600 /etc/ansible/ansible.key" />
+			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" append="true" output="params.txt" command="ansible localhost -m ec2 -a &quot;image=ami-05291a6c  aws_access_key=AKIAIPBUWI3WL4MY6DHA aws_secret_key=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 instance_type=t1.micro key_name=centos_ci_demo_template_key region=us-east-1 group=centos_ci_demo_template wait=yes&quot; -c local | /bin/grep public_dns_name | /bin/sed -e 's/.*: &quot;\(ec2.*\)&quot;.*/\1/g'" />
 		</sequential>
 	</macrodef>
 	<target name="provisionvm">
@@ -195,6 +198,27 @@
 			<ansibleprovisioner vm.name="WEB" />
 		</parallel>
 	</target>
+	<target name="ansible_createtomcatstack">
+		<scriptdef name="generateguid" language="javascript">
+		    <attribute name="property" />
+		    <![CDATA[
+		    importClass( java.util.UUID );
+
+		    project.setProperty( attributes.get( "property" ), UUID.randomUUID() );
+		    ]]>
+		</scriptdef>
+		<generateguid property="hostsguid" />
+		<loadproperties srcFile="params.txt" />
+		<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" command="(mkdir /etc/ansible/run_${hostsguid}; echo &quot;[tomcat]&quot;>/etc/ansible/run_${hostsguid}/hosts ; echo &quot;${WEB}&quot;>>/etc/ansible/run_${hostsguid}/hosts;  ansible-playbook -i /etc/ansible/run_${hostsguid}/hosts /etc/ansible/site.yaml)" />
+<echo file="params_test.txt" append="true">WEB=${WEB}
+</echo>
+<echo file="params_test.txt" append="true">WEBIP=${WEB}
+</echo>
+<echo file="params_test.txt" append="true">EXTWEBIP=${WEB}
+</echo>		
+		
+	</target>
+	
 	<target name="createtomcatstack">
 		<loadproperties srcFile="params.txt" />
 		<delete file="params_test.txt" failonerror="false" />

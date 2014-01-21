@@ -19,7 +19,7 @@
   - restart tomcat6
 
 - name: Create httpd configuration file
-  template: src=proxy_ajp.conf.j2 dest=/etc/conf.d/proxy_ajp.conf
+  template: src=proxy_ajp.conf.j2 dest=/etc/httpd/conf.d/proxy_ajp.conf
   notify: 
   - restart tomcat6
 

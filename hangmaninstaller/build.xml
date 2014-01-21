@@ -176,13 +176,25 @@
 			<sshexec host="puppetmaster.darkseer.org" username="root" keyfile="puppet.key" trust="true" append="true" command="/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production node:groups name=@{node.name} groups=@{node.group}" />
 		</sequential>
 	</macrodef>
+	<macrodef name="ansibleprovisioner">
+		<attribute name="vm.name" default="default" />
+
+		<sequential>
+			<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" append="true" output="params.txt" command="ansible localhost -m ec2 -a &quot;image=ami-05291a6c  aws_access_key=AKIAIPBUWI3WL4MY6DHA aws_secret_key=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 instance_type=t1.micro key_name=centos_ci_demo_template_key region=us-east-1 group=centos_ci_demo_template wait=yes&quot; -c local" />
+		</sequential>
+	</macrodef>
 	<target name="provisionvm">
 		<delete file="params.txt" failonerror="false" />
 		<parallel>
 			<puppetprovisioner vm.name="WEB" />
 		</parallel>
 	</target>
-
+	<target name="ansible_provisionvm">
+		<delete file="params.txt" failonerror="false" />
+		<parallel>
+			<ansibleprovisioner vm.name="WEB" />
+		</parallel>
+	</target>
 	<target name="createtomcatstack">
 		<loadproperties srcFile="params.txt" />
 		<delete file="params_test.txt" failonerror="false" />

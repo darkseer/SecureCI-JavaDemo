@@ -14,7 +14,7 @@
 
 
 - name: Create tomcat configuration file
-  template: src=server.xml.j2 dest=/var/lib/tomcat6/conf/server.xml
+  template: src=server.xml.j2 dest=/usr/share/tomcat6/conf/server.xml
   notify: 
   - restart tomcat6
 

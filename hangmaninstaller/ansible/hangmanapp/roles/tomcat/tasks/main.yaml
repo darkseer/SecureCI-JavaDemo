@@ -2,7 +2,9 @@
   
 - name: set nexus repo
   template: src=nexus.repo.j2 dest=/etc/yum.repos.d/nexus.repo
-  
+
+- name: set yum up for ssl repo
+  template: src=yum.conf.j2 dest=/etc/yum.conf
 - name: Install tomcat package
   yum: name={{ item }} state=installed
   with_items:

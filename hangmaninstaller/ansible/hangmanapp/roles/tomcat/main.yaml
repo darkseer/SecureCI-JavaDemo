@@ -1,0 +1,26 @@
+ # This playbook will install tomcat and apache and start both services
+  
+- name: Install Mysql package
+  yum: name={{ item }} state=installed
+  with_items:
+   - tomcat6
+   - httpd
+   - hangman
+
+
+- name: Create tomcat configuration file
+  template: src=server.xml.j2 dest=/var/lib/tomcat6/conf/server.xml
+  notify: 
+  - restart tomcat6
+
+- name: Create httpd configuration file
+  template: src=proxy_ajp.conf.j2 dest=/etc/conf.d/proxy_ajp.conf
+  notify: 
+  - restart tomcat6
+
+- name: Start Tomcat6 Service
+  service: name=tomcat6 state=started enabled=true
+  
+- name: Start httpd Service
+  service: name=httpd state=started enabled=true
+  

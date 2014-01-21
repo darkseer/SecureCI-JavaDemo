@@ -211,6 +211,8 @@
 		<generateguid property="hostsguid" />
 		<loadproperties srcFile="params.txt" />
 		<sshexec host="ansible.darkseer.org" username="root" keyfile="puppet.key" trust="true" command="(mkdir /etc/ansible/run_${hostsguid}; echo &quot;[tomcat]&quot;>/etc/ansible/run_${hostsguid}/hosts ; echo &quot;${WEB}&quot;>>/etc/ansible/run_${hostsguid}/hosts; ansible-playbook -e vmhost=${WEB} -i /etc/ansible/hosts  /etc/ansible/roles/tomcat/wait.yaml  ; ansible-playbook -i /etc/ansible/run_${hostsguid}/hosts /etc/ansible/site.yaml; rm -rf /etc/ansible/run_${hostsguid}/hosts)" />
+<echo file="params_test.txt" append="true">GUID=${hostsguid}
+</echo>
 <echo file="params_test.txt" append="true">WEB=${WEB}
 </echo>
 <echo file="params_test.txt" append="true">WEBIP=${WEB}

@@ -1,7 +1,7 @@
  # This playbook will install tomcat and apache and start both services
   
 - name: set nexus repo
-  template: src=nexus.repo.j2 dest=/etc/yum.repo.d/nexus.repo
+  template: src=nexus.repo.j2 dest=/etc/yum.repos.d/nexus.repo
   
 - name: Install tomcat package
   yum: name={{ item }} state=installed

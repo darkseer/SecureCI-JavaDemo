@@ -41,7 +41,7 @@ public class HangmanTest {
 	public void testGuesses() throws Exception {
 		game = new Hangman("layers");
 		assertFalse(game.guess('b'));
-		assertTrue(game.guess('s'));
+		assertTrue(game.guess('x'));
 		assertTrue(game.guess('e'));
 		assertFalse(game.guess('z'));
 	}

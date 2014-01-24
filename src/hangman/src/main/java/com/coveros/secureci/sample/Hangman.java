@@ -152,4 +152,24 @@ public class Hangman {
 		return status;
 	}
 
+  // Bogus method to add more code without coverage
+	public int status2() {
+		int status;
+		final String answer = this.getAnswer();
+		String correctGuesses = this.showCurrentDisplay();
+		correctGuesses = correctGuesses.replaceAll("(\\s)", "");
+		if (answer.equals(correctGuesses)) {
+			status = Hangman.WON;
+		} else {
+			final Set<String> incorrect = this.getIncorrectGuesses();
+			final int maxIncorrectGuesses = this.getIncorrectGuessesAllowed();
+			if (incorrect.size() < maxIncorrectGuesses) {
+				status = Hangman.IN_PROGRESS;
+			} else {
+				status = Hangman.LOST;
+			}
+		}
+		return status;
+	}
+
 }

@@ -133,7 +133,7 @@ public class Hangman {
 		return Hangman.setToString(correct);
 	}
 
-	public int status() {
+	public int status2() {
 		int status;
 		final String answer = this.getAnswer();
 		String correctGuesses = this.showCurrentDisplay();
@@ -153,7 +153,7 @@ public class Hangman {
 	}
 
   // Bogus method to add more code without coverage
-	public int status2() {
+	public int status() {
 		int status;
 		final String answer = this.getAnswer();
 		String correctGuesses = this.showCurrentDisplay();

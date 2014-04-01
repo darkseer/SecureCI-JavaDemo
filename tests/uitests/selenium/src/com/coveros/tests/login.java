@@ -12,7 +12,7 @@ public class login {
 
 	@Before
 	public void setUp() throws Exception {
-		selenium = new DefaultSelenium("selenium.darkseer.org", 4444, "*firefox", (String)System.getProperty ("web.url"));
+		selenium = new DefaultSelenium("selenium.demo.secureci.com", 4444, "*firefox", (String)System.getProperty ("web.url"));
 		selenium.start();
 	}
 

@@ -60,7 +60,7 @@
       <!--This sends everything else to /public -->
       <id>nexus</id>
       <mirrorOf>*</mirrorOf>
-      <url>https://jenkins.darkseer.org/nexus/content/groups/public</url>
+      <url>https://jenkins.demo.secureci.com/nexus/content/groups/public</url>
     </mirror>
   </mirrors>
   <activeProfiles>

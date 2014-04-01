@@ -49,24 +49,24 @@ public class HangmanTest {
 	@Test
 	public void testShowCurrentDisplay() throws Exception {
 		game = new Hangman("chair");
-		assertEquals("_____", game.showCurrentDisplay());
+		assertEquals("_ _ _ _ _ ", game.showCurrentDisplay());
 		assertTrue(game.guess('h'));
-		assertEquals("_h___", game.showCurrentDisplay());
+		assertEquals("_ h _ _ _ ", game.showCurrentDisplay());
 		assertTrue(game.guess('r'));
-		assertEquals("_h__r", game.showCurrentDisplay());
+		assertEquals("_ h _ _ r ", game.showCurrentDisplay());
 		assertFalse(game.guess('z'));
-		assertEquals("_h__r", game.showCurrentDisplay());
+		assertEquals("_ h _ _ r ", game.showCurrentDisplay());
 		game.guess('c');
 		game.guess('a');
 		game.guess('i');
-		assertEquals("chair", game.showCurrentDisplay());
+		assertEquals("c h a i r ", game.showCurrentDisplay());
 	}
 
 	@Test
 	public void testCurrentDisplayWithRepeatedLetters() throws Exception {
 		game = new Hangman("tasty");
 		game.guess('t');
-		assertEquals("t__t_", game.showCurrentDisplay());
+		assertEquals("t _ _ t _ ", game.showCurrentDisplay());
 	}
 
 	@Test

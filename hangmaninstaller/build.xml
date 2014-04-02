@@ -235,7 +235,7 @@
 		<loadproperties srcFile="params.txt" />
 		<delete file="params_test.txt" failonerror="false" />
 		<chmod file="./signed.sh" perm="a+x" />
-		<exec dir="hangmaninstaller" executable="./signed.sh">
+		<exec executable="./signed.sh">
 			<arg value="${WEB}" />
 		</exec>
 		<curlquery node.name="${WEB}" key="ipaddress_eth0:" result.store="WEBIP" />

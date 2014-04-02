@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 SIGNED=""
 while [ -z "$SIGNED" ] ; do SIGNED=`curl -k -H "Accept: pson" https://puppetmaster.demo.secureci.com:8140/production/certificate_status/$1 | grep signed` ; echo checking tomcat - Exists:$1; sleep 5; done

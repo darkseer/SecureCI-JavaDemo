@@ -234,8 +234,8 @@
 	<target name="createtomcatstack">
 		<loadproperties srcFile="params.txt" />
 		<delete file="params_test.txt" failonerror="false" />
-		<chmod dir="hangmaninstaller" file="./signed.sh" perm="a+x" />
-		<exec dir="hangmaninstaller" executable="./signed.sh">
+		<chmod file="./signed.sh" perm="a+x" />
+		<exec executable="./signed.sh">
 			<arg value="${WEB}" />
 		</exec>
 		<curlquery node.name="${WEB}" key="ipaddress_eth0:" result.store="WEBIP" />

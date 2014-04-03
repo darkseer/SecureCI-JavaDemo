@@ -88,7 +88,7 @@
 		<div id="page">
 		  <div id="header">
 		    <h1>Hangedman</h1>
-		    <p><em>A demonstration web application for continuous delivery.</em></p>
+            <p><em>A demonstration web application for continuous delivery.</em></p>
 		  </div>
 		  
 		  <div id="body" class="wrapper">

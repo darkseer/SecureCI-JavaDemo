@@ -29,7 +29,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jdk.version>1.7</jdk.version>
+		<jdk.version>1.6</jdk.version>
 		<pmd.cpd.minimumTokens>50</pmd.cpd.minimumTokens>
 
 		<maven.rpm.version>2.1-alpha-3</maven.rpm.version>

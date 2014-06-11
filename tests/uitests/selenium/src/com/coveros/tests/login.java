@@ -20,7 +20,7 @@ public class login {
 	public void testLogin() throws Exception {
 
 		selenium.open("/hangman/");
-		assertTrue("Failed to find front page marker.", selenium.isTextPresent("Hangman"));
+		assertTrue("Failed to find front page marker.", selenium.isTextPresent("hangman"));
 		selenium.type("id=letter", "a");
 		selenium.click("name=submit");
 		selenium.waitForPageToLoad("30000");

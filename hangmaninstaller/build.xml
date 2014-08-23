@@ -210,12 +210,12 @@
 	</target>
 	<target name="ansible_createtomcatstack">
 		<scriptdef name="generateguid" language="javascript">
-		    <attribute name="property" />
-		    <![CDATA[
-		    importClass( java.util.UUID );
+            <attribute name="property" />
+            <![CDATA[
+            importClass( java.util.UUID );
 
-		    project.setProperty( attributes.get( "property" ), UUID.randomUUID() );
-		    ]]>
+            project.setProperty( attributes.get( "property" ), UUID.randomUUID() );
+            ]]>
 		</scriptdef>
 		<generateguid property="hostsguid" />
 		<loadproperties srcFile="params.txt" />
@@ -227,10 +227,9 @@
 <echo file="params_test.txt" append="true">WEBIP=${WEB}
 </echo>
 <echo file="params_test.txt" append="true">EXTWEBIP=${WEB}
-</echo>		
-		
+</echo>
 	</target>
-	
+
 	<target name="createtomcatstack">
 		<loadproperties srcFile="params.txt" />
 		<delete file="params_test.txt" failonerror="false" />

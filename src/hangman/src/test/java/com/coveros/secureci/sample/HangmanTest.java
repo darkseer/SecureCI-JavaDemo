@@ -44,7 +44,7 @@ public class HangmanTest {
 		assertTrue(game.guess('s'));
 		assertTrue(game.guess('e'));
 		assertFalse(game.guess('z'));
-	}
+	}*/
 
 	@Test
 	public void testShowCurrentDisplay() throws Exception {
@@ -59,8 +59,9 @@ public class HangmanTest {
 		game.guess('c');
 		game.guess('a');
 		game.guess('i');
-		assertEquals("c h a i r ", game.showCurrentDisplay());
-	}*/
+		//assertEquals("c h a i r ", game.showCurrentDisplay());
+		assertEquals("c h a i r foobar", game.showCurrentDisplay());
+	}
 
 	@Test
 	public void testCurrentDisplayWithRepeatedLetters() throws Exception {

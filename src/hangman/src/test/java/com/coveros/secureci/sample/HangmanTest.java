@@ -28,7 +28,7 @@ public class HangmanTest {
 
 	private Hangman game;
 
-	@Test
+	/*@Test
 	public void testGameSetup() throws Exception {
 		game = new Hangman("word");
 		assertEquals("word", game.showAnswer());
@@ -92,6 +92,7 @@ public class HangmanTest {
 		game.guess('e');
 		assertEquals(Hangman.WON, game.status());
 	}
+	*/
 
 	@Test
 	public void testLosing() throws Exception {

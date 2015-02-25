@@ -146,7 +146,8 @@ public class HangmanTest {
 		game.guess('f');
 		game.guess('g');
 		game.guess('t');
-		assertEquals(Hangman.WON, game.status());
+		//assertEquals(Hangman.WON, game.status());
+		assertEquals(Hangman.LOST, game.status());
 	}
 
 }

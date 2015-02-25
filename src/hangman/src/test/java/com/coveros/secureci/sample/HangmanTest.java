@@ -68,6 +68,7 @@ public class HangmanTest {
 		game.guess('t');
 		assertEquals("t _ _ t _ ", game.showCurrentDisplay());
 	}
+	*/
 
 	@Test
 	public void testSavingIncorrectLetters() throws Exception {
@@ -92,7 +93,7 @@ public class HangmanTest {
 		game.guess('e');
 		assertEquals(Hangman.WON, game.status());
 	}
-	*/
+	
 
 	@Test
 	public void testLosing() throws Exception {

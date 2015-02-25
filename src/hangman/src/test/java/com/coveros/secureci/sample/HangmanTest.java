@@ -60,15 +60,16 @@ public class HangmanTest {
 		game.guess('a');
 		game.guess('i');
 		assertEquals("c h a i r ", game.showCurrentDisplay());
-	}
+	}*/
 
 	@Test
 	public void testCurrentDisplayWithRepeatedLetters() throws Exception {
 		game = new Hangman("tasty");
 		game.guess('t');
-		assertEquals("t _ _ t _ ", game.showCurrentDisplay());
+		//assertEquals("t _ _ t _ ", game.showCurrentDisplay());
+		assertEquals("t _ _ t _foobar ", game.showCurrentDisplay());
 	}
-	*/
+	
 
 	@Test
 	public void testSavingIncorrectLetters() throws Exception {

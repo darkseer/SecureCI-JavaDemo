@@ -70,9 +70,9 @@ public class HangmanTest {
 		game = new Hangman("tasty");
 		game.guess('t');
 		//pass
-		//assertEquals("t _ _ t _ ", game.showCurrentDisplay());
+		assertEquals("t _ _ t _ ", game.showCurrentDisplay());
 		//fail
-		assertEquals("t _ _ t _foobar ", game.showCurrentDisplay());
+		//assertEquals("t _ _ t _foobar ", game.showCurrentDisplay());
 	}
 	
 

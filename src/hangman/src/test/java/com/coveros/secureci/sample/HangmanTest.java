@@ -28,7 +28,7 @@ public class HangmanTest {
 
 	private Hangman game;
 
-	/*@Test
+	@Test
 	public void testGameSetup() throws Exception {
 		game = new Hangman("word");
 		assertEquals("word", game.showAnswer());
@@ -44,7 +44,7 @@ public class HangmanTest {
 		assertTrue(game.guess('s'));
 		assertTrue(game.guess('e'));
 		assertFalse(game.guess('z'));
-	}*/
+	}
 
 	@Test
 	public void testShowCurrentDisplay() throws Exception {
@@ -59,15 +59,19 @@ public class HangmanTest {
 		game.guess('c');
 		game.guess('a');
 		game.guess('i');
-		//assertEquals("c h a i r ", game.showCurrentDisplay());
-		assertEquals("c h a i r foobar", game.showCurrentDisplay());
+		//pass
+		assertEquals("c h a i r ", game.showCurrentDisplay());
+		//fail
+		//assertEquals("c h a i r foobar", game.showCurrentDisplay());
 	}
 
 	@Test
 	public void testCurrentDisplayWithRepeatedLetters() throws Exception {
 		game = new Hangman("tasty");
 		game.guess('t');
+		//pass
 		//assertEquals("t _ _ t _ ", game.showCurrentDisplay());
+		//fail
 		assertEquals("t _ _ t _foobar ", game.showCurrentDisplay());
 	}
 	
@@ -113,7 +117,9 @@ public class HangmanTest {
 		game.guess('g');
 		assertEquals(Hangman.IN_PROGRESS, game.status());
 		game.guess('i');
+		//pass
 		assertEquals(Hangman.LOST, game.status());
+		//fail
 		//assertEquals(Hangman.WON, game.status());
 	}
 
@@ -146,7 +152,9 @@ public class HangmanTest {
 		game.guess('f');
 		game.guess('g');
 		game.guess('t');
+		//pass
 		assertEquals(Hangman.WON, game.status());
+		//fail
 		//assertEquals(Hangman.LOST, game.status());
 	}
 

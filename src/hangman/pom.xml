@@ -340,12 +340,12 @@
 		<repository>
 			<id>test</id>
 			<name>test</name>
-			<url>https://jenkins.demo.secureci.com/nexus/content/repositories/releases</url>
+			<url>http://jenkins.demo.secureci.com/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>dev</id>
 			<name>dev</name>
-			<url>https://jenkins.demo.secureci.com/nexus/content/repositories/snapshots</url>
+			<url>http://jenkins.demo.secureci.com/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 

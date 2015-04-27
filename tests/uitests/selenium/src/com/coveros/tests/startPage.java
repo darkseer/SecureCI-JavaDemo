@@ -59,6 +59,18 @@ public class startPage {
 		  assertEquals(letter, guesses.getText());
 	  }
   }
+  
+  @Test
+  public void testNumber() throws Exception {
+	  String letter = "3";
+
+	  driver.get(baseUrl + "hangman/");
+	  driver.findElement(By.id("letter")).clear();
+	  driver.findElement(By.id("letter")).sendKeys(letter);
+	  driver.findElement(By.name("submit")).click();
+	  WebElement error = driver.findElement(By.cssSelector("#introduction h3"));
+	  assertEquals("Guesses must be letters.", error.getText());
+  }
 
   @After
   public void tearDown() throws Exception {

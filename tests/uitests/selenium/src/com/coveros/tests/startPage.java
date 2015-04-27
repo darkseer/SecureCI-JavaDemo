@@ -1,24 +1,30 @@
-
-
-import java.util.concurrent.TimeUnit;
-
-import org.junit.*;
+package com.coveros.tests;
 
 import static org.junit.Assert.*;
 
 import org.openqa.selenium.*;
 //import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
-public class loginWD {
+public class startPage {
   private WebDriver driver;
   private String baseUrl;
+  private String proxyUrl;
 
   @Before
   public void setUp() throws Exception {
-    driver = new HtmlUnitDriver();
-    //driver = new FirefoxDriver();
-    baseUrl = (String)System.getProperty ("web.url")
+    baseUrl = (String)System.getProperty ("web.url");
+    proxyUrl = (String)System.getProperty ("web.proxy");
+    
+    Proxy proxy = new org.openqa.selenium.Proxy();
+    proxy.setHttpProxy(proxyUrl); //.setFtpProxy(proxyUrl).setSslProxy(proxyUrl);
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setCapability(CapabilityType.PROXY, proxy);
+    
+    driver = new HtmlUnitDriver(capabilities);
+    //driver = new FirefoxDriver(capabilities);
     //baseUrl = "http://174.129.76.79/";
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }

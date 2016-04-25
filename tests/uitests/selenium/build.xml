@@ -56,5 +56,62 @@
             </junitreport>
     </target>
 
+    <!-- TODO: Conditionalize this to determine if a webProxy is set or not. -->
+   <!-- Invoke test using a WebProxy that the Selenium WebDriver knows how to deal with -->
+   <target name="test-proxy" depends="test-jar,webup">
+            <loadproperties srcFile="params_test.txt" />
+            <mkdir dir="${test.reports}"/>
+           <echo message="Using proxy value [${webProxy}]" />
+            <junit fork="yes" haltonfailure="no">
+                    <jvmarg value="-Dweb.url=http://${EXTWEBIP}/" />
+                   <jvmarg value="-Dweb.proxy=${webProxy}" />
+                    <test name="${test.class.name}" />
+                    <formatter type="plain" usefile="false" />
+                    <formatter type="xml" />
+                    <classpath refid="test.classpath" />
+            </junit>
+    </target>
+    <target name="test-html-proxy" depends="clean-report,webup,test-proxy">
+            <loadproperties srcFile="params_test.txt" />
+            <mkdir dir="${test.reports}"/>
+            <junitreport todir="${test.reports}">
+                    <fileset dir=".">
+                            <include name="TEST-*.xml" />
+                    </fileset>
+                    <report todir="${test.reports}" />
+            </junitreport>
+    </target>
+ 
+ 
+    <target name="classpath">
+        <path id="classpath">
+            <fileset dir="${lib}">
+                <include name="*.jar"/>
+            </fileset>
+            <pathelement location="${classes}"/>
+        </path>
+    </target>
+    <target name="compile" depends="classpath">
+        <mkdir dir="${classes}" />
+        <javac srcdir="${src}" destdir="${classes}" classpathref="classpath" includeantruntime="false" />
+    </target>
+    <target name="test-stf" depends="clean-report,webup,compile" description="Run Selenium tests in parallel">
+        <loadproperties srcFile="params_test.txt" />
+        <java classpathref="classpath" classname="org.testng.TestNG" failonerror="true">
+            <sysproperty key="browser" value="${browser}" />
+            <sysproperty key="hubAddress" value="${hubAddress}" />
+            <sysproperty key="hangmanurl" value="${EXTWEBIP}" />
+            <arg value="-d" />
+            <arg value="${testng.reports}" />
+            <arg value="-suitename" />
+            <arg value="Default suite" />
+            <arg value="-parallel"/>
+            <arg value="methods"/>
+            <arg value="-threadcount"/>
+            <arg value="2"/>
+            <arg value="testng.xml"/>
+        </java>
+    </target>
+
 
 </project>

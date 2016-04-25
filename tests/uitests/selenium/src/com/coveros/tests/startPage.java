@@ -8,6 +8,9 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import org.junit.*;
+import java.util.concurrent.TimeUnit;
+
 public class startPage {
   private WebDriver driver;
   private String baseUrl;

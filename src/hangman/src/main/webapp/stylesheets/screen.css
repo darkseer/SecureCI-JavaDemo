@@ -37,7 +37,7 @@
 .lost { color: red; }
 
 #resources { float: left; width: 230px; text-align: center; }
-#resources h3 { color: #888; margin-top: 0.5em; }
+#resources h3 { color: #000; margin-top: 0.5em; }
 #resources ul, #resources ol { color: #888; }
 #resources ul a { color: #555; }
 

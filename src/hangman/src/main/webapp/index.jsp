@@ -21,7 +21,7 @@
 -->
 
 <%
-	String status = "Please enter a letter.";
+	String status = "Please enter a letter please.";
 	Hangman hangman = null;
 
 	// word passed in (for testing)	
@@ -60,10 +60,10 @@
       if (Hangman.WON == hangman.status()) {
         status = "<span class='won'>You won!!!</span>";
       } else if (Hangman.LOST == hangman.status()) {
-	      status = "<span class='lost'>You lost!</span> The word was: <br/>" + hangman.showAnswer();
+	      status = "<span class='lost'>You suck!</span> The word was: <br/>" + hangman.showAnswer();
       }
 		} catch (IllegalStateException ise) {
-      status = "<span class='lost'>You lost!</span> The word was: <br/>" + hangman.showAnswer();
+      status = "<span class='lost'>You suck!</span> The word was: <br/>" + hangman.showAnswer();
     } catch (IllegalArgumentException iae) {
       status = "Guesses must be letters.";
 		}
@@ -78,7 +78,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<title>Hangedman</title>
+		<title>Hangman</title>
 	  <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen" charset="utf-8"/>
 	  <link rel="stylesheet" href="stylesheets/print.css" type="text/css" media="print" charset="utf-8"/>
 	  <!--[if lte IE 6]><link rel="stylesheet" href="stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"/><![endif]-->
@@ -87,8 +87,9 @@
 	<body>
 		<div id="page">
 		  <div id="header">
-		    <h1>Hangedman</h1>
-            <p><em>A demonstration web application for continuous delivery.</em></p>
+
+		    <h1>Hangman</h1>
+            <p><em>Not the coolest app in the world</em></p>
 		  </div>
 		  
 		  <div id="body" class="wrapper">

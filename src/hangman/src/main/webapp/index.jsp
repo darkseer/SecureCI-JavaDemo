@@ -58,7 +58,7 @@
 		try {
       hangman.guess(guess);
       if (Hangman.WON == hangman.status()) {
-        status = "<span class='won'>You won!!!</span>";
+        status = "<span class='won'>You won!!! Good job!</span>";
       } else if (Hangman.LOST == hangman.status()) {
 	      status = "<span class='lost'>You lost!</span> The word was: <br/>" + hangman.showAnswer();
       }
@@ -78,16 +78,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<title>Hangedman</title>
+		<title>Hangman</title>
 	  <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen" charset="utf-8"/>
 	  <link rel="stylesheet" href="stylesheets/print.css" type="text/css" media="print" charset="utf-8"/>
-	  <!--[if lte IE 6]><link rel="stylesheet" href="stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"/><![endif]-->
+	  <!--[if lte IE 6><link rel="stylesheet" href="stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"/><![endif]-->
 	</head>
 
 	<body>
 		<div id="page">
 		  <div id="header">
-		    <h1>Hangedman</h1>
+		    <h1>Hangman</h1>
             <p><em>A demonstration web application for continuous delivery.</em></p>
 		  </div>
 		  

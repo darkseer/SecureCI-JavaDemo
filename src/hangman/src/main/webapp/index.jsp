@@ -60,10 +60,10 @@
       if (Hangman.WON == hangman.status()) {
         status = "<span class='won'>You won!!!</span>";
       } else if (Hangman.LOST == hangman.status()) {
-	      status = "<span class='lost'>You lost!</span> The word was: <br/>" + hangman.showAnswer();
+	      status = "<span class='lost'>You suck!</span> The word was: <br/>" + hangman.showAnswer();
       }
 		} catch (IllegalStateException ise) {
-      status = "<span class='lost'>You lost!</span> The word was: <br/>" + hangman.showAnswer();
+      status = "<span class='lost'>You suck!</span> The word was: <br/>" + hangman.showAnswer();
     } catch (IllegalArgumentException iae) {
       status = "Guesses must be letters.";
 		}
@@ -87,8 +87,9 @@
 	<body>
 		<div id="page">
 		  <div id="header">
+
 		    <h1>Hangman</h1>
-            <p><em>Coolest app in the world.</em></p>
+            <p><em>Not the coolest app in the world</em></p>
 		  </div>
 		  
 		  <div id="body" class="wrapper">

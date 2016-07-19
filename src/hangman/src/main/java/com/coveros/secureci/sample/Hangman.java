@@ -123,7 +123,8 @@ public class Hangman {
 
 	public String showIncorrectLetters() {
 		final Set<String> incorrect = this.getIncorrectGuesses();
-		return Hangman.setToString(incorrect);
+		return Hangman.setToString(incorrect).toLowerCase();
+		
 	}
 
 	private String showCorrectLetters() {

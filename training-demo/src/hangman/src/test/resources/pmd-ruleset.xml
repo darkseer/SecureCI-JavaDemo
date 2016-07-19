@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<ruleset name="coveros-ruleset" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+	<description>
+		This ruleset checks the code for bad stuff in Coveros projects.
+	</description>
+
+	<rule ref="rulesets/java/basic.xml" />
+	<rule ref="rulesets/java/strings.xml" />
+	<rule ref="rulesets/java/braces.xml" />
+	<rule ref="rulesets/java/clone.xml" />
+	<rule ref="rulesets/java/codesize.xml" />
+	<rule ref="rulesets/java/javabeans.xml" />
+	<rule ref="rulesets/java/naming.xml">
+		<exclude name="ShortVariable" />
+		<exclude name="LongVariable" />
+		<exclude name="ShortMethodName" />
+		<exclude name="LongMethodName" />
+		<exclude name="ShortClassName" />
+	</rule>
+	<rule ref="rulesets/java/empty.xml" />
+	<rule ref="rulesets/java/empty.xml/EmptyCatchBlock">
+		<properties>
+			<property name="allowCommentedBlocks" value="true" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/unusedcode.xml" />
+	<rule ref="rulesets/java/unnecessary.xml">
+		<exclude name="UselessParentheses" />
+	</rule>
+	<rule ref="rulesets/java/typeresolution.xml" />
+	<rule ref="rulesets/java/strictexception.xml" />
+	<rule ref="rulesets/java/sunsecure.xml" />
+	<rule ref="rulesets/java/imports.xml" />
+	<rule ref="rulesets/java/finalizers.xml" />
+	<rule ref="rulesets/java/coupling.xml">
+		<exclude name="LoosePackageCoupling" />
+		<exclude name="LawOfDemeter" />
+	</rule>
+	<rule ref="rulesets/java/design.xml">
+		<exclude name="SimpleDateFormatNeedsLocale" />
+	</rule>
+	<rule ref="rulesets/java/logging-java.xml" />
+	<rule ref="rulesets/java/j2ee.xml" />
+	<rule ref="rulesets/java/junit.xml">
+		<exclude name="JUnitAssertionsShouldIncludeMessage" />
+	</rule>
+	<rule ref="rulesets/java/optimizations.xml" />
+	<rule ref="rulesets/java/migrating_to_15.xml" />
+
+	<!-- Include each of the controversial rules explicitly -->
+	<rule ref="rulesets/java/controversial.xml/AssignmentInOperand">
+		<properties>
+			<property name="allowIncrementDecrement" value="true" />
+			<property name="allowWhile" value="true" />
+			<property name="allowFor" value="true" />
+		</properties>
+	</rule>
+	<rule ref="rulesets/java/controversial.xml/DontImportSun" />
+	<rule ref="rulesets/java/controversial.xml/SuspiciousOctalEscape" />
+	<rule ref="rulesets/java/controversial.xml/CallSuperInConstructor" />
+	<rule ref="rulesets/java/controversial.xml/UnnecessaryParentheses" />
+	<rule ref="rulesets/java/controversial.xml/DefaultPackage" />
+	<rule ref="rulesets/java/controversial.xml/DataflowAnomalyAnalysis" />
+	<rule ref="rulesets/java/controversial.xml/AvoidUsingShortType" />
+	<rule ref="rulesets/java/controversial.xml/AvoidUsingVolatile" />
+	<rule ref="rulesets/java/controversial.xml/AvoidUsingNativeCode" />
+	<rule ref="rulesets/java/controversial.xml/AvoidAccessibilityAlteration" />
+	<rule
+		ref="rulesets/java/controversial.xml/DoNotCallGarbageCollectionExplicitly" />
+
+</ruleset>

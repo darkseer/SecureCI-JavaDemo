@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<!DOCTYPE ant>
+
+<project name="asset" default="test">
+	<property environment="env" />
+	<property name="env.HOSTNAME" value="${env.COMPUTERNAME}" />
+	<!-- Windows vs. Linux -->
+	<property name="author" value="http://www.coveros.com/" />
+	<property name="version" value="0.09" />
+
+	<!-- Earlier build.properties take precedence -->
+	<!-- Load local build.properties first so they override anything defined later -->
+	<property file="local.build.properties" />
+	<!-- not in version control, so useful for passwords -->
+	<property file="${user.name}-${env.HOSTNAME}.build.properties" />
+	<property file="${user.name}.build.properties" />
+	<property file="${env.HOSTNAME}.build.properties" />
+	<property name="at" value="@" />
+
+	<!-- source directories -->
+	<property name="lib.dir" location="lib" />
+
+	<!-- target directories -->
+	<property name="build.dir" location="build" />
+	<property name="rpm.build.dir" location="${build.dir}/rpm" />
+
+	<!-- paths -->
+	<path id="svn.classpath">
+		<pathelement path="${classes.dir}" />
+		<pathelement path="${lib.dir}" />
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+
+	<!-- properties -->
+	<property name="puppet.host" value="puppet.demo.secureci.com" />
+	<property name="puppet.port" value="8140" />
+	<property name="puppet.master.host" value="puppetmaster.demo.secureci.com" />
+	<property name="ansible.host" value="ansible.demo.secureci.com" />
+	<property name="puppet.master.download.url" value="https://s3.amazonaws.com/CoverosDownloads/3rdParty/puppet-enterprise-2.5.3-el-6-x86_64.tar.gz" />
+	<property name="aws.ami.id" value="ami-05291a6c" />
+	<property name="aws.access.key" value="AKIAIPBUWI3WL4MY6DHA" />
+	<property name="aws.secret.key" value="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" />
+
+	<!-- ant contrib -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="svn.classpath" />
+
+	<!-- Debug targets to show variables -->
+	<target name="debug" depends="debug-verbose, debug-quiet" description="Display environment and variables">
+		<echo message="User: ${user.name}" />
+		<echo message="Host: ${env.HOSTNAME}" />
+	</target>
+
+	<!-- ant -Dverbose=true debug -->
+	<target name="debug-verbose" if="verbose">
+		<echoproperties />
+	</target>
+
+	<target name="debug-quiet" unless="verbose">
+		<echoproperties>
+			<propertyset negate="true">
+				<propertyref prefix="env." />
+				<propertyref prefix="java." />
+				<propertyref prefix="sun." />
+				<propertyref prefix="os." />
+				<propertyref prefix="ant." />
+				<propertyref prefix="user." />
+				<propertyref prefix="file." />
+				<propertyref prefix="awt." />
+				<propertyref prefix="path." />
+				<propertyref prefix="line." />
+			</propertyset>
+		</echoproperties>
+	</target>
+
+	<!-- Cleanup -->
+	<target name="clean" description="Cleans out previous builds">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<!-- Package -->
+
+	<target name="builddir" description="create destination for zip file">
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="test" depends="clean,builddir" description="Creates the test asset">
+		<property name="propname" value="" />
+		<sequential>
+			<createasset prop.name="${prop.name}" part.name="master" />
+			<delete dir="stage" />
+			<mkdir dir="stage" />
+			<exec executable="ssh" output="stage/all.tar" error="/dev/null">
+				<arg value="-o" />
+				<arg value="StrictHostKeyChecking=no" />
+				<arg value="-i" />
+				<arg value="key" />
+				<arg value="host" />
+				<arg value="some remote command" />
+			</exec>
+			<exec executable="split">
+				<arg value="-b" />
+				<arg value="524288000" />
+				<arg value="stage/all.tar" />
+				<arg value="stage/asset_part_" />
+			</exec>
+			<shellscript shell="bash" dir="stage">
+			i=1
+			for file in asset_part_*
+			do
+			 mv $file asset_part_${i}
+			 i=$(( i + 1 ))
+			done
+	</shellscript>
+			<foreach target="looptask" param="file.name" inheritall="true">
+				<path>
+					<fileset dir="something" casesensitive="yes">
+						<include name="filepattern*" />
+					</fileset>
+				</path>
+			</foreach>
+		</sequential>
+	</target>
+
+	<target name="looptask">
+
+		<sequential>
+
+		</sequential>
+
+	</target>
+
+	<macrodef name="repeattask" description="something">
+		<attribute name="asset.name" default="default" />
+		<attribute name="part.name" default="default" />
+		<sequential>
+
+		</sequential>
+
+
+	</macrodef>
+	<macrodef name="curlquery">
+		<attribute name="node.name" default="default" />
+		<attribute name="result.store" default="default" />
+		<attribute name="key" default="default" />
+		<sequential>
+			<var name="for.grep" unset="true" />
+			<exec executable="/usr/bin/curl" outputproperty="for.grep">
+				<arg value="-k" />
+				<arg value="-K" />
+				<arg value="puppetrest.conf" />
+				<arg value="https://${puppet.host}:${puppet.port}/production/facts/@{node.name}" />
+			</exec>
+			<var name="for.sed" unset="true" />
+			<exec executable="grep" inputstring="${for.grep}" outputproperty="for.sed">
+				<arg value="@{key}" />
+			</exec>
+			<propertyregex property="@{result.store}" input="${for.sed}" regexp=".*@{key}." replace="" global="true" override="true" />
+		</sequential>
+	</macrodef>
+	<macrodef name="nodecopy">
+		<attribute name="node.fqdn" default="default" />
+		<attribute name="node.dest" default="default" />
+		<attribute name="local.src" default="default" />
+		<sequential>
+			<scp file="@{local.src}" todir="root${at}@{node.fqdn}:@{node.dest}" trust="true" keyfile="puppet.key" />
+		</sequential>
+	</macrodef>
+	<macrodef name="nodeexec">
+		<attribute name="node.fqdn" default="default" />
+		<attribute name="command" default="default" />
+		<sequential>
+			<sshexec host="@{node.fqdn}" username="root" keyfile="puppet.key" trust="true" command="@{command}" />
+		</sequential>
+	</macrodef>
+	<macrodef name="puppetprovisioner">
+		<attribute name="vm.name" default="default" />
+
+		<sequential>
+			<sshexec host="${puppet.master.host}" username="root" keyfile="puppet.key" trust="true" append="true" output="params.txt" command="puppet node_aws bootstrap --group centos_ci_demo_template --region us-east-1 --image ${aws.ami.id} --login root  --keyfile /root/centos_ci_demo_template_key.pem  --keyname centos_ci_demo_template_key --type t1.micro --installer-payload=${puppet.master.download.url} --installer-answers /root/agent_only --install-script puppet-enterprise-http --puppet-version 2.5.3 --server ${puppet.master.host} --debug --trace  2>/dev/null| grep &quot;Using cached certificate for&quot; | sed -e 's/^.*Using cached certificate for /@{vm.name}=/g'| sed -e 's/....$//g'" />
+		</sequential>
+	</macrodef>
+	<macrodef name="classifynode">
+		<attribute name="node.name" default="default" />
+		<attribute name="node.group" default="default" />
+		<sequential>
+			<sshexec host="${puppet.master.host}" username="root" keyfile="puppet.key" trust="true" append="true" command="/opt/puppet/bin/rake -f /opt/puppet/share/puppet-dashboard/Rakefile RAILS_ENV=production node:groups name=@{node.name} groups=@{node.group}" />
+		</sequential>
+	</macrodef>
+	<macrodef name="ansibleprovisioner">
+		<attribute name="vm.name" default="default" />
+
+		<sequential>
+			<chmod file="puppet.key" perm="600" />
+			<sshexec host="${ansible.host}" username="root" keyfile="puppet.key" trust="true" command="(cd /etc/ansible/; git pull)" />
+			<sshexec host="${ansible.host}" username="root" keyfile="puppet.key" trust="true" command="/bin/chmod 0600 /etc/ansible/ansible.key" />
+			<sshexec host="${ansible.host}" username="root" keyfile="puppet.key" trust="true" append="true" output="params.txt" command="ansible localhost -m ec2 -a &quot;image=${aws.ami.id}  aws_access_key=${aws.access.key} aws_secret_key=${aws.secret.key} instance_type=t1.micro key_name=centos_ci_demo_template_key region=us-east-1 group=centos_ci_demo_template wait=yes&quot; -c local | /bin/grep public_dns_name | /bin/sed -e 's/.*: &quot;\(ec2.*\)&quot;.*/WEB=\1/g'" />
+		</sequential>
+	</macrodef>
+	<target name="provisionvm">
+		<delete file="params.txt" failonerror="false" />
+		<parallel>
+			<puppetprovisioner vm.name="WEB" />
+		</parallel>
+	</target>
+	<target name="ansible_provisionvm">
+		<delete file="params.txt" failonerror="false" />
+		<parallel>
+			<ansibleprovisioner vm.name="WEB" />
+		</parallel>
+	</target>
+	<target name="ansible_createtomcatstack">
+		<scriptdef name="generateguid" language="javascript">
+            <attribute name="property" />
+            <![CDATA[
+            importClass( java.util.UUID );
+
+            project.setProperty( attributes.get( "property" ), UUID.randomUUID() );
+            ]]>
+		</scriptdef>
+		<generateguid property="hostsguid" />
+		<loadproperties srcFile="params.txt" />
+		<sshexec host="${ansible.host}" username="root" keyfile="puppet.key" trust="true" command="(mkdir /etc/ansible/run_${hostsguid}; echo &quot;[tomcat]&quot;>/etc/ansible/run_${hostsguid}/hosts ; echo &quot;${WEB}&quot;>>/etc/ansible/run_${hostsguid}/hosts; ansible-playbook -e vmhost=${WEB} -i /etc/ansible/hosts  /etc/ansible/roles/tomcat/wait.yaml  ; ansible-playbook -i /etc/ansible/run_${hostsguid}/hosts /etc/ansible/site.yaml; rm -rf /etc/ansible/run_${hostsguid}/hosts)" />
+<echo file="params_test.txt" append="true">GUID=${hostsguid}
+</echo>
+<echo file="params_test.txt" append="true">WEB=${WEB}
+</echo>
+<echo file="params_test.txt" append="true">WEBIP=${WEB}
+</echo>
+<echo file="params_test.txt" append="true">EXTWEBIP=${WEB}
+</echo>
+	</target>
+
+	<target name="createtomcatstack">
+		<loadproperties srcFile="params.txt" />
+		<delete file="params_test.txt" failonerror="false" />
+		<chmod file="./signed.sh" perm="a+x" />
+		<exec executable="./signed.sh">
+			<arg value="${WEB}" />
+		</exec>
+		<curlquery node.name="${WEB}" key="ipaddress_eth0:" result.store="WEBIP" />
+		<curlquery node.name="${WEB}" key="ec2_public_ipv4:" result.store="EXTWEBIP" />
+		<echo message="WEBIP: ${WEBIP}" />
+		<echo message="EXTWEBIP: ${EXTWEBIP}" />
+		<parallel>
+			<nodecopy node.fqdn="${EXTWEBIP}" node.dest="/etc/yum.repos.d" local.src="nexus.repo" />
+			<nodecopy node.fqdn="${EXTWEBIP}" node.dest="/etc/yum.conf" local.src="yum.conf" />
+		</parallel>
+
+		<parallel>
+			<classifynode node.name="${WEB}" node.group="demo" />
+		</parallel>
+		<parallel>
+			<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-mcollective restart" />
+			<nodeexec node.fqdn="${EXTWEBIP}" command="/etc/init.d/pe-puppet restart" />
+		</parallel>
+<!-- white space matters do not autoformat the echo blocks -->
+<echo file="params_test.txt" append="true">WEB=${WEB}
+</echo>
+<echo file="params_test.txt" append="true">WEBIP=${WEBIP}
+</echo>
+<echo file="params_test.txt" append="true">EXTWEBIP=${EXTWEBIP}
+</echo>
+	</target>
+</project>

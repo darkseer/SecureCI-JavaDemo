@@ -60,7 +60,7 @@
       if (Hangman.WON == hangman.status()) {
         status = "<span class='won'>You won!!! Good job!</span>";
       } else if (Hangman.LOST == hangman.status()) {
-	      status = "<span class='lost'>You lost!</span> The word was: <br/>" + hangman.showAnswer() + " Better luck next time";
+	      status = "<span class='lost'>You suck!</span> The word was: <br/>" + hangman.showAnswer() + " Better luck next time";
       }
 		} catch (IllegalStateException ise) {
       status = "<span class='lost'>You suck!</span> The word was: <br/>" + hangman.showAnswer();

@@ -1,0 +1,7 @@
+# hangman Proxy                                                                                                                                                                          
+ProxyPass         /hangman  ajp://localhost:8009/hangman                                                                                                                                 
+ProxyPassReverse  /hangman  ajp://localhost:8009/hangman                                                                                                                                 
+<Proxy ajp://localhost:8009/hangman*>                                                                                                                                                    
+  Order deny,allow                                                                                                                                                                       
+  Allow from all                                                                                                                                                                         
+</Proxy>   

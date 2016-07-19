@@ -1,0 +1,8 @@
+- name: check instance
+  hosts: localhost
+  user: root
+  gather_facts: False
+  tasks:
+  # wait for it to come up and function
+  - name: wait for the reassignation
+    local_action: wait_for host={{vmhost}} port=22 delay=20 timeout=350

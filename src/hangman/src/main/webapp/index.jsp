@@ -58,7 +58,7 @@
 		try {
       hangman.guess(guess);
       if (Hangman.WON == hangman.status()) {
-        status = "<span class='won'>You won!!!</span>";
+        status = "<span class='won'>You won!!! Good job!</span>";
       } else if (Hangman.LOST == hangman.status()) {
 	      status = "<span class='lost'>You lost!</span> The word was: <br/>" + hangman.showAnswer() + " Better luck next time";
       }
@@ -81,13 +81,12 @@
 		<title>Hangman</title>
 	  <link rel="stylesheet" href="stylesheets/screen.css" type="text/css" media="screen" charset="utf-8"/>
 	  <link rel="stylesheet" href="stylesheets/print.css" type="text/css" media="print" charset="utf-8"/>
-	  <!--[if lte IE 6]><link rel="stylesheet" href="stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"/><![endif]-->
+	  <!--[if lte IE 6><link rel="stylesheet" href="stylesheets/lib/ie.css" type="text/css" media="screen" charset="utf-8"/><![endif]-->
 	</head>
 
 	<body>
 		<div id="page">
 		  <div id="header">
-
 		    <h1>Hangman</h1>
             <p><em>Not the coolest app in the world</em></p>
 		  </div>
@@ -115,7 +114,7 @@
 		    <div id="resources">
 		      <h3>Number of Incorrect Guesses Remaining:</h3>
 		      <p><%= remaining %></p>
-		      <img src="images/hangman-<%= remaining %>.png" alt="<%= remaining %> guesses left"/>
+		      <img src="images/hang-<%= remaining %>.png" alt="<%= remaining %> guesses left"/>
 		      <% if (0 < hangman.getIncorrectGuesses().size()) { %>
 			      <h3>Incorrect Guesses:</h3>
 			      <p><%= hangman.showIncorrectLetters() %></p>

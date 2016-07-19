@@ -124,10 +124,7 @@ public class Hangman {
 	public String showIncorrectLetters() {
 		final Set<String> incorrect = this.getIncorrectGuesses();
 		return Hangman.setToString(incorrect).toUpperCase();
-<<<<<<< HEAD
 		
-=======
->>>>>>> 98b8a1506f65105517613cdf286d6fb05f6d5254
 	}
 
 	private String showCorrectLetters() {

@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * word or have reached the maximum number of incorrect guesses allowed.
  */
 public class Hangman {
-
+// Help me
 	public static final int IN_PROGRESS = 0;
 	public static final int WON = 1;
 	public static final int LOST = -1;
@@ -124,7 +124,10 @@ public class Hangman {
 	public String showIncorrectLetters() {
 		final Set<String> incorrect = this.getIncorrectGuesses();
 		return Hangman.setToString(incorrect).toUpperCase();
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 98b8a1506f65105517613cdf286d6fb05f6d5254
 	}
 
 	private String showCorrectLetters() {

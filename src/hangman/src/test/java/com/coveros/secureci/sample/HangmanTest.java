@@ -79,12 +79,12 @@ public class HangmanTest {
 	@Test
 	public void testSavingIncorrectLetters() throws Exception {
 		game = new Hangman("loquacious");
-		game.guess('o');
+		game.guess('O');
 		assertEquals("", game.showIncorrectLetters());
-		game.guess('t');
-		assertEquals("t", game.showIncorrectLetters());
-		game.guess('j');
-		assertEquals("tj", game.showIncorrectLetters());
+		game.guess('T');
+		assertEquals("T", game.showIncorrectLetters());
+		game.guess('J');
+		assertEquals("TJ", game.showIncorrectLetters());
 	}
 
 	@Test

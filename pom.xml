@@ -52,6 +52,11 @@
 		<maven.liquibase.version>3.5.3</maven.liquibase.version>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
+		<mysql.host>localhost</mysql.host>
+		<mysql.port>3306</mysql.port>
+		<mysql.username>speaker</mysql.username>
+		<mysql.password>test123</mysql.password>
+		
 	</properties>
 
 	<dependencies>
@@ -149,9 +154,9 @@
 				<configuration>
 					<changeLogFile>src/main/resources/org/liquibase/states_data.xml</changeLogFile>
 					<driver>com.mysql.jdbc.Driver</driver>
-					<url>jdbc:mysql://${mysql_host}:${mysql_port}/speaker</url>
-					<username>${mysql_username}</username>
-					<password>${mysql_password}</password>
+					<url>jdbc:mysql://${mysql.host}:${mysql.port}/speaker</url>
+					<username>${mysql.username}</username>
+					<password>${mysql.password}</password>
 				</configuration>
 				<executions>
 					<execution>

@@ -69,8 +69,8 @@ node ('dockernode'){
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				  
 				  stage ("build") {
-					  sh "pwd"
-					  sh "/opt/maven/bin/mvn compile"
+					  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
+					  sh "export MAVEN_OPTS=\"-Dmaven.repo.local=`pwd`/.m2\"; /opt/maven/bin/mvn compile"
 				  }
 			  }
 		  }

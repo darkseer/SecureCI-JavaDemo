@@ -29,10 +29,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<jdk.version>1.5</jdk.version>
 		<pmd.cpd.minimumTokens>50</pmd.cpd.minimumTokens>
 
-		<maven.rpm.version>2.1-alpha-3</maven.rpm.version>
 		<maven.compiler.version>3.1</maven.compiler.version>
 		<maven.clean.version>2.5</maven.clean.version>
 		<maven.deploy.version>2.8.1</maven.deploy.version>
@@ -52,6 +50,7 @@
 		<maven.lint.version>0.0.8</maven.lint.version>
 
 		<junit.version>4.11</junit.version>
+		<jdk.version>1.8</jdk.version>
 	</properties>
 
 	<dependencies>
@@ -66,50 +65,6 @@
 	<build>
 		<finalName>hangman</finalName>
 		<plugins>
-			<plugin>
-				<extensions>true</extensions>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>rpm-maven-plugin</artifactId>
-				<version>${maven.rpm.version}</version>
-				<executions>
-					<execution>
-						<id>generate-rpm</id>
-						<goals>
-							<goal>rpm</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>attach-rpm</id>
-						<goals>
-							<goal>attached-rpm</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<changelogFile>CHANGELOG</changelogFile>
-					<group>Development/Tools</group>
-					<defaultFilemode>640</defaultFilemode>
-					<defaultDirmode>755</defaultDirmode>
-					<autoProvides>false</autoProvides>
-					<autoRequires>false</autoRequires>
-					<mappings>
-						<mapping>
-							<directory>/var/lib/tomcat6/webapps/</directory>
-							<username>tomcat</username>
-							<groupname>tomcat</groupname>
-							<directoryIncluded>false</directoryIncluded>
-							<sources>
-								<source>
-									<location>target/hangman.war</location>
-								</source>
-							</sources>
-						</mapping>
-					</mappings>
-					<provides>
-						<provide>${project.name}</provide>
-					</provides>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -331,21 +286,21 @@
 	</ciManagement>
 
 	<scm>
-		<connection>scm:git:ssh://build@coveros.secureci.com/var/lib/git/coveros_opensource_ci_cd</connection>
-		<developerConnection>scm:git:ssh://build@coveros.secureci.com/var/lib/git/coveros_opensource_ci_cd</developerConnection>
-		<url>https://secureci/trac/secureci/browser/branches/sample-maven</url>
+		<connection>scm:git:ssh://git@gitlab.com:glenn.buckholz/training-demo.git</connection>
+		<developerConnection>scm:git:ssh://git@gitlab.com:glenn.buckholz/training-demo.git</developerConnection>
+		<url>scm:git:ssh://git@gitlab.com:glenn.buckholz/training-demo.git</url>
 	</scm>
 
 	<distributionManagement>
 		<repository>
-			<id>test</id>
-			<name>test</name>
-			<url>http://jenkins.demo.secureci.com/nexus/content/repositories/releases</url>
+			<id>nexus</id>
+			<name>release</name>
+			<url>https://jenkins.darkseer.org/nexus/repository/maven-releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>dev</id>
-			<name>dev</name>
-			<url>http://jenkins.demo.secureci.com/nexus/content/repositories/snapshots</url>
+			<id>nexus</id>
+			<name>snapshot</name>
+			<url>https://jenkins.darkseer.org/nexus/repository/maven-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 

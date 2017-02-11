@@ -63,7 +63,7 @@ node ('dockernode'){
 			
 	  }
 	  docker.withRegistry('https://jenkins.darkseer.org:444','nexus3') {
-		  withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_33') {
+		  withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_38') {
 			  //This cant be done in the docker build so er do it here. Making any host changes
 			  sh 'sudo -u root ./hosts.sh'
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {

@@ -1,14 +1,14 @@
 node ('dockernode'){
   // Build parameters
   // Syntax from here: https://issues.jenkins-ci.org/browse/JENKINS-32780
-  properties([[$class: 'ParametersDefinitionProperty', 
+  /*properties([[$class: 'ParametersDefinitionProperty', 
                parameterDefinitions: [
                    [$class: 'StringParameterDefinition', 
                        defaultValue: 'True', 
                        description: 'Prevents node from being destroyed at end of run. Default: True', 
                        name: 'TerminateNode']]]])
   echo "Parameters: TerminateNode=${TerminateNode}"
-  
+  */
   //Use try catch to set build success criteria, set true to start
   //change a comment
   currentBuild.result = "SUCCESS"
@@ -61,11 +61,6 @@ node ('dockernode'){
 			sh 'uuid | cut -c 1-8 > HOSTNAME.${VERSION}.properties'
 			sh 'rm -f commit-id'
 			
-			/* Now everything should be local lwith Nexus 3
-			//sync docker registry
-			//sh 'sudo `aws ecr get-login --region us-east-1`'
-			//sh 'sudo docker pull 570220892468.dkr.ecr.us-east-1.amazonaws.com/flash:latest'
-			 */
 	  }
 	  docker.withRegistry('https://jenkins.darkseer.org:444','nexus3') {
 		  withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_33') {
@@ -77,11 +72,8 @@ node ('dockernode'){
 				  sh 'mkdir -p .gradlecache .gradle'
 				  
 				  stage ("build") {
-					  sh 'gradle --project-cache-dir .gradlecache -g .gradle -Pversion=${VERSION} -Pforce_sonar_branch=${BRANCH_NAME} -Psonarversion=${SONAR_VERSION} -Pnexuspass="$nexuspass" clean test assemble uploadArchives --stacktrace'
-					  junit '**/build/test-results/test/TEST*.xml'
-					  sh 'mv build/reports/tests/test/index.html build/reports/tests/test/UnitTests.html'
-					  step([$class: 'ArtifactArchiver', artifacts: '**build/reports/tests/test/**', fingerprint: true])
-					  sh 'gradle --project-cache-dir .gradlecache -g .gradle warstage --stacktrace'
+					  def mvnHome = tool 'M3'
+					  sh "${mvnHome}/bin/mvn compile"
 				  }
 			  }
 		  }
@@ -153,8 +145,9 @@ node ('dockernode'){
 	  }
 	}
 	finally {
-		stage ("gradleclean") {
-			sh 'rm -rf .gradle/daemon HOSTNAME*'
+		stage ("clean workspace") {
+			def mvnHome = tool 'M3'
+			sh "${mvnHome}/bin/mvn compile"
 		}
 	}
 }

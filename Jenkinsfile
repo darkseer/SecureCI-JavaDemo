@@ -33,7 +33,7 @@ node ('dockernode'){
 		  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
 		  
 		  //Set the maven variables for this project
-		  env.MAVEN_OPTS="${env.WORKSPACE}/.m2"
+		  env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
 		  env.MAVEN_HOME="/opt/maven"
 		  env.PATH="/opt/maven/bin:" + env.PATH
 		  

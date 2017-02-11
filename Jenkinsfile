@@ -76,7 +76,7 @@ node ('dockernode'){
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				  
 				  stage ("build") {
-					  sh "mvn compile"
+					  sh "mvn clean package"
 				  }
 			  }
 		  }
@@ -104,10 +104,11 @@ node ('dockernode'){
 					 }
 			     }// end of waitUntil
 				 env.MYSQLPORT=mysqlContainer.port(3306)
-				 sh "./dburl_change.sh stage/tomcatcontainerwebapps/env.properties ${MYSQLPORT}"
+				 //Setup Tomcat Mount
+				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT}"
 				 				 
 				 				 
-				 tomcatContainer = docker.image("jenkins.darkseer.org:444/tomcat:12").run('-p 8080 -v ${WORKSPACE}/stage/tomcatcontainerwebapps:/home/tomcat/tmp','/bin/cat')
+				 tomcatContainer = docker.image("jenkins.darkseer.org:444/tomcat:12").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
 				 env.TOMCATID=tomcatContainer.id
 				 
 				 // Wait for tomcat to be up
@@ -149,7 +150,7 @@ node ('dockernode'){
 	}
 	finally {
 		stage ("clean workspace") {
-			sh "/opt/maven/bin/mvn clean"
+			//sh "mvn clean"
 		}
 	}
 }

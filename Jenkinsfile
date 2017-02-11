@@ -63,13 +63,13 @@ node ('dockernode'){
 			
 	  }
 	  docker.withRegistry('https://jenkins.darkseer.org:444','nexus3') {
-		  withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_38') {
+		  withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_39') {
 			  //This cant be done in the docker build so er do it here. Making any host changes
 			  sh 'sudo -u root ./hosts.sh'
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				  
 				  stage ("build") {
-					  sh "ls -alh"
+					  sh "ls -alh; env"
 					  sh "ls -alh /opt/maven/bin"
 					  sh "echo $PATH; /opt/maven/bin/mvn compile"
 				  }

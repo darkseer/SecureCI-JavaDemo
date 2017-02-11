@@ -49,7 +49,7 @@
 		<maven.jdepend.version>2.0-beta-2</maven.jdepend.version>
 		<maven.lint.version>0.0.8</maven.lint.version>
 		<maven.mysql.version>6.0.5</maven.mysql.version>
-        <maven.liquibase.version>3.5.3</maven.liquibase.version>
+		<maven.liquibase.version>3.5.3</maven.liquibase.version>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
 	</properties>
@@ -142,22 +142,26 @@
 				<artifactId>lint-maven-plugin</artifactId>
 				<version>${maven.lint.version}</version>
 			</plugin>
-					<plugin>
-		   <groupId>org.liquibase</groupId>
-		   <artifactId>liquibase-maven-plugin</artifactId>
-		   <version>${maven.liquibase.version}</version>
-		   <configuration>                  
-			  <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
-		   </configuration>                
-		   <executions>
-			 <execution>
-			   <phase>install</phase>                                                                  
-			   <goals>
-				 <goal>update</goal>
-			   </goals>
-			 </execution>
-		   </executions>
-		</plugin> 
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<version>${maven.liquibase.version}</version>
+				<configuration>
+					<changeLogFile>src/main/resources/org/liquibase/states_data.xml</changeLogFile>
+					<driver>com.mysql.jdbc.Driver</driver>
+					<url>jdbc:mysql://${mysql_host}:${mysql_port}/speaker</url>
+					<username>${mysql_username}</username>
+					<password>${mysql_password}</password>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>update</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 

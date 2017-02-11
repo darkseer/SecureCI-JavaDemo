@@ -71,7 +71,7 @@ node ('dockernode'){
 				  stage ("build") {
 					  sh "ls -alh"
 					  sh "ls -alh /opt/maven/bin"
-					  sh "mvn compile"
+					  sh "echo $PATH; /opt/maven/bin/mvn compile"
 				  }
 			  }
 		  }

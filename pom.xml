@@ -48,8 +48,8 @@
 		<maven.cobertura.version>2.6</maven.cobertura.version>
 		<maven.jdepend.version>2.0-beta-2</maven.jdepend.version>
 		<maven.lint.version>0.0.8</maven.lint.version>
-		<maven.mysql.version>5.5</maven.mysql.version>
-        <maven.liquibase.version>3.0.5</maven.liquibase.version>
+		<maven.mysql.version>6.0.5</maven.mysql.version>
+        <maven.liquibase.version>3.5.3</maven.liquibase.version>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
 	</properties>

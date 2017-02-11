@@ -70,7 +70,7 @@ node ('dockernode'){
 				  
 				  stage ("build") {
 					  sh "ls -alh"
-					  sh "ls -alh /opt"
+					  sh "ls -alh /opt/maven/bin"
 					  sh "mvn compile"
 				  }
 			  }
@@ -144,8 +144,7 @@ node ('dockernode'){
 	}
 	finally {
 		stage ("clean workspace") {
-			def mvnHome = tool 'M3'
-			sh "${mvnHome}/bin/mvn compile"
+			sh "mvn clean"
 		}
 	}
 }

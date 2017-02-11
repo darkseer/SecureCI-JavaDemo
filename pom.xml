@@ -48,7 +48,8 @@
 		<maven.cobertura.version>2.6</maven.cobertura.version>
 		<maven.jdepend.version>2.0-beta-2</maven.jdepend.version>
 		<maven.lint.version>0.0.8</maven.lint.version>
-
+		<maven.mysql.version>5.5</maven.mysql.version>
+        <maven.liquibase.version>3.0.5</maven.liquibase.version>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
 	</properties>
@@ -59,6 +60,12 @@
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<!-- Replace with the version of the MySQL driver you want to use -->
+			<version>${maven.mysql.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -135,6 +142,22 @@
 				<artifactId>lint-maven-plugin</artifactId>
 				<version>${maven.lint.version}</version>
 			</plugin>
+					<plugin>
+		   <groupId>org.liquibase</groupId>
+		   <artifactId>liquibase-maven-plugin</artifactId>
+		   <version>${maven.liquibase.version}</version>
+		   <configuration>                  
+			  <propertyFile>src/main/resources/liquibase/liquibase.properties</propertyFile>
+		   </configuration>                
+		   <executions>
+			 <execution>
+			   <phase>process-resources</phase>                                                                  
+			   <goals>
+				 <goal>update</goal>
+			   </goals>
+			 </execution>
+		   </executions>
+		</plugin> 
 		</plugins>
 	</build>
 

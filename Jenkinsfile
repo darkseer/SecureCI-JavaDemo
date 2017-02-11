@@ -143,7 +143,7 @@ node ('dockernode'){
 	}
 	finally {
 		stage ("clean workspace") {
-			sh "mvn clean"
+			sh "/opt/maven/bin/mvn clean"
 		}
 	}
 }

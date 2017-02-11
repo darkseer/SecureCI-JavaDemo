@@ -29,6 +29,12 @@ node ('dockernode'){
 		
 		  stage 'Toolsetup'
 		  
+		  //Create maven cache directory if it doesn't exist
+		  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
+		  
+		  //Set the maven variables for this project
+		  env.MAVEN_OPTS=env.WORKSPACE + "/.m2"
+		  env.PATH="/opt/maven/bin:" + env.PATH
 		  
 		  def matcher=null
 		  //Set up gradle based on node settings
@@ -69,8 +75,7 @@ node ('dockernode'){
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				  
 				  stage ("build") {
-					  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
-					  sh "export MAVEN_OPTS=\"-Dmaven.repo.local=`pwd`/.m2\"; /opt/maven/bin/mvn compile"
+					  sh "mvn compile"
 				  }
 			  }
 		  }

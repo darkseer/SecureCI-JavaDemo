@@ -69,6 +69,8 @@ node ('dockernode'){
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				  
 				  stage ("build") {
+					  sh "ls -alh"
+					  sh "ls -alh /opt"
 					  sh "mvn compile"
 				  }
 			  }

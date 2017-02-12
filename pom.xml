@@ -56,7 +56,7 @@
 		<db.port>3306</db.port>
 		<db.username>speaker</db.username>
 		<db.password>test123</db.password>
-		<db.driver>com.mysql.jdbc.Driver</db.driver>
+		<db.driver>com.mysql.cj.jdbc.Driver</db.driver>
 
 	</properties>
 

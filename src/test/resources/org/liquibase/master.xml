@@ -5,8 +5,8 @@
 	<preConditions>
 		<runningAs username="speaker" />
 	</preConditions>	
-	<include file="01_states_schema.xml" />
-	<include file="02_states_data.xml" />
+	<include file="resources/org/liquibase/01_states_schema.xml" />
+	<include file="resources/org/liquibase/02_states_data.xml" />
 	<changeSet id="tag-state-1.0" author="glenn">
 		<tagDatabase tag="state-1.0" />
 	</changeSet>

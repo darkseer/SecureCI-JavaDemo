@@ -15,8 +15,8 @@ node ('dockernode'){
     
   try {
 	  stage 'MVN Setup'
-	  env.DOCKER_HOST = sh "ip route show dev docker0 | sed -e 's/.*src //g'"
-	  echo "DOCKER: ${DOCKER_HOST}"
+	  env.DOCKER_HOST_INTERNAL_IP = sh "ip route show dev docker0 | sed -e 's/.*src //g'"
+
 	  //Create maven cache directory if it doesn't exist
 	  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
 	  
@@ -117,7 +117,7 @@ node ('dockernode'){
 						 matcher = null
 						 stage ("build") {
 							 //Populate DB
-							 sh "mvn -Ddb.url=jdbc:mysql://${DOCKER_HOST}:${DBPORT}/speaker liquibase:update"
+							 sh "mvn -Ddb.url=jdbc:mysql://${DOCKER_HOST_INTERNAL_IP}:${DBPORT}/speaker liquibase:update"
 						 }
 					 }
 				 }

@@ -22,6 +22,8 @@ node ('dockernode'){
 	  def matcher=null
 	  matcher=(env.DOCKER_HOST_INTERNAL_IP =~ /.*src ([^ ]+).*/)
 	  env.DOCKER_HOST_INTERNAL_IP=matcher[0][1]
+	  matcher=null
+
 	  echo "${DOCKER_HOST_INTERNAL_IP}"
 	  //Create maven cache directory if it doesn't exist
 	  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"

@@ -15,7 +15,7 @@ node ('dockernode'){
     
   try {
 	  stage 'MVN Setup'
-	  env.DOCKER_HOST_INTERNAL_IP = sh "ip route show dev docker0 | sed -e 's/.*src //g'"
+	  env.DOCKER_HOST_INTERNAL_IP = sh "ip route show dev docker0 | sed -e 's/.*src \([^ ]\+\).*/\1/g'"
 
 	  //Create maven cache directory if it doesn't exist
 	  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"

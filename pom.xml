@@ -177,7 +177,7 @@
 				<configuration>
 					<port>${maven.h2.port}</port>
 					<allowOthers>true</allowOthers>
-					<ifExists>false</ifExists>
+					<ifExists>true</ifExists>
 				</configuration>
 				<executions>
 					<execution>

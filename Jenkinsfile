@@ -88,6 +88,7 @@ node ('dockernode'){
 				  stage ("build") {
 					  sh "mvn clean package"
 					  sh "mvn com.edugility:h2-maven-plugin:1.0:spawn liquibase:update"
+					  sh "mvn com.edugility:h2-maven-plugin:1.0:stop"
 				  }
 			  }
 		  }

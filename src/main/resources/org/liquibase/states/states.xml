@@ -1,0 +1,13 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+	<preConditions>
+		<runningAs username="speaker" />
+	</preConditions>
+	<include file="2017_02_11/01_states_schema.xml" />
+	<include file="2017_02_11/02_states_data.xml" />
+	<changeSet id="tag-state-1.0" author="glenn">
+		<tagDatabase tag="state-1.0" />
+	</changeSet>
+</databaseChangeLog>

@@ -5,8 +5,7 @@
 	<preConditions>
 		<runningAs username="speaker" />
 	</preConditions>
-	<include file="2017_02_11_01states_schema.xml" />
-	<include file="2017_02_11_02states_data.xml" />
+	<include file="states/states.xml" />
 	<changeSet id="tag-1.0" author="glenn">
 		<tagDatabase tag="1.0" />
 	</changeSet>

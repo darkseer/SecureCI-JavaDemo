@@ -154,7 +154,7 @@
 				<version>${maven.liquibase.version}</version>
 				<configuration>
 					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-					<changeLogFile>src/main/resources/org/liquibase/master.xml</changeLogFile>
+					<changeLogFile>src/test/resources/org/liquibase/master.xml</changeLogFile>
 					<driver>${db.driver}</driver>
 					<url>${db.url}</url>
 					<username>${db.username}</username>

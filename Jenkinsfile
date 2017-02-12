@@ -16,7 +16,7 @@ node ('dockernode'){
   try {
 	  stage 'MVN Setup'
 	  env.DOCKER_HOST_INTERNAL_IP = sh (
-		  script: "ip route show dev docker0 | sed -e 's/.*src \\([^ ]\\+\\).*/\1/g'",
+		  script: 'ip route show dev docker0',
 		  returnStdout: true
 		  ).trim()
 	  echo "${DOCKER_HOST_INTERNAL_IP}"

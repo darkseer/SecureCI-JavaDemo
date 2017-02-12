@@ -87,8 +87,9 @@ node ('dockernode'){
 				  
 				  stage ("build") {
 					  sh "mvn clean package"
-					  sh "mvn com.edugility:h2-maven-plugin:1.0:spawn liquibase:update"
-					  sh "mvn com.edugility:h2-maven-plugin:1.0:stop"
+				  }
+				  stage ("Integration Tests") {
+					  sh "mvn pre-integration-test liquibase:update"
 				  }
 			  }
 		  }
@@ -127,7 +128,7 @@ node ('dockernode'){
 						 matcher = null
 						 stage ("build") {
 							 //Populate DB
-							 sh "mvn -Ddb.url=jdbc:mysql://${DOCKER_HOST_INTERNAL_IP}:${DBPORT}/speaker liquibase:update"
+							 sh "mvn -Ddb.driver=com.mysql.cj.jdbc.Driver -Ddb.username=speaker -Ddb.password=test123 -Ddb.url=jdbc:mysql://${DOCKER_HOST_INTERNAL_IP}:${DBPORT}/speaker liquibase:update"
 						 }
 					 }
 				 }

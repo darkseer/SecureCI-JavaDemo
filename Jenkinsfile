@@ -15,7 +15,7 @@ node ('dockernode'){
     
   try {
 	  stage 'MVN Setup'
-	  env.DOCKER_HOST="ip route show dev docker0".execute().getText().tokenize()[9]
+	  env.DOCKER_HOST = sh (ip route show dev docker0 | sed -e 's/.*src //g')	
 	  echo "DOCKER: ${DOCKER_HOST}"
 	  //Create maven cache directory if it doesn't exist
 	  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"

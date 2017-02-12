@@ -4,7 +4,7 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 	<preConditions>
 		<runningAs username="speaker" />
-	</preConditions>
+	</preConditions>	
 	<include file="states/states.xml" />
 	<changeSet id="tag-1.0" author="glenn">
 		<tagDatabase tag="1.0" />

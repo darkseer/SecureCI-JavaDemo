@@ -14,6 +14,16 @@ node ('dockernode'){
   currentBuild.result = "SUCCESS"
     
   try {
+	  stage 'MVN Setup'
+	  
+	  //Create maven cache directory if it doesn't exist
+	  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
+	  
+	  //Set the maven variables for this project
+	  env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
+	  env.MAVEN_HOME="/opt/maven"
+	  env.PATH="/opt/maven/bin:" + env.PATH
+	  
 	  stage ("Checkout") {
 		  checkout scm
 		  def imageId
@@ -27,16 +37,7 @@ node ('dockernode'){
 		  //set target release here until we find a better place
 		  env.RELEASE="1.0"
 		
-		  stage 'Toolsetup'
-		  
-		  //Create maven cache directory if it doesn't exist
-		  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
-		  
-		  //Set the maven variables for this project
-		  env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
-		  env.MAVEN_HOME="/opt/maven"
-		  env.PATH="/opt/maven/bin:" + env.PATH
-		  
+		  stage 'Toolsetup'	  
 		  def matcher=null
 		  //Set up gradle based on node settings
 		  if((env.BRANCH_NAME != "master") && (env.BRANCH_NAME != "develop")){

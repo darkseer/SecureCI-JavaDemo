@@ -7,8 +7,7 @@
 	</preConditions>
 
 	<changeSet id="2" author="glenn">
-		<insert schemaName="speaker"
-			tableName="states">
+		<insert	tableName="states">
 			<column name="state_name" value="New York" />
 			<column name="capital_name" value="Albany" />
 		</insert>

@@ -54,12 +54,12 @@
 		<maven.h2.port>9902</maven.h2.port>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
-		<db.url>jdbc:h2:tcp://localhost:9902/mem:speaker</db.url>
+		<db.url>jdbc:h2:mem:speaker;MODE=MYSQL</db.url>
 		<db.port>9902</db.port>
 		<db.username>speaker</db.username>
 		<db.password>test123</db.password>
 		<db.driver>org.h2.Driver</db.driver>
-		
+
 		<!-- <db.url>jdbc:mysql://localhost:3306/speaker</db.url> <db.port>3306</db.port> 
 			<db.username>speaker</db.username> <db.password>test123</db.password> <db.driver>com.mysql.cj.jdbc.Driver</db.driver> -->
 	</properties>
@@ -163,7 +163,7 @@
 				<version>${maven.liquibase.version}</version>
 				<configuration>
 					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-					<changeLogFile>src/main/resources/liquibase/master.xml</changeLogFile>
+					<changeLogFile>src/test/resources/liquibase/master.xml</changeLogFile>
 					<driver>${db.driver}</driver>
 					<url>${db.url}</url>
 					<username>${db.username}</username>
@@ -171,25 +171,23 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>com.edugility</groupId>
-				<artifactId>h2-maven-plugin</artifactId>
-				<version>1.0</version>
+				<groupId>com.btmatthews.maven.plugins.inmemdb</groupId>
+				<artifactId>inmemdb-maven-plugin</artifactId>
+				<version>1.4.3</version>
 				<configuration>
-					<port>${maven.h2.port}</port>
-					<allowOthers>true</allowOthers>
-					<ifExists>true</ifExists>
+					<monitorPort>9903</monitorPort>
+					<monitorKey>foo</monitorKey>
+					<daemon>true</daemon>
+					<type>h2</type>
+					<database>speaker</database>
+					<username>speaker</username>
+					<password>test123</password>
 				</configuration>
 				<executions>
 					<execution>
-						<id>Spawn a new H2 TCP server</id>
+						<id>start-db</id>
 						<goals>
-							<goal>spawn</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>Stop a spawned H2 TCP server</id>
-						<goals>
-							<goal>stop</goal>
+							<goal>run</goal>
 						</goals>
 					</execution>
 				</executions>

@@ -5,12 +5,9 @@
 	<preConditions>
 		<runningAs username="speaker" />
 	</preConditions>
-
-	<changeSet id="2" author="glenn">
-		<insert schemaName="speaker"
-			tableName="states">
-			<column name="state_name" value="New York" />
-			<column name="capital_name" value="Albany" />
-		</insert>
+	<include file="states_schema.xml" />
+	<include file="states_data.xml" />
+	<changeSet id="tag-1.0" author="glenn">
+		<tagDatabase tag="1.0" />
 	</changeSet>
 </databaseChangeLog>

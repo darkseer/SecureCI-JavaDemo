@@ -137,7 +137,7 @@ node ('dockernode'){
 					 sh 'sudo -u root ./hosts.sh'
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 matcher = (env.MYSQLPORT =~ /(.*):(.*)/)
-						 env.DBPORT=matcher[0][1]
+						 env.DBPORT=matcher[0][2]
 						 matcher = null
 						 stage ("build") {
 							 //Populate DB

@@ -15,6 +15,7 @@ node ('dockernode'){
     
   try {
 	  stage 'MVN Setup'
+	  env.DOCKER_HOST=getIPAddress()
 	  echo "DOCKER: ${DOCKER_HOST}"
 	  //Create maven cache directory if it doesn't exist
 	  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
@@ -171,5 +172,9 @@ node ('dockernode'){
 			//sh "mvn clean"
 		}
 	}
+}
+def getIPAddress() {
+	// needs error handling incase its not docker0 interface
+	return "ip route show dev docker0".execute().getText().tokenize()[9]
 }
 

@@ -57,7 +57,7 @@
 		<db.username>speaker</db.username>
 		<db.password>test123</db.password>
 		<db.driver>com.mysql.jdbc.Driver</db.driver>
-		
+
 	</properties>
 
 	<dependencies>
@@ -153,6 +153,7 @@
 				<artifactId>liquibase-maven-plugin</artifactId>
 				<version>${maven.liquibase.version}</version>
 				<configuration>
+					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
 					<changeLogFile>src/main/resources/org/liquibase/states_data.xml</changeLogFile>
 					<driver>${db.driver}</driver>
 					<url>${db.url}</url>

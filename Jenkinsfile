@@ -19,6 +19,9 @@ node ('dockernode'){
 		  script: 'ip route show dev docker0',
 		  returnStdout: true
 		  ).trim()
+	  def matcher=null
+	  matcher=(env.DOCKER_HOST_INTERNAL_IP =~ /.*src ([^ ]+).*/)
+	  env.DOCKER_HOST_INTERNAL_IP=matcher[0][1]
 	  echo "${DOCKER_HOST_INTERNAL_IP}"
 	  //Create maven cache directory if it doesn't exist
 	  sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
@@ -42,7 +45,7 @@ node ('dockernode'){
 		  env.RELEASE="1.0"
 		
 		  stage 'Toolsetup'	  
-		  def matcher=null
+		  matcher = null
 		  //Set up gradle based on node settings
 		  if((env.BRANCH_NAME != "master") && (env.BRANCH_NAME != "develop")){
 			  // pull out the branch name

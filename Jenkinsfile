@@ -132,9 +132,18 @@ node ('dockernode'){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 sh "echo Tomcat running on port: ${TOMCATPORT}"
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
-				 
-				 //Populate DB
-				 sh "mvn -Ddb.url=jdbc:mysql://localhost:${MYSQLPORT}/speaker install"
+				 withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_39') {
+					 //This cant be done in the docker build so er do it here. Making any host changes
+					 sh 'sudo -u root ./hosts.sh'
+					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+						 
+						 stage ("build") {
+							 //Populate DB
+				             sh "mvn -Ddb.url=jdbc:mysql://192.168.1.51:${MYSQLPORT}/speaker install"
+						 }
+					 }
+				 }
+
 				 
 				 input 'Now test'
 			 }

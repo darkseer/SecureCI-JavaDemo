@@ -132,6 +132,10 @@ node ('dockernode'){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 sh "echo Tomcat running on port: ${TOMCATPORT}"
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
+				 
+				 //Populate DB
+				 sh "mvn -Ddb.url=jdbc:mysql://localhost:${MYSQLPORT}/speaker install"
+				 
 				 input 'Now test'
 			 }
 			 finally {

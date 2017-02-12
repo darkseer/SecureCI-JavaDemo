@@ -136,10 +136,12 @@ node ('dockernode'){
 					 //This cant be done in the docker build so er do it here. Making any host changes
 					 sh 'sudo -u root ./hosts.sh'
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-						 
+						 matcher = (env.MYSQLPORT =~ /(.*):(.*)/)
+						 env.DBPORT=matcher[0][1]
+						 matcher = null
 						 stage ("build") {
 							 //Populate DB
-				             sh "mvn -Ddb.url=jdbc:mysql://192.168.1.51:${MYSQLPORT}/speaker install"
+				             sh "mvn -Ddb.url=jdbc:mysql://192.168.1.51:${DBPORT}/speaker install"
 						 }
 					 }
 				 }

@@ -141,7 +141,7 @@ node ('dockernode'){
 						 matcher = null
 						 stage ("build") {
 							 //Populate DB
-				             sh "mvn -Ddb.url=jdbc:mysql://192.168.1.51:${DBPORT}/speaker install"
+				             sh "mvn -Ddb.url=jdbc:mysql://192.168.1.51:${DBPORT}/speaker liquibase:update"
 						 }
 					 }
 				 }

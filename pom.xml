@@ -160,14 +160,6 @@
 					<username>${db.username}</username>
 					<password>${db.password}</password>
 				</configuration>
-				<executions>
-					<execution>
-						<phase>install</phase>
-						<goals>
-							<goal>update</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

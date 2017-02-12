@@ -105,6 +105,22 @@ node ('dockernode'){
 					 }
 			     }// end of waitUntil
 				 env.MYSQLPORT=mysqlContainer.port(3306)
+				 
+				 // Populate database before tomcat starts
+				 withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_39') {
+					 //This cant be done in the docker build so er do it here. Making any host changes
+					 sh 'sudo -u root ./hosts.sh'
+					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+						 matcher = (env.MYSQLPORT =~ /(.*):(.*)/)
+						 env.DBPORT=matcher[0][2]
+						 matcher = null
+						 stage ("build") {
+							 //Populate DB
+							 sh "mvn -Ddb.url=jdbc:mysql://${DOCKER_HOST}:${DBPORT}/speaker liquibase:update"
+						 }
+					 }
+				 }
+				 
 				 //Setup Tomcat Mount
 				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT}"
 				 				 
@@ -133,20 +149,6 @@ node ('dockernode'){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 sh "echo Tomcat running on port: ${TOMCATPORT}"
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
-				 withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_39') {
-					 //This cant be done in the docker build so er do it here. Making any host changes
-					 sh 'sudo -u root ./hosts.sh'
-					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-						 matcher = (env.MYSQLPORT =~ /(.*):(.*)/)
-						 env.DBPORT=matcher[0][2]
-						 matcher = null
-						 stage ("build") {
-							 //Populate DB
-				             sh "mvn -Ddb.url=jdbc:mysql://192.168.1.51:${DBPORT}/speaker liquibase:update"
-						 }
-					 }
-				 }
-
 				 
 				 input 'Now test'
 			 }

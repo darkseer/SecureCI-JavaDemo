@@ -22,13 +22,16 @@ import org.flywaydb.core.Flyway;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.logging.*;
 
 import java.util.LinkedHashSet;
+import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,176 +57,88 @@ public class Hangman {
 		this.answer = answer;
 		this.incorrectGuessesAllowed = incorrectGuessesAllowed;
 		this.guessedLetters = new LinkedHashSet<String>(NUM_LETTERS);
+		try {
+			this.flyway();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Hangman(final String answer) {
 		this(answer, DEFAULT_INCORRECT_GUESSES);
-	}
-
-	public String showAnswer() {
-		return this.getAnswer();
-	}
-
-	private String getAnswer() {
-		return this.answer;
-	}
-
-	private String getAnswerLowerCase() {
-		final String answer = this.getAnswer();
-		return answer.toLowerCase();
-	}
-
-	public int getIncorrectGuessesAllowed() {
-		return this.incorrectGuessesAllowed;
-	}
-
-	public void setIncorrectGuessesAllowed(final int incorrectGuessesAllowed) {
-		this.incorrectGuessesAllowed = incorrectGuessesAllowed;
-	}
-
-	private void addGuessedLetter(final String s) {
-		this.guessedLetters.add(s);
-	}
-
-	private Set<String> getGuessedLetters() {
-		// returns a copy, so the user can play with it safely
-		return new LinkedHashSet<String>(this.guessedLetters);
-	}
-
-	public boolean guess(final char c) {
-		if (Hangman.IN_PROGRESS != this.status()) {
-			throw new IllegalStateException("Game is over. No more guessing.");
-		}
-		if (!Character.isLetter(c)) {
-			throw new IllegalArgumentException("Guesses must be letters.");
-		}
-		final String s = Character.toString(c);
-		this.addGuessedLetter(s.toLowerCase()); // duplicates will be ignored
-		return this.getAnswerLowerCase().contains(s);
-	}
-
-	public String showCurrentDisplay() {
-		// include underscore in class just in case it is otherwise empty
-		final Pattern p = Pattern.compile("[^" + this.showCorrectLetters() + "_]");
-		final Matcher m = p.matcher(this.answer);
-		String display = m.replaceAll("_");
-		display = display.replaceAll("(.)", "$1 ");
-		return display;
-	}
-
-	public Set<String> getIncorrectGuesses() {
-		final String answerLc = this.getAnswerLowerCase();
-		Set<String> incorrect = new LinkedHashSet<String>(); // want to keep
-																// order
-		final Set<String> guesses = this.getGuessedLetters();
-		for (String guess : guesses) {
-			if (!answerLc.contains(guess)) {
-				incorrect.add(guess);
-			}
-		}
-		return incorrect;
-	}
-
-	private static String setToString(final Set<String> set) {
-		StringBuilder sb = new StringBuilder();
-		for (String letter : set) {
-			sb.append(letter);
-		}
-		return sb.toString();
-	}
-
-	public String showIncorrectLetters() {
-		final Set<String> incorrect = this.getIncorrectGuesses();
-		return Hangman.setToString(incorrect).toUpperCase();
-
-	}
-
-	private String showCorrectLetters() {
-		final Set<String> incorrect = this.getIncorrectGuesses();
-		Set<String> correct = new LinkedHashSet<String>(this.getGuessedLetters());
-		correct.removeAll(incorrect);
-		return Hangman.setToString(correct);
-	}
-
-	public int status() {
-		int status;
-		final String answer = this.getAnswer();
-		String correctGuesses = this.showCurrentDisplay();
-		correctGuesses = correctGuesses.replaceAll("(\\s)", "");
-		if (answer.equals(correctGuesses)) {
-			status = Hangman.WON;
-		} else {
-			final Set<String> incorrect = this.getIncorrectGuesses();
-			final int maxIncorrectGuesses = this.getIncorrectGuessesAllowed();
-			if (incorrect.size() < maxIncorrectGuesses) {
-				status = Hangman.IN_PROGRESS;
-			} else {
-				status = Hangman.LOST;
-			}
-		}
-		return status;
-	}
-
-	// Bogus method to add more code without coverage
-	public int status2() {
-		int status;
-		final String answer = this.getAnswer();
-		String correctGuesses = this.showCurrentDisplay();
-		correctGuesses = correctGuesses.replaceAll("(\\s)", "");
-		if (answer.equals(correctGuesses)) {
-			status = Hangman.WON;
-		} else {
-			final Set<String> incorrect = this.getIncorrectGuesses();
-			final int maxIncorrectGuesses = this.getIncorrectGuessesAllowed();
-			if (incorrect.size() < maxIncorrectGuesses) {
-				status = Hangman.IN_PROGRESS;
-			} else {
-				status = Hangman.LOST;
-			}
-		}
-		return status;
-	}
-
-	public String states() {
 		try {
 			this.flyway();
-		}
-		catch(Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return new String("test");
 	}
-    public BasicDataSource dataSource() {
-            BasicDataSource ds = new BasicDataSource();
-            /*
-            ds.setDriverClassName(env.getProperty("db.driver"));
-            ds.setUrl(env.getProperty("db.url"));
-            LOGGER.info("PROPERTIES: Loaded property: db.url" + env.getProperty("db.url"));
 
-            ds.setUsername(env.getProperty("db.user"));
-            ds.setPassword(env.getProperty("db.password"));
-            */
-            
-            ds.setDriverClassName("org.h2.Driver");
-            ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
-            ds.setUsername("tomcat8");
-            ds.setPassword("tomcat8");
-            return ds;
-    }
 
-    public Flyway flyway() {
-            Flyway flyway = new Flyway();
-            flyway.setBaselineOnMigrate(true);
 
-            flyway.setDataSource(dataSource());
-            flyway.clean();
-            flyway.repair();
-            flyway.migrate();
+	public String states() throws Exception {
 
-            return flyway;
+		Statement stmt = null;
+		String query = "select id,state_name,capital_name from states;";
+		String states = new String();
 
-    }
+		try {
+			Connection con = null;
+			Properties connectionProps = new Properties();
+			connectionProps.put("user", "tomcat8");
+			connectionProps.put("password", "tomcat8");
+			con = DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country", connectionProps);
 
+			stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next()) {
+				String state_name = rs.getString("state_name");
+				String capital_name = rs.getString("capital_name");
+				int id = rs.getInt("id");
+
+				states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id +"</p>";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (stmt != null) {
+				stmt.close();				
+			}
+		}
+
+		return states;
+	}
+
+	public BasicDataSource dataSource() {
+		BasicDataSource ds = new BasicDataSource();
+		/*
+		 * ds.setDriverClassName(env.getProperty("db.driver"));
+		 * ds.setUrl(env.getProperty("db.url"));
+		 * LOGGER.info("PROPERTIES: Loaded property: db.url" +
+		 * env.getProperty("db.url"));
+		 * 
+		 * ds.setUsername(env.getProperty("db.user"));
+		 * ds.setPassword(env.getProperty("db.password"));
+		 */
+
+		ds.setDriverClassName("org.h2.Driver");
+		ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
+		ds.setUsername("tomcat8");
+		ds.setPassword("tomcat8");
+		return ds;
+	}
+
+	public Flyway flyway() {
+		Flyway flyway = new Flyway();
+		flyway.setBaselineOnMigrate(true);
+
+		flyway.setDataSource(dataSource());
+		flyway.clean();
+		flyway.repair();
+		flyway.migrate();
+		System.out.println("Flyway Migration Complete");
+
+		return flyway;
+
+	}
 
 }

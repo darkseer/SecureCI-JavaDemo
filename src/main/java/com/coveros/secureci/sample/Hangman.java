@@ -18,6 +18,16 @@
 
 package com.coveros.secureci.sample;
 
+import org.flywaydb.core.Flyway;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -30,7 +40,7 @@ import java.util.regex.Pattern;
  * word or have reached the maximum number of incorrect guesses allowed.
  */
 public class Hangman {
-// Help me
+	// Help me
 	public static final int IN_PROGRESS = 0;
 	public static final int WON = 1;
 	public static final int LOST = -1;
@@ -103,7 +113,8 @@ public class Hangman {
 
 	public Set<String> getIncorrectGuesses() {
 		final String answerLc = this.getAnswerLowerCase();
-		Set<String> incorrect = new LinkedHashSet<String>(); // want to keep order
+		Set<String> incorrect = new LinkedHashSet<String>(); // want to keep
+																// order
 		final Set<String> guesses = this.getGuessedLetters();
 		for (String guess : guesses) {
 			if (!answerLc.contains(guess)) {
@@ -124,7 +135,7 @@ public class Hangman {
 	public String showIncorrectLetters() {
 		final Set<String> incorrect = this.getIncorrectGuesses();
 		return Hangman.setToString(incorrect).toUpperCase();
-		
+
 	}
 
 	private String showCorrectLetters() {
@@ -153,7 +164,7 @@ public class Hangman {
 		return status;
 	}
 
-  // Bogus method to add more code without coverage
+	// Bogus method to add more code without coverage
 	public int status2() {
 		int status;
 		final String answer = this.getAnswer();
@@ -172,9 +183,47 @@ public class Hangman {
 		}
 		return status;
 	}
-	
+
 	public String states() {
+		try {
+			this.flyway();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return new String("test");
 	}
+    public BasicDataSource dataSource() {
+            BasicDataSource ds = new BasicDataSource();
+            /*
+            ds.setDriverClassName(env.getProperty("db.driver"));
+            ds.setUrl(env.getProperty("db.url"));
+            LOGGER.info("PROPERTIES: Loaded property: db.url" + env.getProperty("db.url"));
+
+            ds.setUsername(env.getProperty("db.user"));
+            ds.setPassword(env.getProperty("db.password"));
+            */
+            
+            ds.setDriverClassName("org.h2.Driver");
+            ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
+            ds.setUsername("tomcat8");
+            ds.setPassword("tomcat8");
+            return ds;
+    }
+
+    public Flyway flyway() {
+            Flyway flyway = new Flyway();
+            flyway.setBaselineOnMigrate(true);
+
+            flyway.setDataSource(dataSource());
+            flyway.clean();
+            flyway.repair();
+            flyway.migrate();
+
+            return flyway;
+
+    }
+
 
 }

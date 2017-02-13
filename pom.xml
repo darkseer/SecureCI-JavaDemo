@@ -52,6 +52,9 @@
 		<maven.liquibase.version>3.5.3</maven.liquibase.version>
 		<maven.h2.version>1.4.193</maven.h2.version>
 		<maven.h2.port>9902</maven.h2.port>
+		<maven.flyway.version>4.1.0</maven.flyway.version>
+		<maven.commons-dbcp.version>1.4</maven.commons-dbcp.version>
+		<maven.slf4j.version>1.7.22</maven.slf4j.version>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
 		<db.url>jdbc:h2:tcp://127.0.0.1:9902/mem:speaker</db.url>
@@ -60,8 +63,6 @@
 		<db.password>test123</db.password>
 		<db.driver>org.h2.Driver</db.driver>
 
-		<!-- <db.url>jdbc:mysql://localhost:3306/speaker</db.url> <db.port>3306</db.port> 
-			<db.username>speaker</db.username> <db.password>test123</db.password> <db.driver>com.mysql.cj.jdbc.Driver</db.driver> -->
 	</properties>
 
 	<dependencies>
@@ -81,6 +82,21 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${maven.h2.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>${maven.flyway.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${maven.commons-dbcp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${maven.slf4j.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -158,19 +174,6 @@
 				<version>${maven.lint.version}</version>
 			</plugin>
 			<plugin>
-				<groupId>org.liquibase</groupId>
-				<artifactId>liquibase-maven-plugin</artifactId>
-				<version>${maven.liquibase.version}</version>
-				<configuration>
-					<promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-					<changeLogFile>src/test/resources/liquibase/master.xml</changeLogFile>
-					<driver>${db.driver}</driver>
-					<url>${db.url}</url>
-					<username>${db.username}</username>
-					<password>${db.password}</password>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>com.btmatthews.maven.plugins.inmemdb</groupId>
 				<artifactId>inmemdb-maven-plugin</artifactId>
 				<version>1.4.3</version>
@@ -179,9 +182,9 @@
 					<monitorKey>foo</monitorKey>
 					<daemon>false</daemon>
 					<type>h2</type>
-					<database>speaker</database>
-					<username>speaker</username>
-					<password>test123</password>
+					<database>country</database>
+					<username>tomcat8</username>
+					<password>tomcat8</password>
 					<port>9902</port>
 				</configuration>
 				<executions>

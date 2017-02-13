@@ -172,5 +172,9 @@ public class Hangman {
 		}
 		return status;
 	}
+	
+	public String states() {
+		return new String("test");
+	}
 
 }

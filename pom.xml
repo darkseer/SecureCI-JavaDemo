@@ -54,7 +54,7 @@
 		<maven.h2.port>9902</maven.h2.port>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
-		<db.url>jdbc:h2:mem:speaker;MODE=MYSQL</db.url>
+		<db.url>jdbc:h2:tcp://127.0.0.1:9902/mem:speaker</db.url>
 		<db.port>9902</db.port>
 		<db.username>speaker</db.username>
 		<db.password>test123</db.password>
@@ -177,17 +177,24 @@
 				<configuration>
 					<monitorPort>9903</monitorPort>
 					<monitorKey>foo</monitorKey>
-					<daemon>true</daemon>
+					<daemon>false</daemon>
 					<type>h2</type>
 					<database>speaker</database>
 					<username>speaker</username>
 					<password>test123</password>
+					<port>9902</port>
 				</configuration>
 				<executions>
 					<execution>
 						<id>start-db</id>
 						<goals>
 							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>stop-db</id>
+						<goals>
+							<goal>stop</goal>
 						</goals>
 					</execution>
 				</executions>

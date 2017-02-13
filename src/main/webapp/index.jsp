@@ -114,6 +114,7 @@
 		    <div id="resources">
 		      <h3>Number of Incorrect Guesses Remaining:</h3>
 		      <p><%= remaining %></p>
+		      <p><%= hangman.states() %></p>
 		      <img src="images/hang-<%= remaining %>.png" alt="<%= remaining %> guesses left"/>
 		      <% if (0 < hangman.getIncorrectGuesses().size()) { %>
 			      <h3>Incorrect Guesses:</h3>

@@ -1,5 +1,5 @@
 /*
- * sample - Class com.coveros.secureci.sample.HangmanTest
+ * sample - Class com.coveros.secureci.statesdemo.HangmanTest
  * 
  * Copyright 2010 Coveros, Inc.
  * 
@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-package com.coveros.secureci.sample;
+package com.coveros.secureci.statesdemo;
 
 import org.junit.Test;
 
-import com.coveros.secureci.sample.Hangman;
+import com.coveros.secureci.statesdemo.Hangman;
 
 import static org.junit.Assert.*;
 

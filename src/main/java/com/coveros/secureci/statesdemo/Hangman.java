@@ -1,5 +1,5 @@
 /*
- * sample - Class com.coveros.secureci.sample.Hangman
+ * sample - Class com.coveros.secureci.statesdemo.Hangman
  * 
  * Copyright 2010 Coveros, Inc.
  * 
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.coveros.secureci.sample;
+package com.coveros.secureci.statesdemo;
 
 import org.flywaydb.core.Flyway;
 
@@ -138,7 +138,6 @@ public class Hangman {
 		System.out.println("Flyway Migration Complete");
 
 		return flyway;
-
 	}
 
 }

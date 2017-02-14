@@ -197,7 +197,7 @@
 					</execution>
 					<execution>
 						<id>stop-db</id>
-						<phase>prepare-package</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>stop</goal>
 						</goals>

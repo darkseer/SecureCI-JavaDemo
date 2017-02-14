@@ -180,7 +180,7 @@
 				<configuration>
 					<monitorPort>9903</monitorPort>
 					<monitorKey>foo</monitorKey>
-					<daemon>false</daemon>
+					<daemon>true</daemon>
 					<type>h2</type>
 					<database>country</database>
 					<username>tomcat8</username>
@@ -190,12 +190,14 @@
 				<executions>
 					<execution>
 						<id>start-db</id>
+						<phase>process-test-resources</phase>
 						<goals>
 							<goal>run</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>stop-db</id>
+						<phase>prepare-package</phase>
 						<goals>
 							<goal>stop</goal>
 						</goals>

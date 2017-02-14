@@ -28,132 +28,15 @@ public class HangmanTest {
 
 	private Hangman game;
 
-	@Test
-	public void testGameSetup() throws Exception {
-		game = new Hangman("word");
-		assertEquals("word", game.showAnswer());
-		assertEquals(6, game.getIncorrectGuessesAllowed());
-		game = new Hangman("beautiful", 3);
-		assertEquals(3, game.getIncorrectGuessesAllowed());
-	}
 
-	@Test
-	public void testGuesses() throws Exception {
-		game = new Hangman("layers");
-		assertFalse(game.guess('b'));
-		assertTrue(game.guess('s'));
-		assertTrue(game.guess('e'));
-		assertFalse(game.guess('z'));
-	}
-
-	@Test
-	public void testShowCurrentDisplay() throws Exception {
-		game = new Hangman("chair");
-		assertEquals("_ _ _ _ _ ", game.showCurrentDisplay());
-		assertTrue(game.guess('h'));
-		assertEquals("_ h _ _ _ ", game.showCurrentDisplay());
-		assertTrue(game.guess('r'));
-		assertEquals("_ h _ _ r ", game.showCurrentDisplay());
-		assertFalse(game.guess('z'));
-		assertEquals("_ h _ _ r ", game.showCurrentDisplay());
-		game.guess('c');
-		game.guess('a');
-		game.guess('i');
-		//pass
-		assertEquals("c h a i r ", game.showCurrentDisplay());
-		//fail
-		//assertEquals("c h a i r foobar", game.showCurrentDisplay());
-	}
-
-	@Test
-	public void testCurrentDisplayWithRepeatedLetters() throws Exception {
-		game = new Hangman("tasty");
-		game.guess('t');
-		//pass
-		assertEquals("t _ _ t _ ", game.showCurrentDisplay());
-		//fail
-		//assertEquals("t _ _ t _foobar ", game.showCurrentDisplay());
-	}
-	
-
-	@Test
-	public void testSavingIncorrectLetters() throws Exception {
-		game = new Hangman("loquacious");
-		game.guess('O');
-		assertEquals("", game.showIncorrectLetters());
-		game.guess('T');
-		assertEquals("T", game.showIncorrectLetters());
-		game.guess('J');
-		assertEquals("TJ", game.showIncorrectLetters());
-	}
-
-	@Test
-	public void testWinning() throws Exception {
-		game = new Hangman("easy");
-		game.guess('s');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('a');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('y');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('e');
-		assertEquals(Hangman.WON, game.status());
-	}
-	
-
-	@Test
-	public void testLosing() throws Exception {
-		game = new Hangman("hard");
-		game.guess('b');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('c');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('e');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('a');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('f');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('g');
-		assertEquals(Hangman.IN_PROGRESS, game.status());
-		game.guess('i');
-		//pass
-		assertEquals(Hangman.LOST, game.status());
-		//fail
-		//assertEquals(Hangman.WON, game.status());
-	}
-
-	@Test
-	public void testGuessingAfterGameOver() throws Exception {
-		game = new Hangman("to");
-		game.guess('t');
-		game.guess('o');
-
-		try {
-			game.guess('e');
-			fail("Should not allow guessing after game over");
-		} catch (IllegalStateException ise) {
-			// expected
-		}
-	}
 
 	@Test
 	public void testVeryLongWord() throws Exception {
+		String test=null;
 		game = new Hangman("supercalifragilistic");
-		game.guess('s');
-		game.guess('u');
-		game.guess('p');
-		game.guess('e');
-		game.guess('r');
-		game.guess('c');
-		game.guess('a');
-		game.guess('l');
-		game.guess('i');
-		game.guess('f');
-		game.guess('g');
-		game.guess('t');
+		test=game.states();
 		//pass
-		assertEquals(Hangman.WON, game.status());
+		assertNotEquals(null, test);
 		//fail
 		//assertEquals(Hangman.LOST, game.status());
 	}

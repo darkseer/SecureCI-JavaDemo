@@ -88,9 +88,6 @@ node ('dockernode'){
 				  stage ("build") {
 					  sh "mvn clean package"
 				  }
-				  stage ("Integration Tests") {
-					  sh "mvn pre-integration-test liquibase:update"
-				  }
 			  }
 		  }
 		  stage ("TestSetup"){
@@ -118,20 +115,6 @@ node ('dockernode'){
 			     }// end of waitUntil
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 
-				 // Populate database before tomcat starts
-				 withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_39') {
-					 //This cant be done in the docker build so er do it here. Making any host changes
-					 sh 'sudo -u root ./hosts.sh'
-					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-						 matcher = (env.MYSQLPORT =~ /(.*):(.*)/)
-						 env.DBPORT=matcher[0][2]
-						 matcher = null
-						 stage ("build") {
-							 //Populate DB
-							 sh "mvn -Ddb.driver=com.mysql.cj.jdbc.Driver -Ddb.username=speaker -Ddb.password=test123 -Ddb.url=jdbc:mysql://${DOCKER_HOST_INTERNAL_IP}:${DBPORT}/speaker liquibase:update"
-						 }
-					 }
-				 }
 				 
 				 //Setup Tomcat Mount
 				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT}"

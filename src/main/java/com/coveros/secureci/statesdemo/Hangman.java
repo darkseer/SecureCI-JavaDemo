@@ -86,8 +86,9 @@ public class Hangman {
 			Properties connectionProps = new Properties();
 			connectionProps.put("user", "tomcat8");
 			connectionProps.put("password", "tomcat8");
+			//con = DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country", connectionProps);
 			con = DriverManager.getConnection("jdbc:h2:mem:country", connectionProps);
-
+			
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
@@ -121,6 +122,7 @@ public class Hangman {
 		 */
 
 		ds.setDriverClassName("org.h2.Driver");
+		//ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
 		ds.setUrl("jdbc:h2:mem:country");
 		ds.setUsername("tomcat8");
 		ds.setPassword("tomcat8");

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ page
-	import="com.coveros.secureci.sample.Hangman, java.io.*, java.util.*"%>
+	import="com.coveros.secureci.statesdemo.Hangman, java.io.*, java.util.*"%>
 
 <!--
   sample - index.jsp

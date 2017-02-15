@@ -55,6 +55,8 @@
 		<maven.flyway.version>4.1.0</maven.flyway.version>
 		<maven.commons-dbcp.version>1.4</maven.commons-dbcp.version>
 		<maven.slf4j.version>1.7.22</maven.slf4j.version>
+		<maven.inmem.version>1.4.3</maven.inmem.version>
+		<inmem.daemon>true</inmem.daemon>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
 		<db.url>jdbc:h2:tcp://127.0.0.1:9902/mem:speaker</db.url>
@@ -176,11 +178,11 @@
 			<plugin>
 				<groupId>com.btmatthews.maven.plugins.inmemdb</groupId>
 				<artifactId>inmemdb-maven-plugin</artifactId>
-				<version>1.4.3</version>
+				<version>${maven.inmem.version}</version>
 				<configuration>
 					<monitorPort>9903</monitorPort>
 					<monitorKey>foo</monitorKey>
-					<daemon>true</daemon>
+					<daemon>${inmem.daemon}</daemon>
 					<type>h2</type>
 					<database>country</database>
 					<username>tomcat8</username>

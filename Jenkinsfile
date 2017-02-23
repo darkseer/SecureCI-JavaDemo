@@ -79,8 +79,8 @@ node ('dockernode'){
 			sh 'rm -f commit-id'
 			
 	  }
-	  docker.withRegistry('https://jenkins.darkseer.org:444','nexus3') {
-		  withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_39') {
+	  docker.withRegistry('http://secureci:444','nexus3') {
+		  withDockerContainer('secureci:444/centos:latest') {
 			  //This cant be done in the docker build so er do it here. Making any host changes
 			  sh 'sudo -u root ./hosts.sh'
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
@@ -98,7 +98,7 @@ node ('dockernode'){
 			 def tomcatContainer
 			 def mysqlContainer
 			 try { 
-				 mysqlContainer = docker.image("jenkins.darkseer.org:444/mysql:14").run('-p 3306','/start.sh')
+				 mysqlContainer = docker.image("secureci:444/mysql:latest").run('-p 3306','/start.sh')
 				 env.MYSQLID=mysqlContainer.id
 				 
 				 waitUntil {
@@ -119,7 +119,7 @@ node ('dockernode'){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 
 				 // Populate database before tomcat starts
-				 withDockerContainer('jenkins.darkseer.org:444/centos:jenkinsbuild_39') {
+				 withDockerContainer('secureci:444/centos:latest') {
 					 //This cant be done in the docker build so er do it here. Making any host changes
 					 sh 'sudo -u root ./hosts.sh'
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {

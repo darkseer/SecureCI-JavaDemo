@@ -122,7 +122,7 @@ node ('dockernode'){
 				 withDockerContainer('secureci:444/centos:latest') {
 					 //This cant be done in the docker build so er do it here. Making any host changes
 					 sh 'sudo -u root ./hosts.sh'
-					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 matcher = (env.MYSQLPORT =~ /(.*):(.*)/)
 						 env.DBPORT=matcher[0][2]
 						 matcher = null
@@ -137,7 +137,7 @@ node ('dockernode'){
 				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT}"
 				 				 
 				 				 
-				 tomcatContainer = docker.image("jenkins.darkseer.org:444/tomcat:12").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
+				 tomcatContainer = docker.image("secureci:444/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
 				 env.TOMCATID=tomcatContainer.id
 				 
 				 // Wait for tomcat to be up

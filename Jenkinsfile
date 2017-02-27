@@ -51,15 +51,15 @@ node ('dockernode'){
 		  //Set up gradle based on node settings
 		  if((env.BRANCH_NAME != "master") && (env.BRANCH_NAME != "develop")){
 			  // pull out the branch name
-			  def matcher = null
-			  matcher = (env.BRANCH_NAME =~ /.*[^a-zA-Z0-9\.]([a-zA-Z0-9\.]+)/)
-			  env.BRANCH_ID=matcher[0][1]
-			  matcher = null
+			  def matcher2 = null
+			  matcher2 = (env.BRANCH_NAME =~ /.*[^a-zA-Z0-9\.]([a-zA-Z0-9\.]+)/)
+			  env.BRANCH_ID=matcher2[0][1]
+			  matcher2 = null
 		
 			  // pull out the type of branch
-			  matcher = (env.BRANCH_NAME =~ /(.*)[^a-zA-Z0-9\.][a-zA-Z0-9\.]+/)
-			  env.BRANCH_PREFIX=matcher[0][1]
-			  matcher=null
+			  matcher2 = (env.BRANCH_NAME =~ /(.*)[^a-zA-Z0-9\.][a-zA-Z0-9\.]+/)
+			  env.BRANCH_PREFIX=matcher2[0][1]
+			  matcher2=null
 			}
 			else {
 			  env.BRANCH_PREFIX="none"

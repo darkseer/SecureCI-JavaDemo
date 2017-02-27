@@ -65,7 +65,8 @@ node ('dockernode'){
 			  env.BRANCH_PREFIX="none"
 			  env.BRANCH_ID=env.BRANCH_NAME
 			}
-			
+
+						
 			//We should no longer need to set the gradle path
 			//env.PATH = "${tool 'gradle'}/bin:${env.PATH}"
 			echo "My branch is: ${env.BRANCH_ID}"

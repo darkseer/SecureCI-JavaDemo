@@ -81,12 +81,9 @@ node ('dockernode'){
 			sh 'rm -f commit-id'
 			
 	  }
-	  docker.withRegistry('http://secureci:444','docker') {
-		  withDockerContainer('secureci:444/centos:latest') {
-			  //This cant be done in the docker build so er do it here. Making any host changes
-			  sh 'sudo -u root ./hosts.sh'
-			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-				  
+	  docker.withRegistry('http://secureci:8182','docker') {
+		  withDockerContainer('secureci:8182/centos:latest') {
+			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
 					  sh "mvn clean package"
 				  }
@@ -100,7 +97,7 @@ node ('dockernode'){
 			 def tomcatContainer
 			 def mysqlContainer
 			 try { 
-				 mysqlContainer = docker.image("secureci:444/mysql:latest").run('-p 3306','/start.sh')
+				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306','/start.sh')
 				 env.MYSQLID=mysqlContainer.id
 				 
 				 waitUntil {
@@ -121,7 +118,7 @@ node ('dockernode'){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 
 				 // Populate database before tomcat starts
-				 withDockerContainer('secureci:444/centos:latest') {
+				 withDockerContainer('secureci:8182/centos:latest') {
 					 //This cant be done in the docker build so er do it here. Making any host changes
 					 sh 'sudo -u root ./hosts.sh'
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
@@ -139,7 +136,7 @@ node ('dockernode'){
 				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT}"
 				 				 
 				 				 
-				 tomcatContainer = docker.image("secureci:444/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
+				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
 				 env.TOMCATID=tomcatContainer.id
 				 
 				 // Wait for tomcat to be up

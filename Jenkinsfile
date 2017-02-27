@@ -143,7 +143,8 @@ node ('dockernode'){
 				 sh "echo Tomcat running on port: ${TOMCATPORT}"
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
 				 
-				 input 'Now test'
+				 echo 'Two Minutes to test'
+				 sh 'sleep 120'
 			 }
 			 finally {
 				 tomcatContainer.stop()

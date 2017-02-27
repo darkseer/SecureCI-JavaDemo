@@ -81,7 +81,7 @@ node ('dockernode'){
 			sh 'rm -f commit-id'
 			
 	  }
-	  docker.withRegistry('http://secureci:444','nexus3') {
+	  docker.withRegistry([credentialsId: 'docker', url: 'secureci:444']) {
 		  withDockerContainer('secureci:444/centos:latest') {
 			  //This cant be done in the docker build so er do it here. Making any host changes
 			  sh 'sudo -u root ./hosts.sh'

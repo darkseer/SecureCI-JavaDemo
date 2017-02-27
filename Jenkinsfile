@@ -117,7 +117,7 @@ node ('dockernode'){
 				 // Populate database before tomcat starts
 				 withDockerContainer('secureci:8182/centos:latest') {
 					 //This cant be done in the docker build so er do it here. Making any host changes
-					 sh 'sudo -u root ./hosts.sh'
+					 //sh 'sudo -u root ./hosts.sh'
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 matcher = (env.MYSQLPORT =~ /(.*):(.*)/)
 						 env.DBPORT=matcher[0][2]

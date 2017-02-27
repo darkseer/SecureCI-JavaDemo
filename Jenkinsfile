@@ -85,7 +85,7 @@ node ('dockernode'){
 		  withDockerContainer('secureci:444/centos:latest') {
 			  //This cant be done in the docker build so er do it here. Making any host changes
 			  sh 'sudo -u root ./hosts.sh'
-			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'nexus3', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				  
 				  stage ("build") {
 					  sh "mvn clean package"

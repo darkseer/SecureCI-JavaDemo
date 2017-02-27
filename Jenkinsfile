@@ -39,7 +39,7 @@ node ('dockernode'){
 		  sh "git rev-parse HEAD > commit-id"
 		  env.GIT_COMMIT = readFile('commit-id')
 		  echo "The commit: ${env.GIT_COMMIT}"
-		
+		  echo "Branch: ${BRANCH_NAME}"
 		
 		  //echo 'FATAL:'
 		  //step([$class: 'LogParserPublisher', failBuildOnError: true, projectRulePath: '${env.WORKSPACE}/errorscanning/consolepatterns.dat', showGraphs: true, unstableOnWarning: true, useProjectRule: true])

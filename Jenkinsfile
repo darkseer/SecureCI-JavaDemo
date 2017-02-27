@@ -47,10 +47,11 @@ node ('dockernode'){
 		  env.RELEASE="1.0"
 		
 		  stage 'Toolsetup'	  
-		  matcher = null
+		  
 		  //Set up gradle based on node settings
 		  if((env.BRANCH_NAME != "master") && (env.BRANCH_NAME != "develop")){
 			  // pull out the branch name
+			  def matcher = null
 			  matcher = (env.BRANCH_NAME =~ /.*[^a-zA-Z0-9\.]([a-zA-Z0-9\.]+)/)
 			  env.BRANCH_ID=matcher[0][1]
 			  matcher = null

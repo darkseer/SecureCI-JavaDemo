@@ -87,9 +87,6 @@ node ('dockernode'){
 				  stage ("build") {
 					  sh "mvn clean package"
 				  }
-				  stage ("Integration Tests") {
-					  sh "mvn pre-integration-test liquibase:update"
-				  }
 			  }
 		  }
 		  stage ("TestSetup"){

@@ -1,4 +1,4 @@
-node ('dockernode'){
+node (){
   // Build parameters
   // Syntax from here: https://issues.jenkins-ci.org/browse/JENKINS-32780
   /*properties([[$class: 'ParametersDefinitionProperty', 

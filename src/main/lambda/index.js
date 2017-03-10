@@ -12,25 +12,33 @@ exports.handler = (event, context, callback) => {
     // Get ENV VAR defining Table Name
     var DB_TABLE_NAME = process.env.TABLE_NAME;
 
-    console.log("Env Val for TABE_NAME >>> " + DB_TABLE_NAME);
+    console.log("Env Val for TABLE_NAME >>> " + DB_TABLE_NAME);
     console.log(JSON.stringify(event));
-    var whoIsCool = "James";
-    
-    try {
-        whoIsCool = event.params.querystring.name;
-        console.log("Name Query Param >> " + whoIsCool);
-    } catch (e) {
-        console.log("No name query param provided...Defaulting to the coolest.");
-    }
-    
-    var output = { "message" : whoIsCool + " Is Cool" };
 
-    console.log("Outputting JSON >>> " + JSON.stringify(output));
+    var login = event.params.querystring.name;
 
-    try {
-        context.done(null, output);
-    } catch (e) {
-        console.log("Error -> " + JSON.stringify(e));
-        context.fail("An error occurred, holmes >> " + e);
-    }
+    var params = {
+        TableName: DB_TABLE_NAME
+    };
+
+    if (login != undefined) {
+        params.FilterExpression = 'username = :login';
+        params.ExpressionAttributeValues = {':login' : login};
+    } 
+
+    console.log("PARAMS >>> " + params);
+
+    dynamodb.scan(params, function(err, data) {
+        if (!err) {
+            var employees = [];
+            data.Items.forEach((item) => employees.push(item));
+            
+            context.done(
+                null,
+                JSON.stringify(employees)
+            );
+        } else {
+            context.fail(err);
+        }
+    });  
 };

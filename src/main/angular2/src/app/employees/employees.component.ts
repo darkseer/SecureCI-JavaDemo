@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoggedInCallback, UserLoginService, CognitoUtil, Callback } from '../service/cognito.service';
+import { EmployeeService } from '../service/employee.service';
+import { Employee } from './employee.model';
 
 export class AuthTokens {
     public accessToken: string;
@@ -15,8 +17,12 @@ export class AuthTokens {
 export class EmployeesComponent implements OnInit, LoggedInCallback {
 
   public authTokens: AuthTokens = new AuthTokens();
+  errorMessage: string;
+  employees: Employee[];
+  mode = 'Observable';
 
-  constructor(public router: Router, public userService: UserLoginService, public cognitoUtil: CognitoUtil) {
+  constructor(public router: Router, public userService: UserLoginService, public cognitoUtil: CognitoUtil,
+    private employeeService: EmployeeService) {
     this.userService.isAuthenticated(this);
     console.log('In EmployeesComponent');
   }
@@ -33,6 +39,14 @@ export class EmployeesComponent implements OnInit, LoggedInCallback {
   }
 
   ngOnInit() {
+    this.getEmployees();
+  }
+
+  getEmployees() {
+    console.log('Getting employees');
+    const authToken = localStorage.getItem('auth_token');
+    this.employeeService.getEmployees(authToken).subscribe(employees => this.employees = employees,
+        error => this.errorMessage = <any>error);
   }
 
   callbackWithParam(jwtToken: string) {

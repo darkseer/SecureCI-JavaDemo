@@ -45,11 +45,13 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
       if (this.errorMessage === 'User is not confirmed.') {
           console.log('redirecting');
           // this.router.navigate(['/home/confirmRegistration', this.email]);
+      } else {
+        this.model.authFailure = true;
       }
     } else {
-      // this.ddb.writeLogEntry("login");
-      // this.router.navigate(['/securehome']);
-      console.log('User has logged in successfully! ' + result.getIdToken().getJwtToken());
+      const authToken = result.getIdToken().getJwtToken();
+      console.log('User has logged in successfully! ' + authToken);
+      localStorage.setItem('auth_token', authToken);
       this.router.navigate(['/employees']);
     }
   }
@@ -58,6 +60,7 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
       if (isLoggedIn) {
           // this.router.navigate(['/securehome']);
           console.log('User is authenticated!');
+          this.router.navigate(['/employees']);
       }
   }
 

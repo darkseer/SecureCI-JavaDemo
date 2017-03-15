@@ -1,6 +1,9 @@
 <div class="container">
   <h1>Login</h1>
   <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <div [hidden]="!model.authFailure" class="alert alert-danger">
+      {{errorMessage}}
+    </div>
     <div class="form-group">
       <label for="name">Username</label>
       <input type="text" class="form-control" id="username"

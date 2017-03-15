@@ -10,10 +10,10 @@ module.exports = {
 	TICSConfig: {
 	 	config: {
 			region: 'us-east-1',
-	    	identityPoolId: 'us-east-1:0ad49232-e0db-4717-bf08-3e2ca35507c1',
-	    	UserPoolId: 'us-east-1_qQDx6p5SR',
-	    	ClientId: '584a9pau7pmmie35d3t9mv1c4s',
-	    	apiUrl: 'https://4jhbs3q7mf.execute-api.us-east-1.amazonaws.com/Dev',
+	    	identityPoolId: 'us-east-1:d1cab046-7c83-4f79-9605-373021fc3ab7',
+	    	UserPoolId: 'us-east-1_M4meXAkdl',
+	    	ClientId: '8l4skgdsichrvh6mp3jr9cmql',
+	    	apiUrl: 'https://zjfqrfo6bf.execute-api.us-east-1.amazonaws.com/dev',
 	    	Username: 'jcaple',
 	    	Password: '@TICSEmail69',
 	    	Email: ''

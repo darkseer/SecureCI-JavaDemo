@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container login">
   <h1>Login</h1>
   <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
     <div [hidden]="!model.authFailure" class="alert alert-danger">
@@ -21,6 +21,6 @@
     <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
       Password is required
     </div>
-    <button type="submit" class="btn btn-success" [disabled]="!loginForm.form.valid">Login</button>
+    <button type="submit" class="btn btn-success text-center" [disabled]="!loginForm.form.valid">Login</button>
   </form>
 </div>

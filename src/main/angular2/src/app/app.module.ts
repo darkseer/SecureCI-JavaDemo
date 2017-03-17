@@ -8,19 +8,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { UserLoginService, UserParametersService, CognitoUtil} from './service/cognito.service';
 import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeService } from './service/employee.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NewEmployeeComponent } from './new-employee/new-employee.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    EmployeesComponent
+    EmployeesComponent,
+    NewEmployeeComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     JsonpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgbModule.forRoot()
   ],
   providers: [
     UserLoginService,

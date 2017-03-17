@@ -12,8 +12,6 @@ console.log('HERE');
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit {
-  username: string;
-  password: string;
   errorMessage: string;
   submitted = false;
   model = new Login('', '');
@@ -57,11 +55,18 @@ export class LoginComponent implements CognitoCallback, LoggedInCallback, OnInit
   }
 
   isLoggedIn(message: string, isLoggedIn: boolean) {
-      if (isLoggedIn) {
-          // this.router.navigate(['/securehome']);
-          console.log('User is authenticated!');
-          this.router.navigate(['/employees']);
-      }
+    const token = localStorage.getItem('auth_token');
+    if (token == null) {
+      console.log('No local token found');
+      this.router.navigate(['/login']);
+    } else if (isLoggedIn) {
+      console.log('User is authenticated!');
+      this.router.navigate(['/employees']);
+    }
+  }
+
+  logout() {
+    this.userService.logout();
   }
 
 }

@@ -1,5 +1,6 @@
 import {Injectable, Inject} from '@angular/core';
 import {environment} from '../../environments/environment';
+import { Router } from '@angular/router';
 
 /**
  * Created by Vladimir Budilov
@@ -134,7 +135,7 @@ export class CognitoUtil {
 @Injectable()
 export class UserLoginService {
 
-    constructor(public cognitoUtil: CognitoUtil) {
+    constructor(public cognitoUtil: CognitoUtil, public router: Router) {
     }
 
     authenticate(username: string, password: string, callback: CognitoCallback) {
@@ -222,8 +223,11 @@ export class UserLoginService {
 
     logout() {
         console.log('UserLoginService: Logging out');
-        this.cognitoUtil.getCurrentUser().signOut();
-
+        try {
+            localStorage.setItem('auth_token', null);
+            this.router.navigate(['/login']);
+            this.cognitoUtil.getCurrentUser().signOut();
+        } catch (e) {}
     }
 
     isAuthenticated(callback: LoggedInCallback) {

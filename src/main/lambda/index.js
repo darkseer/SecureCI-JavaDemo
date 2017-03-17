@@ -15,30 +15,65 @@ exports.handler = (event, context, callback) => {
     console.log("Env Val for TABLE_NAME >>> " + DB_TABLE_NAME);
     console.log(JSON.stringify(event));
 
-    var login = event.params.querystring.name;
+    if (event.operation) {
+        var operation = event.operation;
+        console.log("Servicing Op Request >>>> " + operation);
 
-    var params = {
-        TableName: DB_TABLE_NAME
-    };
+        event.payload.TableName = DB_TABLE_NAME;
 
-    if (login != undefined) {
-        params.FilterExpression = 'username = :login';
-        params.ExpressionAttributeValues = {':login' : login};
-    } 
-
-    console.log("PARAMS >>> " + params);
-
-    dynamodb.scan(params, function(err, data) {
-        if (!err) {
-            var employees = [];
-            data.Items.forEach((item) => employees.push(item));
-            
-            context.done(
-                null,
-                JSON.stringify(employees)
-            );
-        } else {
-            context.fail(err);
+        switch (operation) {
+            case 'create':
+                dynamodb.put(event.payload, callback);
+                break;
+            case 'read':
+                dynamodb.get(event.payload, callback);
+                break;
+            case 'update':
+                dynamodb.update(event.payload, callback);
+                break;
+            case 'delete':
+                dynamodb.delete(event.payload, callback);
+                break;
+            case 'list':
+                dynamodb.scan(event.payload, callback);
+                break;
+            case 'echo':
+                callback(null, "Success");
+                break;
+            case 'ping':
+                callback(null, "pong");
+                break;
+            default:
+                callback('Unknown operation: ${operation}');
         }
-    });  
+
+    } else {
+
+        var login = event.params.querystring.name;
+
+        var params = {
+            TableName: DB_TABLE_NAME
+        };
+
+        if (login != undefined) {
+            params.FilterExpression = 'username = :login';
+            params.ExpressionAttributeValues = {':login' : login};
+        } 
+
+        console.log("PARAMS >>> " + params);
+
+        dynamodb.scan(params, function(err, data) {
+            if (!err) {
+                var employees = [];
+                data.Items.forEach((item) => employees.push(item));
+                
+                context.done(
+                    null,
+                    JSON.stringify(employees)
+                );
+            } else {
+                context.fail(err);
+            }
+        }); 
+    } 
 };

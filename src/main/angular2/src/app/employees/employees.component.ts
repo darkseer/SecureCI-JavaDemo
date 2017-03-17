@@ -4,39 +4,23 @@ import { LoggedInCallback, UserLoginService, CognitoUtil, Callback } from '../se
 import { Http, Response } from '@angular/http';
 import { EmployeeService } from '../service/employee.service';
 import { Employee } from './employee.model';
-
-export class AuthTokens {
-    public accessToken: string;
-    public idToken: string;
-}
+import { AuthBaseComponent } from '../auth-base.module';
 
 @Component({
   selector: 'app-employees',
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.css']
 })
-export class EmployeesComponent implements OnInit, LoggedInCallback {
+export class EmployeesComponent extends AuthBaseComponent implements OnInit, LoggedInCallback {
 
-  public authTokens: AuthTokens = new AuthTokens();
   errorMessage: string;
   employees: Employee[];
   mode = 'Observable';
 
   constructor(public router: Router, public userService: UserLoginService, public cognitoUtil: CognitoUtil,
     private employeeService: EmployeeService) {
-    this.userService.isAuthenticated(this);
+    super(router, userService, cognitoUtil);
     console.log('In EmployeesComponent');
-  }
-
-  isLoggedIn(message: string, isLoggedIn: boolean) {
-    if (!isLoggedIn) {
-      console.log('no logged in, redirecting');
-      this.router.navigate(['/login']);
-    } else {
-      console.log('Getting user tokens');
-      this.cognitoUtil.getAccessToken(new AccessTokenCallback(this));
-      this.cognitoUtil.getIdToken(new IdTokenCallback(this));
-    }
   }
 
   ngOnInit() {
@@ -61,50 +45,29 @@ export class EmployeesComponent implements OnInit, LoggedInCallback {
       console.log('Response Code >>> ' + rcode);
       console.log('Msg Body >>> ' + msgBody);
 
-      // Unauthorized
-      if (rcode === 401) {
-        this.userService.logout();
-      }
+      super.handleUnauthorizedAccess(rcode);
     } else {
       this.errorMessage = errMsg;
     }
-  }
-
-  callbackWithParam(jwtToken: string) {
-    console.log('User Has Valid Token >>> ' + jwtToken);
   }
 
   addNewUser() {
     this.router.navigate(['/new-employee']);
   }
 
-}
+  deleteUser(Employee) {
+    console.log('Deleteing User ' + JSON.stringify(Employee));
+    const authToken = localStorage.getItem('auth_token');
+    this.employeeService.deleteEmployee(authToken, Employee).subscribe(
+      res => this.deleteUserSuccess(Employee, <any>res),
+      error => this.handleGetEmployeesErrors(<any>error)
+    );
+  }
 
-export class AccessTokenCallback implements Callback {
-    constructor(public jwt: EmployeesComponent) {
+  deleteUserSuccess(employee: Employee, res) {
+    console.log('Succeeded in deleting ' + JSON.stringify(employee));
+    console.log('Response from server ' + JSON.stringify(res));
+    this.getEmployees();
+  }
 
-    }
-
-    callback() {
-
-    }
-
-    callbackWithParam(result) {
-        this.jwt.authTokens.accessToken = result;
-    }
-}
-
-export class IdTokenCallback implements Callback {
-    constructor(public jwt: EmployeesComponent) {
-
-    }
-
-    callback() {
-
-    }
-
-    callbackWithParam(result) {
-      console.log('ID Token >>> ' + result);
-      this.jwt.authTokens.idToken = result;
-    }
 }

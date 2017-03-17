@@ -42,7 +42,8 @@
       <td>{{employee.zip}}</td>
       <td>{{employee.phone}}</td>
       <td>  
-        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" title="delete"></span>
+        <span class="glyphicon glyphicon-remove-circle" aria-hidden="true" title="delete"
+          (click)="deleteUser(employee)"></span>
       </td>
     </tr>
   </tbody>

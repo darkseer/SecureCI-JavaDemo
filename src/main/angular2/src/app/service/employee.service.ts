@@ -5,24 +5,75 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import { Employee } from '../employees/employee.model';
 import { environment } from '../../environments/environment';
+import { HttpBaseService } from './http-base.service';
 
 @Injectable()
-export class EmployeeService {
+export class EmployeeService extends HttpBaseService {
 
-  private employeeLambdaURL = environment.lambdaurl;
-
-  constructor(private http: Http) {}
+  constructor(private http: Http) {
+    super();
+  }
 
   getEmployees(authToken): Observable<Employee[]> {
-    console.log('getEmployees authToken in localStorage: ' + authToken);
-    const header = new Headers({ 'Authorization': authToken });
-    const options = new RequestOptions({ headers: header });
+    const options = this.getHeaderOptions(authToken);
     return this.http.get(this.employeeLambdaURL, options).map(this.extractData);
   }
 
-  private extractData(res: Response) {
-    const body = JSON.parse( res.json() );
-    console.log('Received JSON from Server >>> ' + body);
-    return body || { };
+  addEmployee(authToken, Employee): Observable<Response> {
+    const options = this.getHeaderOptions(authToken);
+
+    const command = {};
+    command['operation'] = 'create';
+    const Item = {};
+    Item['Item'] = Employee;
+    command['payload'] = Item;
+
+    const postBody = JSON.stringify(command);
+
+    console.log('Command Structure >>> ' + postBody);
+
+    return this.http.post(this.employeeLambdaURL, postBody, options);
+  }
+
+  deleteEmployee(authToken, Employee): Observable<Response> {
+    const options = this.getHeaderOptions(authToken);
+    const command = {};
+    command['operation'] = 'delete';
+    const Item = {};
+    Item['Key'] = { 'username' : Employee.username };
+    command['payload'] = Item;
+
+    const postBody = JSON.stringify(command);
+
+    console.log('Command Structure >>> ' + postBody);
+
+    return this.http.post(this.employeeLambdaURL, postBody, options);
   }
 }
+
+/**
+ {
+    "operation": "create",
+    "payload": {
+    	"Item": { 
+    		"username": "jcaple007",
+    		"firstname": "James",
+    		"lastname": "Bond",
+    		"address1": "44 Knoll Drive",
+    		"address2": "n/a",
+    		"city": "Falls Church",
+    		"state": "Virginia",
+    		"zip": "22042",
+    		"email": "test@gmail.com",
+    		"phone": "555555555" 
+    	}
+    }
+}
+
+{
+    "operation": "delete",
+    "payload": {
+    	"Key": { "username": "jcaple007" }
+    }
+}
+ */

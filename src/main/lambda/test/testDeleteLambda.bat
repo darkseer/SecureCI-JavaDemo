@@ -1,0 +1,1 @@
+aws lambda  invoke --invocation-type RequestResponse --function-name TICSLambdaDemo --region us-east-1 --payload file://delete.json delete-result.json

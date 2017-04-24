@@ -34,7 +34,7 @@ public class UItestIT {
 	@Test
  	@Category(com.coveros.secureci.statesdemo.UItestIT.class)
 	public void SecondIntTest()  throws InterruptedException {
-		System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
+		//System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
 
 		
 		// Create a new instance of the Firefox driver

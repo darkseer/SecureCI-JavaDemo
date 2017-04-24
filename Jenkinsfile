@@ -150,7 +150,7 @@ node (){
 				 withDockerContainer('secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
-							 wrap([$class: 'Xvfb', additionalOptions: '', assignedLabels: '', displayNameOffset: 0, screen: '']) {
+							 wrap([$class: 'Xvfb', additionalOptions: '', assignedLabels: '', displayNameOffset: 0, installationName: 'buildcontainer', screen: '']) {
 							   sh "mvn failsafe:integration-test"
 							 }
 						 }

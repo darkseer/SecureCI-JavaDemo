@@ -21,15 +21,11 @@ package com.coveros.secureci.statesdemo;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
 
 import com.coveros.secureci.statesdemo.Hangman;
 
 import static org.junit.Assert.*;
-
-import java.io.File;
 
 public class UItestIT {
 
@@ -42,9 +38,7 @@ public class UItestIT {
 
 		
 		// Create a new instance of the Firefox driver
-		FirefoxBinary binary = new FirefoxBinary(new File("/usr/bin/firefox"));
-		FirefoxProfile profile = new FirefoxProfile();
-		WebDriver driver = new FirefoxDriver(binary, profile);
+		WebDriver driver = new FirefoxDriver();
 		
         //Launch the Online Store Website
 		driver.get("https://cnn.com");

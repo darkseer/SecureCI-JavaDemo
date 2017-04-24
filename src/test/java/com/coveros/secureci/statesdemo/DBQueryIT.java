@@ -19,25 +19,23 @@
 package com.coveros.secureci.statesdemo;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 import com.coveros.secureci.statesdemo.Hangman;
 
 import static org.junit.Assert.*;
 
-public class HangmanTest {
+public class DBQueryIT {
 
 	private Hangman game;
 
-
-
 	@Test
-	public void testVeryLongWord() throws Exception {
-		String test=null;
-		System.out.println("foooo!!!2");
-		game = new Hangman("supercalifragilistic");
-		test=game.states();
+ 	@Category(com.coveros.secureci.statesdemo.DBQueryIT.class)
+	public void FirstIntTest() throws Exception {
+
 		//pass
-		assertNotEquals(null, test);
+		System.out.println("foooo!!!1");
+		assertNotEquals(1, 1);
 		//fail
 		//assertEquals(Hangman.LOST, game.status());
 	}

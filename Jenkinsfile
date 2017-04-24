@@ -151,7 +151,7 @@ node (){
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 wrap([$class: 'Xvfb', additionalOptions: '', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {
-							   sh "mvn failsafe:integration-test"
+							   sh "dbus-uuidgen > /etc/machine-id; mvn failsafe:integration-test"
 							 }
 						 }
 					 }

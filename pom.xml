@@ -100,6 +100,18 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${maven.slf4j.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.4.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>3.0.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -149,7 +161,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>${maven.surefire.version}</version>
 				<configuration>
-					<excludedGroups>com.coveros.secureci.statesdemo.DBQueryIT</excludedGroups>
+					<excludedGroups>com.coveros.secureci.statesdemo.DBQueryIT,com.coveros.secureci.statesdemo.UItestIT</excludedGroups>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -160,7 +172,7 @@
 					<includes>
 						<include>**/*.java</include>
 					</includes>
-					<groups>com.coveros.secureci.statesdemo.DBQueryIT</groups>
+					<groups>com.coveros.secureci.statesdemo.DBQueryIT,com.coveros.secureci.statesdemo.UItestIT</groups>
 				</configuration>
 				<executions>
 					<execution>

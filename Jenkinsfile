@@ -85,8 +85,11 @@ node (){
 		  withDockerContainer('secureci:8182/centos:latest') {
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
-					  sh "mvn clean package"
+					  sh "mvn clean compile"
 				  }
+				  stage ("Unit Test") {
+					  sh "mvn test"
+				  }				  
 			  }
 		  }
 		  stage ("TestSetup"){
@@ -144,6 +147,13 @@ node (){
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
 				 
 				 echo 'Two Minutes to test'
+				 withDockerContainer('secureci:8182/centos:latest') {
+					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+						 stage ("Integration Test") {
+							 sh "mvn failsafe:integration-test"
+						 }
+					 }
+				 }
 				 sh 'sleep 120'
 			 }
 			 finally {

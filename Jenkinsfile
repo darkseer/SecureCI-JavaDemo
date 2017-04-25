@@ -161,7 +161,7 @@ node (){
 						 }
 					 }
 				 }
-				 sh 'sleep 120'
+				 input 'waiting to continue'
 			 }
 			 finally {
 				 tomcatContainer.stop()

@@ -22,29 +22,26 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-
-import com.coveros.secureci.statesdemo.Hangman;
-
 import static org.junit.Assert.*;
 
 public class UItestIT {
 
-	private Hangman game;
 
 	@Test
  	@Category(com.coveros.secureci.statesdemo.UItestIT.class)
 	public void SecondIntTest()  throws InterruptedException {
 		//System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
-
+		String URL=new String("http://localhost:" + System.getProperty( "tomcat.port" ));
+		
 		
 		// Create a new instance of the Firefox driver
 		WebDriver driver = new FirefoxDriver();
 		
         //Launch the Online Store Website
-		driver.get("https://cnn.com");
+		driver.get(URL);
  
         // Print a Log In message to the screen
-        System.out.println("Successfully opened the website www.google.com");
+        System.out.println("Successfully opened the website" + URL);
  
 		//Wait for 5 Sec
 		Thread.sleep(5);

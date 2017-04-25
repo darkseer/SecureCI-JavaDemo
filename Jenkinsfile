@@ -143,6 +143,11 @@ node (){
 				 
 				 env.TOMCATPORT=tomcatContainer.port(8080)
 				 env.MYSQLPORT=mysqlContainer.port(3306)
+				 
+				 matcher=(env.TOMCATPORT =~ /.*:([^ ]+).*/)
+				 env.TOMCATPORT=matcher[0][1]
+				 matcher=null
+				 
 				 sh "echo Tomcat running on port: ${TOMCATPORT}"
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
 				 

@@ -92,6 +92,7 @@ node (){
 				  }				  
 			  }
 		  }
+		  input 'waiting to continue'
 		  stage ("TestSetup"){
 			 
 			 def tomcatContainer

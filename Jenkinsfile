@@ -156,7 +156,7 @@ node (){
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 wrap([$class: 'Xvfb', additionalOptions: '-fbdir /var/lib/jenkins', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {
-							   sh "mvn failsafe:integration-test -Dtomcat.port=${TOMCATPORT}"
+							   sh "mvn failsafe:integration-test -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							 }
 						 }
 					 }

@@ -96,6 +96,8 @@ node (){
 			 
 			 def tomcatContainer
 			 def mysqlContainer
+			 def testContainer
+			 
 			 try { 
 				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306','/start.sh')
 				 env.MYSQLID=mysqlContainer.id
@@ -152,7 +154,7 @@ node (){
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
 				 
 				 echo 'Two Minutes to test'
-				 withDockerContainer('secureci:8182/centos:latest') {
+				 withDockerContainer(args: '--net="bridge"', image:'secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 wrap([$class: 'Xvfb', additionalOptions: '-fbdir /var/lib/jenkins', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {

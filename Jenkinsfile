@@ -154,7 +154,7 @@ node (){
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
 				 
 				 echo 'Two Minutes to test'
-				 withDockerContainer(args: '--net="bridge"', image:'secureci:8182/centos:latest') {
+				 withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 wrap([$class: 'Xvfb', additionalOptions: '-fbdir /var/lib/jenkins', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {

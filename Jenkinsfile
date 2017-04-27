@@ -85,7 +85,7 @@ node (){
 		  withDockerContainer('secureci:8182/centos:latest') {
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
-					  sh "mvn clean compile"
+					  sh "mvn clean package"
 				  }
 				  stage ("Unit Test") {
 					  sh "mvn test"

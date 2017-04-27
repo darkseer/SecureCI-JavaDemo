@@ -120,7 +120,7 @@ node (){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 
 				 //Setup Tomcat Mount
-				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT}"
+				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT} ${DOCKER_HOST_INTERNAL_IP}"
 				 				 
 				 				 
 				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')

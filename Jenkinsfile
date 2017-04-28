@@ -120,12 +120,13 @@ node (){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 
 				 //Setup Tomcat Mount
+				 sh "rm -f target/env.properties"
 				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT} ${DOCKER_HOST_INTERNAL_IP}"
 				 				 
 				 				 
-				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
+				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp -v ${WORKSPACE}/conf:/home/tomcat/tmp','/bin/cat')
 				 env.TOMCATID=tomcatContainer.id
-				 
+				  
 				 // Wait for tomcat to be up
 				 waitUntil {
 					   sh "docker exec -t ${TOMCATID} netstat -apn | grep 8080 | grep LISTEN | wc -l | tr -d '\n' > wait_results"

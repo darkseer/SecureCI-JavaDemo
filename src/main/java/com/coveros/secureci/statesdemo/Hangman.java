@@ -35,6 +35,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.File;
+import java.io.InputStream;
+import java.io.FileInputStream;
 
 /**
  * This guessing game is similar to the "Hangman" game popular with children in
@@ -73,8 +76,6 @@ public class Hangman {
 		}
 	}
 
-
-
 	public String states() throws Exception {
 
 		Statement stmt = null;
@@ -86,10 +87,12 @@ public class Hangman {
 			Properties connectionProps = new Properties();
 			connectionProps.put("user", "tomcat8");
 			connectionProps.put("password", "tomcat8");
-			
-			//con = DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country", connectionProps);
+
+			// con =
+			// DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country",
+			// connectionProps);
 			con = DriverManager.getConnection("jdbc:h2:mem:country", connectionProps);
-			
+
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
@@ -97,13 +100,13 @@ public class Hangman {
 				String capital_name = rs.getString("capital_name");
 				int id = rs.getInt("id");
 
-				states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id +"</p>";
+				states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id + "</p>";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (stmt != null) {
-				stmt.close();				
+				stmt.close();
 			}
 		}
 
@@ -123,7 +126,7 @@ public class Hangman {
 		 */
 
 		ds.setDriverClassName("org.h2.Driver");
-		//ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
+		// ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
 		ds.setUrl("jdbc:h2:mem:country");
 		ds.setUsername("tomcat8");
 		ds.setPassword("tomcat8");
@@ -139,12 +142,17 @@ public class Hangman {
 		flyway.repair();
 		flyway.migrate();
 		System.out.println("Flyway Migration Complete");
+		try {
 		File configDir = new File(System.getProperty("catalina.base"), "conf");
 		File configFile = new File(configDir, "env.properties");
 		InputStream stream = new FileInputStream(configFile);
 		Properties props = new Properties();
 		props.load(stream);
 		System.out.println("Props" + System.getProperty("db.driver"));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return flyway;
 	}
 

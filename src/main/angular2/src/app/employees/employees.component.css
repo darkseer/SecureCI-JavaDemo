@@ -1,0 +1,17 @@
+.header {
+    display: inline-block;
+    width: 100%;
+}
+
+.left-header {
+    float: left;
+    text-align: center;
+    margin: 0px auto;
+}
+
+.right-header {
+    float: right;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0px auto;
+}

@@ -99,7 +99,7 @@ node (){
 			 def testContainer
 			 
 			 try { 
-				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306 -name=mysql_${BUILD_NUMBER}','/start.sh')
+				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306 --name=mysql_${BUILD_NUMBER}','/start.sh')
 				 env.MYSQLID=mysqlContainer.id
 				 
 				 waitUntil {

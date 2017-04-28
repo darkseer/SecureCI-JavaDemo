@@ -86,6 +86,7 @@ public class Hangman {
 			Properties connectionProps = new Properties();
 			connectionProps.put("user", "tomcat8");
 			connectionProps.put("password", "tomcat8");
+			
 			//con = DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country", connectionProps);
 			con = DriverManager.getConnection("jdbc:h2:mem:country", connectionProps);
 			
@@ -138,7 +139,12 @@ public class Hangman {
 		flyway.repair();
 		flyway.migrate();
 		System.out.println("Flyway Migration Complete");
-
+		File configDir = new File(System.getProperty("catalina.base"), "conf");
+		File configFile = new File(configDir, "env.properties");
+		InputStream stream = new FileInputStream(configFile);
+		Properties props = new Properties();
+		props.load(stream);
+		System.out.println("Props" + System.getProperty("db.driver"));
 		return flyway;
 	}
 

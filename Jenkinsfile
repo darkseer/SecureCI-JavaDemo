@@ -99,7 +99,7 @@ node (){
 			 def testContainer
 			 
 			 try { 
-				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306','/start.sh')
+				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306 -name=mysql_${BUILD_NUMBER}','/start.sh')
 				 env.MYSQLID=mysqlContainer.id
 				 
 				 waitUntil {
@@ -124,7 +124,7 @@ node (){
 				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT} ${DOCKER_HOST_INTERNAL_IP}"
 				 				 
 				 				 
-				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
+				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp --link=mysql_${BUILD_NUMBER}:mysql','/bin/cat')
 				 env.TOMCATID=tomcatContainer.id
 				  
 				 // Wait for tomcat to be up

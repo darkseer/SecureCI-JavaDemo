@@ -85,7 +85,7 @@ node (){
 		  withDockerContainer('secureci:8182/centos:latest') {
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
-					  sh "mvn clean compile"
+					  sh "mvn clean package"
 				  }
 				  stage ("Unit Test") {
 					  sh "mvn test"
@@ -96,8 +96,10 @@ node (){
 			 
 			 def tomcatContainer
 			 def mysqlContainer
+			 def testContainer
+			 
 			 try { 
-				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306','/start.sh')
+				 mysqlContainer = docker.image("secureci:8182/mysql:latest").run('-p 3306 --name=mysql_${BUILD_NUMBER}','/start.sh')
 				 env.MYSQLID=mysqlContainer.id
 				 
 				 waitUntil {
@@ -118,12 +120,13 @@ node (){
 				 env.MYSQLPORT=mysqlContainer.port(3306)
 				 
 				 //Setup Tomcat Mount
-				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT}"
+				 sh "rm -f target/env.properties"
+				 sh "./dburl_change.sh target/env.properties ${MYSQLPORT} ${DOCKER_HOST_INTERNAL_IP}"
 				 				 
 				 				 
-				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp','/bin/cat')
+				 tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp --link=mysql_${BUILD_NUMBER}:mysql','/bin/cat')
 				 env.TOMCATID=tomcatContainer.id
-				 
+				  
 				 // Wait for tomcat to be up
 				 waitUntil {
 					   sh "docker exec -t ${TOMCATID} netstat -apn | grep 8080 | grep LISTEN | wc -l | tr -d '\n' > wait_results"
@@ -152,11 +155,11 @@ node (){
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
 				 
 				 echo 'Two Minutes to test'
-				 withDockerContainer('secureci:8182/centos:latest') {
+				 withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 wrap([$class: 'Xvfb', additionalOptions: '-fbdir /var/lib/jenkins', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {
-							   sh "mvn failsafe:integration-test -Dtomcat.port=${TOMCATPORT}"
+							   sh "mvn failsafe:integration-test -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							 }
 						 }
 					 }

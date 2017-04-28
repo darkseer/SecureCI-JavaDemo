@@ -35,6 +35,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.File;
+import java.io.InputStream;
+import java.io.FileInputStream;
 
 /**
  * This guessing game is similar to the "Hangman" game popular with children in
@@ -52,6 +55,11 @@ public class Hangman {
 	private String answer;
 	private int incorrectGuessesAllowed;
 	private Set<String> guessedLetters;
+	private String dbdriver="org.h2.Driver";
+	private String dburl="jdbc:h2:mem:country";
+	private String dbuser="speaker"; 
+	private String dbpassword="test123";
+	private String hibernate_dialect=null;
 
 	public Hangman(final String answer, final int incorrectGuessesAllowed) {
 		this.answer = answer;
@@ -59,6 +67,11 @@ public class Hangman {
 		this.guessedLetters = new LinkedHashSet<String>(NUM_LETTERS);
 		try {
 			this.flyway();
+			System.out.println("Props1:" + this.dbdriver);
+			System.out.println("Props2:" + this.dburl);
+			System.out.println("Props3:" + this.dbuser);
+			System.out.println("Props4:" + this.dbpassword);
+			System.out.println("Props5:" + this.hibernate_dialect);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,12 +81,15 @@ public class Hangman {
 		this(answer, DEFAULT_INCORRECT_GUESSES);
 		try {
 			this.flyway();
+			System.out.println("Props1:" + this.dbdriver);
+			System.out.println("Props2:" + this.dburl);
+			System.out.println("Props3:" + this.dbuser);
+			System.out.println("Props4:" + this.dbpassword);
+			System.out.println("Props5:" + this.hibernate_dialect);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	public String states() throws Exception {
 
@@ -84,11 +100,14 @@ public class Hangman {
 		try {
 			Connection con = null;
 			Properties connectionProps = new Properties();
-			connectionProps.put("user", "tomcat8");
-			connectionProps.put("password", "tomcat8");
-			//con = DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country", connectionProps);
-			con = DriverManager.getConnection("jdbc:h2:mem:country", connectionProps);
-			
+			connectionProps.put("user", this.dbuser);
+			connectionProps.put("password", this.dbpassword);
+
+			// con =
+			// DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country",
+			// connectionProps);
+			con = DriverManager.getConnection(this.dburl, connectionProps);
+
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 			while (rs.next()) {
@@ -96,13 +115,13 @@ public class Hangman {
 				String capital_name = rs.getString("capital_name");
 				int id = rs.getInt("id");
 
-				states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id +"</p>";
+				states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id + "</p>";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			if (stmt != null) {
-				stmt.close();				
+				stmt.close();
 			}
 		}
 
@@ -121,11 +140,11 @@ public class Hangman {
 		 * ds.setPassword(env.getProperty("db.password"));
 		 */
 
-		ds.setDriverClassName("org.h2.Driver");
-		//ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
-		ds.setUrl("jdbc:h2:mem:country");
-		ds.setUsername("tomcat8");
-		ds.setPassword("tomcat8");
+		ds.setDriverClassName(this.dbdriver);
+		// ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
+		ds.setUrl(this.dburl);
+		ds.setUsername(this.dbuser);
+		ds.setPassword(this.dbpassword);
 		return ds;
 	}
 
@@ -138,7 +157,22 @@ public class Hangman {
 		flyway.repair();
 		flyway.migrate();
 		System.out.println("Flyway Migration Complete");
-
+		try {
+			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+			InputStream input = classLoader.getResourceAsStream("env.properties");
+		    Properties properties = new Properties();
+		    if (input != null ){
+		      properties.load(input);
+		      this.dbdriver=new String(properties.getProperty("db.driver"));
+		      this.dburl=new String(properties.getProperty("db.url"));
+		      this.hibernate_dialect=new String(properties.getProperty("hibernate.dialect"));
+		      this.dbuser=new String(properties.getProperty("db.user"));
+		      this.dbpassword=new String(properties.getProperty("db.password"));
+		    }
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return flyway;
 	}
 

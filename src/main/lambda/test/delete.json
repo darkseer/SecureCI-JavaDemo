@@ -1,6 +1,0 @@
-{
-    "operation": "delete",
-    "payload": {
-    	"Key": { "username": "jcaple007" }
-    }
-}

@@ -1,6 +1,0 @@
-{
-    "operation": "read",
-    "payload": {
-    	"Key": { "username": "jcaple007" }
-    }
-}

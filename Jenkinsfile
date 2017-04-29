@@ -82,7 +82,7 @@ node (){
 			
 	  }
 	  docker.withRegistry('http://secureci:8182','docker') {
-		  withDockerContainer('secureci:8182/centos:latest') {
+		  withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
 					  sh "mvn clean compile"

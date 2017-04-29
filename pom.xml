@@ -400,9 +400,9 @@
 	</ciManagement>
 
 	<scm>
-		<connection>scm:git:ssh://git@gitlab.com:glenn.buckholz/training-demo.git</connection>
-		<developerConnection>scm:git:ssh://git@gitlab.com:glenn.buckholz/training-demo.git</developerConnection>
-		<url>scm:git:ssh://git@gitlab.com:glenn.buckholz/training-demo.git</url>
+		<connection>scm:git:ssh://git@github.com:darkseer/SecureCI-JavaDemo.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:darkseer/SecureCI-JavaDemo.git</developerConnection>
+		<url>scm:git:ssh://git@github.com:darkseer/SecureCI-JavaDemo.git</url>
 	</scm>
 
 	<distributionManagement>

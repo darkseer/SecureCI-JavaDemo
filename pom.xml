@@ -59,11 +59,6 @@
 		<inmem.daemon>true</inmem.daemon>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
-		<db.url>jdbc:h2:tcp://127.0.0.1:9902/mem:speaker</db.url>
-		<db.port>9902</db.port>
-		<db.username>speaker</db.username>
-		<db.password>test123</db.password>
-		<db.driver>org.h2.Driver</db.driver>
 		<sonar.host.url>http://172.17.0.1:9000/sonar</sonar.host.url>
 		<sonar.login>admin</sonar.login>
 		<sonar.password>admin</sonar.password>
@@ -218,37 +213,6 @@
 				<version>${maven.lint.version}</version>
 			</plugin>
 			<plugin>
-				<groupId>com.btmatthews.maven.plugins.inmemdb</groupId>
-				<artifactId>inmemdb-maven-plugin</artifactId>
-				<version>${maven.inmem.version}</version>
-				<configuration>
-					<monitorPort>9903</monitorPort>
-					<monitorKey>foo</monitorKey>
-					<daemon>${inmem.daemon}</daemon>
-					<type>h2</type>
-					<database>country</database>
-					<username>tomcat8</username>
-					<password>tomcat8</password>
-					<port>9902</port>
-				</configuration>
-				<executions>
-					<execution>
-						<id>start-db</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>stop-db</id>
-						<phase>test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.9</version>
@@ -278,9 +242,9 @@
 						</goals>
 						<configuration>
 							<!-- Sets the path to the file which contains the execution data. -->
-							<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
+							<dataFile>${project.build.directory}/jacoco.exec</dataFile>
 							<!-- Sets the output directory for the code coverage report. -->
-							<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+							<outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -432,7 +396,7 @@
 	</issueManagement>
 	<ciManagement>
 		<system>Hudson</system>
-		<url>https://secureci/hudson/</url>
+		<url>https://secureci/jenkins/</url>
 	</ciManagement>
 
 	<scm>
@@ -445,12 +409,12 @@
 		<repository>
 			<id>nexus</id>
 			<name>release</name>
-			<url>https://jenkins.darkseer.org/nexus/repository/maven-releases</url>
+			<url>https://secureci/nexus/repository/maven-releases</url>
 		</repository>
 		<snapshotRepository>
 			<id>nexus</id>
 			<name>snapshot</name>
-			<url>https://jenkins.darkseer.org/nexus/repository/maven-snapshots</url>
+			<url>https://secureci/nexus/repository/maven-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 

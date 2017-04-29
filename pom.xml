@@ -64,7 +64,7 @@
 		<db.username>speaker</db.username>
 		<db.password>test123</db.password>
 		<db.driver>org.h2.Driver</db.driver>
-
+		<sonar.host.url>http://localhost:9000</sonar.host.url>
 	</properties>
 
 	<dependencies>
@@ -117,6 +117,11 @@
 	<build>
 		<finalName>hangman</finalName>
 		<plugins>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.2</version>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

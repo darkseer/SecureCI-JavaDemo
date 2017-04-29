@@ -67,7 +67,7 @@
 		<sonar.host.url>http://172.17.0.1:9000/sonar</sonar.host.url>
 		<sonar.login>admin</sonar.login>
 		<sonar.password>admin</sonar.password>
-		<sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
+		<sonar.JaCoCo.exec>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.JaCoCo.exec>
 	</properties>
 
 	<dependencies>

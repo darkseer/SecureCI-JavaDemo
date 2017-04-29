@@ -88,7 +88,7 @@ node (){
 					  sh "mvn clean compile"
 				  }
 				  stage ("Unit Test") {
-					  sh "mvn package"
+					  sh "mvn package sonar:sonar"
 				  }				  
 			  }
 		  }

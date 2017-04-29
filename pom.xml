@@ -64,7 +64,7 @@
 		<db.username>speaker</db.username>
 		<db.password>test123</db.password>
 		<db.driver>org.h2.Driver</db.driver>
-		<sonar.host.url>http://localhost:9000</sonar.host.url>
+		<sonar.host.url>http://172.17.0.1:9000</sonar.host.url>
 	</properties>
 
 	<dependencies>

@@ -164,7 +164,8 @@ node (){
 						 }
 					 }
 				 }
-				 input 'waiting to continue'
+				 sh 'docker commit ${TOMCATID} secureci:8182/tomcat:tomcat_${BUILD_ID}'
+				 sh 'docker push secureci:8182/tomcat:tomcat_${BUILD_ID}'
 			 }
 			 finally {
 				 tomcatContainer.stop()

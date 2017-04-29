@@ -88,7 +88,7 @@ node (){
 					  sh "mvn clean compile"
 				  }
 				  stage ("Unit Test") {
-					  sh "mvn package sonar:sonar"
+					  sh "mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
 				  }				  
 			  }
 		  }
@@ -159,7 +159,7 @@ node (){
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 wrap([$class: 'Xvfb', additionalOptions: '-fbdir /var/lib/jenkins', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {
-							   sh "mvn failsafe:integration-test -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							   sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							 }
 						 }
 					 }

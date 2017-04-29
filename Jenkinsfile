@@ -164,8 +164,6 @@ node (){
 						 }
 					 }
 				 }
-				 sh 'docker commit ${TOMCATID} secureci:8182/tomcat:tomcat_${BUILD_ID}'
-				 sh 'docker push secureci:8182/tomcat:tomcat_${BUILD_ID}'
 			 }
 			 finally {
 				 tomcatContainer.stop()
@@ -178,6 +176,12 @@ node (){
 	catch(err) {
 	  stage ("Error") {
 		  currentBuild.result = "FAILURE"
+		  sh 'docker commit ${MYSQLID} secureci:8182/mysql:mysql_${BUILD_ID}'
+		  sh 'docker commit ${TOMCATID} secureci:8182/tomcat:tomcat_${BUILD_ID}'
+		  sh 'docker push secureci:8182/tomcat:mysql_${BUILD_ID}'
+		  sh 'docker push secureci:8182/tomcat:tomcat_${BUILD_ID}'
+		  tomcatContainer.stop()
+		  mysqlContainer.stop()
 		  throw err
 	  }
 	}

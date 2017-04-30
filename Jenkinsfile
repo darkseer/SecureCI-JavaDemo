@@ -89,6 +89,7 @@ node (){
 				  }
 				  stage ("Unit Test") {
 					  sh "mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
+					  archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
 				  }				  
 			  }
 		  }

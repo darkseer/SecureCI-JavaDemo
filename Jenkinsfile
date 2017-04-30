@@ -158,20 +158,10 @@ node (){
 				 withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
-							 try {
 							   wrap([$class: 'Xvfb', additionalOptions: '-fbdir /var/lib/jenkins', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {
 							     //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							     sh "mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   }
-							 }
-							 catch(err) {
-								 stage("state capture"){
-									 sh 'docker commit ${MYSQLID} secureci:8182/mysql:mysql_${BUILD_ID}'
-									 sh 'docker commit ${TOMCATID} secureci:8182/tomcat:tomcat_${BUILD_ID}'
-									 sh 'docker push secureci:8182/tomcat:mysql_${BUILD_ID}'
-									 sh 'docker push secureci:8182/tomcat:tomcat_${BUILD_ID}'
-									 throw err
-								   }
 							 }
 						 }
 					 }
@@ -179,6 +169,14 @@ node (){
 			 }
 			 finally {
 				 stage("Stopping Containers"){
+					 if (currentBuild.result == "FAILURE"){
+						 stage("state capture"){
+							 sh 'docker commit ${MYSQLID} secureci:8182/mysql:mysql_${BUILD_ID}'
+							 sh 'docker commit ${TOMCATID} secureci:8182/tomcat:tomcat_${BUILD_ID}'
+							 sh 'docker push secureci:8182/tomcat:mysql_${BUILD_ID}'
+							 sh 'docker push secureci:8182/tomcat:tomcat_${BUILD_ID}'
+						 }
+					 }
 				   tomcatContainer.stop()
 				   mysqlContainer.stop()
 				 }

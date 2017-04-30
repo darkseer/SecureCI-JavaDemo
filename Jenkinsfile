@@ -166,8 +166,8 @@ node (){
 				 }
 			 }
 			 finally {
-				 tomcatContainer.stop()
-				 mysqlContainer.stop()
+				 //tomcatContainer.stop()
+				 //mysqlContainer.stop()
 			 }
 		  }
 	  }
@@ -190,6 +190,10 @@ node (){
 	finally {
 		stage ("clean workspace") {
 			//sh "mvn clean"
+		}
+		stage ("Stop Containers"){
+		  tomcatContainer.stop()
+		  mysqlContainer.stop()
 		}
 	}
 }

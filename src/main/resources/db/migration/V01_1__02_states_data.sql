@@ -1,5 +1,5 @@
 INSERT INTO states (state_name,capital_name) VALUES('Alabama','Mongomery');
-INSERT INTO states (state_name,capital_name) VALUES('Alaska','uneau');
+INSERT INTO states (state_name,capital_name) VALUES('Alaska','Juneau');
 INSERT INTO states (state_name,capital_name) VALUES('Arizona','Phoenix');
 INSERT INTO states (state_name,capital_name) VALUES('Arkansas Little','Rock');
 INSERT INTO states (state_name,capital_name) VALUES('California','Sacrameno');

@@ -167,6 +167,8 @@ node (){
 							     sh "mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 								 //Gather the int coverage results
 								 sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
+								 //Gather the it tests
+								 sh "mvn sonar:sonar"
 							   }
 							}
 							catch (err){

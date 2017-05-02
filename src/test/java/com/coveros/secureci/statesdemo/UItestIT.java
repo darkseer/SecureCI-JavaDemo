@@ -22,6 +22,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.*;
+import java.util.List;
 import static org.junit.Assert.*;
 
 public class UItestIT {
@@ -44,7 +46,7 @@ public class UItestIT {
         System.out.println("Successfully opened the website" + URL);
  
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Alaska" + "')]"));
-		Assert.assertTrue("Text not found!", list.size() > 0);
+		assertTrue("Text not found!", list.size() > 0);
         
 		//Wait for 5 Sec
 		Thread.sleep(5);

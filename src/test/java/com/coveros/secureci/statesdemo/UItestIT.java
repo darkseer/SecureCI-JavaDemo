@@ -43,7 +43,7 @@ public class UItestIT {
         // Print a Log In message to the screen
         System.out.println("Successfully opened the website" + URL);
  
-		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + 'Alaska' + "')]"));
+		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Alaska" + "')]"));
 		Assert.assertTrue("Text not found!", list.size() > 0);
         
 		//Wait for 5 Sec

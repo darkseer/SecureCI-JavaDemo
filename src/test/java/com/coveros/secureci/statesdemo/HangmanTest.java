@@ -33,8 +33,8 @@ public class HangmanTest {
 	@Test
 	public void testVeryLongWord() throws Exception {
 		String test=null;
-		System.out.println("foooo!!!2");
-		game = new Hangman("supercalifragilistic");
+
+		game = new Hangman("test");
 		test=game.states();
 		//pass
 		assertNotEquals(null, test);

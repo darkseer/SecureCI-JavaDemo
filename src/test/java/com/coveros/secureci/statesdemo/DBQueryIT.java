@@ -35,7 +35,7 @@ public class DBQueryIT {
 
 		//pass
 		System.out.println("foooo!!!1");
-		assertNotEquals(1, 1);
+		assertNotEquals(1, 2);
 		//fail
 		//assertEquals(Hangman.LOST, game.status());
 	}

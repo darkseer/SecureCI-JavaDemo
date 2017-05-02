@@ -89,6 +89,7 @@ node (){
 				  }
 				  stage ("Unit Test") {
 					  sh "mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
+					  junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
 				  }				  
 			  }
 		  }

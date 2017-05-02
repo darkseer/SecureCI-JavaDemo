@@ -46,7 +46,11 @@ public class UItestIT {
         System.out.println("Successfully opened the website" + URL);
  
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Alaska" + "')]"));
-		assertTrue("Text not found!", list.size() > 0);
+		assertTrue("Alaska not found!", list.size() > 0);
+		
+		list = driver.findElements(By.xpath("//*[contains(text(),'" + "Juneau" + "')]"));
+		assertTrue("Alaska's Capital not found!", list.size() > 0);
+		
         
 		//Wait for 5 Sec
 		Thread.sleep(5);

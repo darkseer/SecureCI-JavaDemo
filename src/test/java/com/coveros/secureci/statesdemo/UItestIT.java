@@ -58,4 +58,35 @@ public class UItestIT {
         // Close the driver
         driver.quit();
     }
+	
+
+	@Test
+ 	@Category(com.coveros.secureci.statesdemo.UItestIT.class)
+	public void ThirdIntTest()  throws InterruptedException {
+		//System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
+		String URL=new String("http://"+ System.getProperty( "tomcat.ip" ) + ":" + System.getProperty( "tomcat.port" ) + "/hangman");
+		
+		
+		// Create a new instance of the Firefox driver
+		WebDriver driver = new FirefoxDriver();
+		
+        //Launch the Online Store Website
+		driver.get(URL);
+		
+        // Print a Log In message to the screen
+        System.out.println("Successfully opened the website" + URL);
+ 
+		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "USVI" + "')]"));
+		assertTrue("Alaska not found!", list.size() > 0);
+		
+		list = driver.findElements(By.xpath("//*[contains(text(),'" + "Charlotte Amalie" + "')]"));
+		assertTrue("Alaska's Capital not found!", list.size() > 0);
+		
+        
+		//Wait for 5 Sec
+		Thread.sleep(5);
+		
+        // Close the driver
+        driver.quit();
+    }
 }

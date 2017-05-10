@@ -41,5 +41,82 @@ public class HangmanTest {
 		//fail
 		//assertEquals(Hangman.LOST, game.status());
 	}
+	@Test
+	public void test1() throws Exception {
+		String test=null;
+
+		game = new Hangman("test");
+		test=game.states();
+		//pass
+		assertNotEquals(null, test);
+		//fail
+		//assertEquals(Hangman.LOST, game.status());
+	}
+	@Test
+	public void test2() throws Exception {
+		String test=null;
+
+		game = new Hangman("test");
+		test=game.states();
+		//pass
+		assertNotEquals(null, test);
+		//fail
+		//assertEquals(Hangman.LOST, game.status());
+	}
+	@Test
+	public void test3() throws Exception {
+		String test=null;
+
+		game = new Hangman("test");
+		test=game.states();
+		//pass
+		assertNotEquals(null, test);
+		//fail
+		//assertEquals(Hangman.LOST, game.status());
+	}
+	@Test
+	public void test4() throws Exception {
+		String test=null;
+
+		game = new Hangman("test");
+		test=game.states();
+		//pass
+		assertNotEquals(null, test);
+		//fail
+		//assertEquals(Hangman.LOST, game.status());
+	}
+	@Test
+	public void test5() throws Exception {
+		String test=null;
+
+		game = new Hangman("test");
+		test=game.states();
+		//pass
+		assertNotEquals(null, test);
+		//fail
+		//assertEquals(Hangman.LOST, game.status());
+	}
+	@Test
+	public void test6() throws Exception {
+		String test=null;
+
+		game = new Hangman("test");
+		test=game.states();
+		//pass
+		assertNotEquals(null, test);
+		//fail
+		//assertEquals(Hangman.LOST, game.status());
+	}
+	@Test
+	public void test7() throws Exception {
+		String test=null;
+
+		game = new Hangman("test");
+		test=game.states();
+		//pass
+		assertNotEquals(null, test);
+		//fail
+		//assertEquals(Hangman.LOST, game.status());
+	}
 
 }

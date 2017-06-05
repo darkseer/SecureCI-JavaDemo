@@ -48,3 +48,4 @@ INSERT INTO states (state_name,capital_name) VALUES('Washington','Olympia');
 INSERT INTO states (state_name,capital_name) VALUES('West Virginia','Charleston');
 INSERT INTO states (state_name,capital_name) VALUES('Wisconsin','Madison');
 INSERT INTO states (state_name,capital_name) VALUES('Wyoming','Cheyenne');
+INSERT INTO states (state_name,capital_name) VALUES('USVI','Charlotte Amalie');

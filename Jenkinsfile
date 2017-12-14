@@ -36,7 +36,7 @@ node (){
 	  stage ("Checkout") {
 		  checkout scm
 		  def imageId
-		  env.BRANCH_NAME=GIT_BRANCH
+		  env.BRANCH_NAME=env.GIT_BRANCH
 		  sh "git rev-parse HEAD > commit-id"
 		  env.GIT_COMMIT = readFile('commit-id')
 		  echo "The commit: ${env.GIT_COMMIT}"

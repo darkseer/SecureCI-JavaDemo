@@ -32,6 +32,7 @@ node (){
 	  env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
 	  env.MAVEN_HOME="/usr/local/maven-3.3.9"
 	  env.PATH="/usr/local/maven-3.3.9/bin:" + env.PATH
+	  echo "${PATH}"
 	  
 	  stage ("Checkout") {
 		  checkout scm

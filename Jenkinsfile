@@ -30,8 +30,8 @@ node (){
 	  
 	  //Set the maven variables for this project
 	  env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
-	  env.MAVEN_HOME="/opt/maven"
-	  env.PATH="/opt/maven/bin:" + env.PATH
+	  env.MAVEN_HOME="/opt/apache-maven-3.5.2"
+	  env.PATH="/opt/apache-maven-3.5.2/bin:" + env.PATH
 
 	  stage ("Checkout") {
 		  checkout scm

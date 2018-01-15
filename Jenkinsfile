@@ -30,10 +30,9 @@ node (){
 	  
 	  //Set the maven variables for this project
 	  env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
-	  env.MAVEN_HOME="/usr/local/maven-3.3.9"
-	  env.PATH="/usr/local/maven-3.3.9/bin:" + env.PATH
-	  echo "${PATH}"
-	  
+	  env.MAVEN_HOME="/opt/maven"
+	  env.PATH="/opt/maven/bin:" + env.PATH
+
 	  stage ("Checkout") {
 		  checkout scm
 		  def imageId
@@ -87,6 +86,7 @@ node (){
 		  withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
+				  	  sh "ls /opt; ls /opt/maven"
 					  sh "mvn clean compile"
 				  }
 				  stage ("Unit Test") {

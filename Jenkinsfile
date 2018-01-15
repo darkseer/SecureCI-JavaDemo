@@ -86,7 +86,6 @@ node (){
 		  withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
-				  	  sh "ls /opt; ls /opt/maven"
 					  sh "/opt/apache-maven-3.5.2/bin/mvn clean compile"
 				  }
 				  stage ("Unit Test") {
@@ -159,13 +158,13 @@ node (){
 				 
 				 echo 'Two Minutes to test'
 
-				 withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
+				 //withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 try {
 							   wrap([$class: 'Xvfb']) {
 							     //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							     sh "/opt/apache-maven-3.5.2/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							     sh "mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   }
 							}
 							catch (err){
@@ -174,7 +173,7 @@ node (){
 							}
 						 }
 					 }
-				 }
+				 //}
 				 //Gather the int coverage results
 				 sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
 				 sh "sleep 120"

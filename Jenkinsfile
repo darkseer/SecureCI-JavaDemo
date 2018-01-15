@@ -87,10 +87,10 @@ node (){
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
 				  	  sh "ls /opt; ls /opt/maven"
-					  sh "mvn clean compile"
+					  sh "/opt/apache-maven-3.5.2/bin/mvn clean compile"
 				  }
 				  stage ("Unit Test") {
-					  sh "mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
+					  sh "/opt/apache-maven-3.5.2/bin/mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
 					  junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
 				  }				  
 			  }
@@ -165,7 +165,7 @@ node (){
 							 try {
 							   wrap([$class: 'Xvfb', additionalOptions: '-fbdir /var/lib/jenkins', assignedLabels: '', debug: true, displayNameOffset: 10, installationName: 'buildcontainer', parallelBuild: true, screen: '']) {
 							     //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							     sh "mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							     sh "/opt/apache-maven-3.5.2/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   }
 							}
 							catch (err){
@@ -182,7 +182,7 @@ node (){
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Upload results") {
 							    //Gather the it tests
-								 sh "mvn sonar:sonar"
+								 sh "/opt/apache-maven-3.5.2/bin/mvn sonar:sonar"
 					
 							}
 					  }

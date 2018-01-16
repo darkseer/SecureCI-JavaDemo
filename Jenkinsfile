@@ -165,7 +165,7 @@ node (){
 							   //wrap([$class: 'Xvfb']) {
 							   	sh '/usr/bin/Xvfb :1 -screen 0 1024x768x24 &'
 							     //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							     sh "export DISPLAY=:1; mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							     sh "export DISPLAY=:1; /opt/apache-maven-3.5.2/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   //}
 							}
 							catch (err){

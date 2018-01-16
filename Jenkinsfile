@@ -169,6 +169,7 @@ node (){
 							   //}
 							}
 							catch (err){
+								sh 'sleep 2400'
 								currentBuild.result = "FAILURE"
 								throw err
 							}

@@ -31,7 +31,7 @@ node (){
 	  //Set the maven variables for this project
 	  env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
 	  env.MAVEN_HOME="/opt/apache-maven-3.5.2"
-	  env.PATH="/opt/apache-maven-3.5.2/bin:" + env.PATH
+	  env.PATH="${MAVEN_HOME}/bin:" + env.PATH
 
 	  stage ("Checkout") {
 		  checkout scm
@@ -86,10 +86,10 @@ node (){
 		  withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			  withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 				  stage ("build") {
-					  sh "/opt/apache-maven-3.5.2/bin/mvn clean compile"
+					  sh "${MAVEN_HOME}/bin/mvn clean compile"
 				  }
 				  stage ("Unit Test") {
-					  sh "/opt/apache-maven-3.5.2/bin/mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
+					  sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
 					  junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
 				  }				  
 			  }
@@ -165,7 +165,7 @@ node (){
 							   //wrap([$class: 'Xvfb']) {
 							   	sh '/usr/bin/Xvfb :1 -screen 0 1024x768x24 &'
 							     //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							     sh "export DISPLAY=:1; /opt/apache-maven-3.5.2/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							     sh "export DISPLAY=:1; ${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   //}
 							}
 							catch (err){
@@ -182,7 +182,7 @@ node (){
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Upload results") {
 							    //Gather the it tests
-								 sh "/opt/apache-maven-3.5.2/bin/mvn sonar:sonar"
+								 sh "${MAVEN_HOME}/bin/mvn sonar:sonar"
 					
 							}
 					  }

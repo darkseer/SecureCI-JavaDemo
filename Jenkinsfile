@@ -156,21 +156,20 @@ node (){
 				 sh "echo Tomcat running on port: ${TOMCATPORT}"
 				 sh "echo Mysql running on port: ${MYSQLPORT}"
 				 
-				 //echo 'Two Minutes to test'
-				 //sh "sleep 2400"
+				 echo 'Two Minutes to test'
+
 				 withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 try {
 							   //wrap([$class: 'Xvfb']) {
 							   	sh '/usr/bin/Xvfb :1 -screen 0 1024x768x24 &'
-							     //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							     //sh "export DISPLAY=:1; ${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-								sh "export DISPLAY=:1; ${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=172.17.0.3"
+							   	sh 'curl http://${DOCKER_HOST_INTERNAL_IP}:${TOMCATPORT}/hangman/index.jsp'
+							    //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							    sh "export DISPLAY=:1; ${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   //}
 							}
 							catch (err){
-								sh 'sleep 2400'
 								currentBuild.result = "FAILURE"
 								throw err
 							}

@@ -25,7 +25,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.*;
 import java.util.List;
 import static org.junit.Assert.*;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class UItestIT {
 
@@ -34,13 +33,12 @@ public class UItestIT {
  	@Category(com.coveros.secureci.statesdemo.UItestIT.class)
 	public void SecondIntTest()  throws InterruptedException {
 		DesiredCapabilities capabilities=DesiredCapabilities.firefox();
-		capabilities.setCapability("marionette", true);
 		//System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
 		String URL=new String("http://"+ System.getProperty( "tomcat.ip" ) + ":" + System.getProperty( "tomcat.port" ) + "/hangman/index.jsp");
 		
 		
 		// Create a new instance of the Firefox driver
-		WebDriver driver = new FirefoxDriver(capabilities);
+		WebDriver driver = new FirefoxDriver();
 		
         //Launch the Online Store Website
 		driver.get(URL);
@@ -65,14 +63,12 @@ public class UItestIT {
 	@Test
  	@Category(com.coveros.secureci.statesdemo.UItestIT.class)
 	public void ThirdIntTest()  throws InterruptedException {
-		DesiredCapabilities capabilities=DesiredCapabilities.firefox();
-		capabilities.setCapability("marionette", true);
 		//System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
 		String URL=new String("http://"+ System.getProperty( "tomcat.ip" ) + ":" + System.getProperty( "tomcat.port" ) + "/hangman");
 		
 		
 		// Create a new instance of the Firefox driver
-		WebDriver driver = new FirefoxDriver(capabilities);
+		WebDriver driver = new FirefoxDriver();
 		
         //Launch the Online Store Website
 		driver.get(URL);

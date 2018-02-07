@@ -32,7 +32,6 @@ public class UItestIT {
 	@Test
  	@Category(com.coveros.secureci.statesdemo.UItestIT.class)
 	public void SecondIntTest()  throws InterruptedException {
-		DesiredCapabilities capabilities=DesiredCapabilities.firefox();
 		//System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
 		String URL=new String("http://"+ System.getProperty( "tomcat.ip" ) + ":" + System.getProperty( "tomcat.port" ) + "/hangman/index.jsp");
 		

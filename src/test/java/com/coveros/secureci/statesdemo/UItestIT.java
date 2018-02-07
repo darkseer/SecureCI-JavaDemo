@@ -37,7 +37,7 @@ public class UItestIT {
 		
 		
 		// Create a new instance of the Firefox driver
-		WebDriver driver = new FirefoxDriver();
+		WebDriver driver = new new ChromeDriver();
 		
         //Launch the Online Store Website
 		driver.get(URL);
@@ -67,7 +67,7 @@ public class UItestIT {
 		
 		
 		// Create a new instance of the Firefox driver
-		WebDriver driver = new FirefoxDriver();
+		WebDriver driver = new new ChromeDriver();
 		
         //Launch the Online Store Website
 		driver.get(URL);

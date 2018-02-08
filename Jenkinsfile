@@ -171,6 +171,7 @@ node (){
 							}
 							catch (err){
 								currentBuild.result = "FAILURE"
+								sh "sleep 200000"
 								throw err
 							}
 						 }

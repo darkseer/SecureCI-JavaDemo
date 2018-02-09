@@ -158,7 +158,7 @@ node (){
 				 
 				 echo 'Two Minutes to test'
 
-				 withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
+				 //withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 try {
@@ -176,7 +176,7 @@ node (){
 							}
 						 }
 					 }
-				 }
+				 //}
 				 //Gather the int coverage results
 				 sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
 				 sh "sleep 120"

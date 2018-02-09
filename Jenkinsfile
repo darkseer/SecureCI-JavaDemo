@@ -162,16 +162,16 @@ node (){
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Integration Test") {
 							 try {
-							   //wrap([$class: 'Xvfb']) {
-							   	sh '/usr/bin/Xvfb :1 -screen 0 1024x768x24 &'
+							   wrap([$class: 'Xvfb']) {
+							   	//sh '/usr/bin/Xvfb :1 -screen 0 1024x768x24 &'
 							   	sh 'curl http://${DOCKER_HOST_INTERNAL_IP}:${TOMCATPORT}/hangman/index.jsp'
 							    //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							    sh "export DISPLAY=:1; ${MAVEN_HOME}/bin/mvn -Dwebdriver.chrome.driver=/usr/bin/chromedriver -Dwebdriver.gecko.driver=/usr/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							   //}
+							    //sh "export DISPLAY=:1; ${MAVEN_HOME}/bin/mvn -Dwebdriver.chrome.driver=/usr/bin/chromedriver -Dwebdriver.gecko.driver=/usr/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							    sh "mvn -Dwebdriver.chrome.driver=/usr/bin/chromedriver -Dwebdriver.gecko.driver=/usr/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+							   }
 							}
 							catch (err){
 								currentBuild.result = "FAILURE"
-								sh "sleep 200000"
 								throw err
 							}
 						 }

@@ -186,7 +186,7 @@ node (){
 						 stage ("Upload results") {
 							    //Gather the it tests
 								 sh "${MAVEN_HOME}/bin/mvn sonar:sonar"
-					
+								 sh "sleep 300"					
 							}
 					  }
 				 }

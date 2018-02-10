@@ -134,8 +134,6 @@ node (){
 						 stage ("Integration Test") {
 							 try {
 							   wrap([$class: 'Xvfb']) {
-							   	//sh '/usr/bin/Xvfb :1 -screen 0 1024x768x24 &'
-							   	sh 'curl http://${DOCKER_HOST_INTERNAL_IP}:${TOMCATPORT}/hangman/index.jsp'
 							    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   }
 							}
@@ -147,7 +145,6 @@ node (){
 					 }
 				 //}
 				 //Gather the int coverage results
- 				 sh "docker exec -t ${TOMCATID} chmod a+rw /home/tomcat/tmp/jacoco-it.exec*"
 				 sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
 
 				 withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {

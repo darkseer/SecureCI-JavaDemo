@@ -151,8 +151,7 @@ node (){
 					 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 						 stage ("Upload results") {
 							    //Gather the it tests
-								 sh "${MAVEN_HOME}/bin/mvn sonar:sonar"
-								 sh "sleep 300"					
+								 sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
 							}
 					  }
 				 }

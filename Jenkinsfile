@@ -1,16 +1,5 @@
 node (){
-  // Build parameters
-  // Syntax from here: https://issues.jenkins-ci.org/browse/JENKINS-32780
-  /*properties([[$class: 'ParametersDefinitionProperty', 
-               parameterDefinitions: [
-                   [$class: 'StringParameterDefinition', 
-                       defaultValue: 'True', 
-                       description: 'Prevents node from being destroyed at end of run. Default: True', 
-                       name: 'TerminateNode']]]])
-  echo "Parameters: TerminateNode=${TerminateNode}"
-  */
-  //Use try catch to set build success criteria, set true to start
-  //change a comment
+
   currentBuild.result = "SUCCESS"
     
   try {
@@ -42,37 +31,19 @@ node (){
 		  echo "The commit: ${env.GIT_COMMIT}"
 		  echo "Branch: ${BRANCH_NAME}"
 		
-		  //echo 'FATAL:'
-		  //step([$class: 'LogParserPublisher', failBuildOnError: true, projectRulePath: '${env.WORKSPACE}/errorscanning/consolepatterns.dat', showGraphs: true, unstableOnWarning: true, useProjectRule: true])
-		  //set target release here until we find a better place
 		  env.RELEASE="1.0"
 		
 		  stage 'Toolsetup'	  
 		  
-		  //Set up gradle based on node settings
-//		  if((env.BRANCH_NAME != "master") && (env.BRANCH_NAME != "develop")){
-			  // pull out the branch name
-//			  def matcher2 = null
-//			  matcher2 = (env.BRANCH_NAME =~ /.*[^a-zA-Z0-9\.]([a-zA-Z0-9\.]+)/)
-//			  env.BRANCH_ID=matcher2[0][1]
-//			  matcher2 = null
-		
-			  // pull out the type of branch
-//			  matcher2 = (env.BRANCH_NAME =~ /(.*)[^a-zA-Z0-9\.][a-zA-Z0-9\.]+/)
-//			  env.BRANCH_PREFIX=matcher2[0][1]
-//			  matcher2=null
-//			}
-//			else {
+
 			  env.BRANCH_PREFIX="none"
 			  env.BRANCH_ID=env.BRANCH_NAME
-//			}
+
 
 						
 			//We should no longer need to set the gradle path
-			//env.PATH = "${tool 'gradle'}/bin:${env.PATH}"
 			echo "My branch is: ${env.BRANCH_ID}"
-			//env.VERSION="${env.BUILD_ID}.${env.BRANCH_ID}"
-			//env.SONAR_VERSION="${env.BUILD_ID}.SNAPSHOT"
+
 			// Nexus 3 version weirdness
 			env.VERSION="${env.BUILD_ID}.${env.BRANCH_ID}"
 			env.SONAR_VERSION="${env.BUILD_ID}"
@@ -165,8 +136,6 @@ node (){
 							   wrap([$class: 'Xvfb']) {
 							   	//sh '/usr/bin/Xvfb :1 -screen 0 1024x768x24 &'
 							   	sh 'curl http://${DOCKER_HOST_INTERNAL_IP}:${TOMCATPORT}/hangman/index.jsp'
-							    //sh "mvn -Dmaven.test.failure.ignore=false failsafe:integration-test verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-							    //sh "export DISPLAY=:1; ${MAVEN_HOME}/bin/mvn -Dwebdriver.chrome.driver=/usr/bin/chromedriver -Dwebdriver.gecko.driver=/usr/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 							   }
 							}

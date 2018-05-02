@@ -180,7 +180,8 @@ node (){
 				   mysqlContainer.stop()
 				 }
 			 }
-	
+		}
+	}
     }
 	
 	catch(err) {

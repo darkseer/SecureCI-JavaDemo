@@ -1,4 +1,4 @@
-node (){
+e (){
 
   currentBuild.result = "SUCCESS"
     
@@ -171,8 +171,17 @@ node (){
 				   mysqlContainer.stop()
 				 }
 			 }
+			parallel testlinux: {
+				
+
+		  },
+		  testwindows: {
+	  	  },
+		  testMacOS: {
+		  },
+		  staticAnalysis: {
 		  }
-	  }
+	
     }
 	
 	catch(err) {

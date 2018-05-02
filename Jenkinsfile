@@ -155,6 +155,15 @@ e (){
 							}
 					  }
 				 }
+		  parallel testlinux: {
+		  },
+		  testwindows: {
+	  	  },
+		  testMacOS: {
+		  },
+		  staticAnalysis: {
+		  }
+
 				
 			 }
 			 finally {
@@ -171,16 +180,6 @@ e (){
 				   mysqlContainer.stop()
 				 }
 			 }
-			parallel testlinux: {
-				
-
-		  },
-		  testwindows: {
-	  	  },
-		  testMacOS: {
-		  },
-		  staticAnalysis: {
-		  }
 	
     }
 	

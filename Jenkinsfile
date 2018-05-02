@@ -1,4 +1,4 @@
-e (){
+node (){
 
   currentBuild.result = "SUCCESS"
     

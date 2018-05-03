@@ -133,11 +133,11 @@ node (){
 		    sh "echo Mysql running on port: ${MYSQLPORT}"
 		    
 		    echo 'Two Minutes to test'
-
-		    //withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
+		    
 		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 			try {
 			    wrap([$class: 'Xvfb']) {
+				sleep 20;
 				sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 			    }
 			}
@@ -172,8 +172,8 @@ node (){
 			mysqlContainer.stop()
 		    }
 		}
-	    },
-	    TestLinuxChrome: {
+	    }
+	    parallel TestLinuxChrome: {
 		sleep 30;
 	    },
 	    TestLinuxFirefox: {

@@ -145,30 +145,7 @@ node (){
 			    currentBuild.result = "FAILURE"
 			    throw err
 			}
-		    },
-		    testlinux-chrome: {
-			sleep 30;
-		    },
-		    testlinux-firefox: {
-			sleep 30;
-		    },
-		    testwindows-chrome: {
-			sleep 30;
-	  	    },
-		    testwindows-edge: {
-			sleep 30;
-	  	    },
-		    testMacOS-safari: {
-			sleep 30;
-		    },
-		    testMacOS-chrome: {
-			sleep 30;
-		    },
-		    testMacOS-firefox: {
-			sleep 30;
 		    }
-
-		    
 		    stage("StaticAnalysis") {
 			withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
@@ -197,7 +174,28 @@ node (){
 			mysqlContainer.stop()
 		    }
 		}
-	    }
+	    },
+	    testlinux-chrome: {
+		sleep 30;
+	    },
+	    testlinux-firefox: {
+		sleep 30;
+	    },
+	    testwindows-chrome: {
+		sleep 30;
+	    },
+	    testwindows-edge: {
+		sleep 30;
+	    },
+	    testMacOS-safari: {
+		sleep 30;
+	    },
+	    testMacOS-chrome: {
+		sleep 30;
+	    },
+	    testMacOS-firefox: {
+		sleep 30;
+	    }	    
 	}
     }
     

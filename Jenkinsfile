@@ -58,13 +58,24 @@ node (){
 		    stage ("build") {
 			sh "${MAVEN_HOME}/bin/mvn clean compile"
 		    }
-		    stage ("Unit Test") {
-			sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
-			junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
-		    }				  
 		}
 	    }
-	    stage ("TestSetup"){
+
+	    parallel UnitTests: {
+		withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
+		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
+			stage ("build") {
+			    sh "${MAVEN_HOME}/bin/mvn clean compile"
+			}
+			stage ("Unit Test") {
+			    sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
+			    junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+			}				  
+		    }
+		}
+
+	    },
+	    TestSetup: {
 		
 		def tomcatContainer
 		def mysqlContainer
@@ -130,7 +141,7 @@ node (){
 
 		    //withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-			stage ("Integration Test") {
+			IntegrationTest: {
 			    try {
 				wrap([$class: 'Xvfb']) {
 				    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"

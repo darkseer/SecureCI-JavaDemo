@@ -64,13 +64,13 @@ node (){
 	    parallel UnitTests: {
 		withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
-			    sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package"
-			    junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+			sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package"
+			junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
 		    }
 		}
 
 	    },
-	    TestSetup: {
+	    IntegrationTests: {
 		
 		def tomcatContainer
 		def mysqlContainer
@@ -136,37 +136,45 @@ node (){
 
 		    //withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-			IntegrationTest: {
-			    try {
-				wrap([$class: 'Xvfb']) {
-				    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-				}
-			    }
-			    catch (err){
-				currentBuild.result = "FAILURE"
-				throw err
+			try {
+			    wrap([$class: 'Xvfb']) {
+				sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
 			    }
 			}
-		    }
-		    //}
-		    //Gather the int coverage results
-		    sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
-
-
-		    parallel testlinux: {
+			catch (err){
+			    currentBuild.result = "FAILURE"
+			    throw err
+			}
+		    },
+		    testlinux-chrome: {
 			sleep 30;
 		    },
-		    testwindows: {
+		    testlinux-firefox: {
+			sleep 30;
+		    },
+		    testwindows-chrome: {
 			sleep 30;
 	  	    },
-		    testMacOS: {
+		    testwindows-edge: {
+			sleep 30;
+	  	    },
+		    testMacOS-safari: {
 			sleep 30;
 		    },
-		    staticAnalysis: {
+		    testMacOS-chrome: {
+			sleep 30;
+		    },
+		    testMacOS-firefox: {
+			sleep 30;
+		    }
+
+		    
+		    stage("StaticAnalysis") {
 			withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				stage ("Upload results") {
-				    //Gather the it tests
+				    //Gather the it tests Gather the int coverage results
+				    sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
 				    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
 				}
 			    }

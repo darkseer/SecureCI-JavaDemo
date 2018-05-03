@@ -144,7 +144,7 @@ node (){
 			IntegrationTest: {
 			    try {
 				wrap([$class: 'Xvfb']) {
-				    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+				    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP} -X sonar"
 				}
 			    }
 			    catch (err){

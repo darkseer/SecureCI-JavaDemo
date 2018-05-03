@@ -3,26 +3,27 @@ node (){
     currentBuild.result = "SUCCESS"
     
     try {
-	stage 'MVN Setup'
-	env.DOCKER_HOST_INTERNAL_IP = sh (
-	    script: 'ip route show dev docker0',
-	    returnStdout: true
-	).trim()
-	def matcher=null
-	matcher=(env.DOCKER_HOST_INTERNAL_IP =~ /.*src ([^ ]+).*/)
-	env.DOCKER_HOST_INTERNAL_IP=matcher[0][1]
-	matcher=null
 
-	echo "${DOCKER_HOST_INTERNAL_IP}"
-	//Create maven cache directory if it doesn't exist
-	sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
-	
-	//Set the maven variables for this project
-	env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
-	env.MAVEN_HOME="/opt/apache-maven-3.5.2"
-	env.PATH="${MAVEN_HOME}/bin:" + env.PATH
+	parallel MVNSetup: {
+	    env.DOCKER_HOST_INTERNAL_IP = sh (
+		script: 'ip route show dev docker0',
+		returnStdout: true
+	    ).trim()
+	    def matcher=null
+	    matcher=(env.DOCKER_HOST_INTERNAL_IP =~ /.*src ([^ ]+).*/)
+	    env.DOCKER_HOST_INTERNAL_IP=matcher[0][1]
+	    matcher=null
 
-	stage ("Checkout") {
+	    echo "${DOCKER_HOST_INTERNAL_IP}"
+	    //Create maven cache directory if it doesn't exist
+	    sh "if [ ! -d .m2 ] ; then mkdir .m2; fi"
+	    
+	    //Set the maven variables for this project
+	    env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
+	    env.MAVEN_HOME="/opt/apache-maven-3.5.2"
+	    env.PATH="${MAVEN_HOME}/bin:" + env.PATH
+	},
+	Checkout: {
 	    checkout scm
 	    def imageId
 	    env.BRANCH_NAME="securecidemo"
@@ -130,7 +131,7 @@ node (){
 		    echo 'Two Minutes to test'
 
 		    //withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
-			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 			stage ("Integration Test") {
 			    try {
 				wrap([$class: 'Xvfb']) {
@@ -144,24 +145,28 @@ node (){
 			}
 		    }
 		    //}
-		//Gather the int coverage results
+		    //Gather the int coverage results
 		    sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
 
-		    withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
-			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-			    stage ("Upload results") {
-				//Gather the it tests
-				sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
-			    }
-			}
-		    }
+
 		    parallel testlinux: {
+			sleep 30;
 		    },
 		    testwindows: {
+			sleep 30;
 	  	    },
 		    testMacOS: {
+			sleep 30;
 		    },
 		    staticAnalysis: {
+			withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
+			    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+				stage ("Upload results") {
+				    //Gather the it tests
+				    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
+				}
+			    }
+			}
 		    }
 
 		    

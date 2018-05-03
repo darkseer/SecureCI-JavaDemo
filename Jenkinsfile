@@ -173,25 +173,25 @@ node (){
 		    }
 		}
 	    },
-	    testlinux-chrome: {
+	    TestLinuxChrome: {
 		sleep 30;
 	    },
-	    testlinux-firefox: {
+	    TestLinuxFirefox: {
 		sleep 30;
 	    },
-	    testwindows-chrome: {
+	    TestWindowsChrome: {
 		sleep 30;
 	    },
-	    testwindows-edge: {
+	    TestWindowsEdge: {
 		sleep 30;
 	    },
-	    testMacOS-safari: {
+	    TestMacOSSafari: {
 		sleep 30;
 	    },
-	    testMacOS-chrome: {
+	    TestMacOSChrome: {
 		sleep 30;
 	    },
-	    testMacOS-firefox: {
+	    TestMacOSFirefox: {
 		sleep 30;
 	    }	    
 	}

@@ -93,7 +93,7 @@ node (){
 			else {
 			    echo "Mysql is not listening on port 3306 yet"
 			    return false
-			}
+		}
 		    }// end of waitUntil
 		    env.MYSQLPORT=mysqlContainer.port(3306)
 		    
@@ -157,8 +157,6 @@ node (){
 			    }
 			}
 		    }
-
-		    
 		}
 		finally {
 		    stage("Stopping Containers"){

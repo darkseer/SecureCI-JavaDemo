@@ -34,8 +34,6 @@ node (){
 	    
 	    env.RELEASE="1.0"
 	    
-	    stage 'Toolsetup'	  
-	    
 
 	    env.BRANCH_PREFIX="none"
 	    env.BRANCH_ID=env.BRANCH_NAME

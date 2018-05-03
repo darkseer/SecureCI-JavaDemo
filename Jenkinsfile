@@ -64,13 +64,8 @@ node (){
 	    parallel UnitTests: {
 		withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
-			stage ("build") {
-			    sh "${MAVEN_HOME}/bin/mvn clean compile"
-			}
-			stage ("Unit Test") {
-			    sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package sonar:sonar"
+			    sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package"
 			    junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
-			}				  
 		    }
 		}
 

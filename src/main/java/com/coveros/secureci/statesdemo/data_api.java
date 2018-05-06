@@ -58,7 +58,7 @@ public class data_api {
     private String dbdriver="org.h2.Driver";
     private String dburl="jdbc:h2:mem:country";
     private String dbuser="speaker"; 
-    private String dbpassword="test123";
+    private String dbpassword=null;
     private String hibernate_dialect=null;
 
     public data_api(final String answer, final int incorrectGuessesAllowed) {
@@ -117,6 +117,8 @@ public class data_api {
 
 		states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id + "</p>";
 	    }
+	    rs.close();
+	    con.close();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {

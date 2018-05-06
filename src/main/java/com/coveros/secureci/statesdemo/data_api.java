@@ -139,6 +139,7 @@ public class data_api {
 	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {
+	    if (rs != null) {
 		rs.close();
 	    }
 	    if (con != null){ 

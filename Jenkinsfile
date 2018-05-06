@@ -147,13 +147,15 @@ node (){
 			}
 		    }
 		    stage("StaticAnalysis") {
-			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-			    stage ("Upload results") {
-				//Gather the it tests Gather the int coverage results
-				sh "docker exec tomcat_${BUILD_NUMBER} /opt/tomcat9/bin/catalina.sh stop"
-				sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
+			stage ("Upload results") {	
+			    sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
+			    withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+				    //Gather the it tests Gather the int coverage results
+				    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
+				}
 			    }
-			}			
+			}
 		    }
 		}
 		finally {

@@ -151,7 +151,7 @@ node (){
 			    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 				stage ("Upload results") {
 				    //Gather the it tests Gather the int coverage results
-				    sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
+				    sh "docker exec tomcat_${BUILD_NUMBER} /opt/tomcat9/bin/catalina.sh stop"
 				    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
 				}
 			    }
@@ -162,7 +162,6 @@ node (){
 		    stage("Stopping Containers"){
 			if (currentBuild.result == "FAILURE"){
 			    stage("state capture"){
-				sleep 240;
 				sh 'docker commit ${MYSQLID} secureci:8182/mysql:mysql_${BUILD_ID}'
 				sh 'docker commit ${TOMCATID} secureci:8182/tomcat:tomcat_${BUILD_ID}'
 				sh 'docker push secureci:8182/mysql:mysql_${BUILD_ID}'

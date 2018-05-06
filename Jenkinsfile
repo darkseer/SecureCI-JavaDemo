@@ -62,13 +62,14 @@ node (){
 	    }
 
 	    parallel UnitTests: {
-		withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
-		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
-			sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false test"
-			junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+		stage("Unit Tests"){
+		    withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
+			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
+			    sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false test"
+			    junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+			}
 		    }
 		}
-
 	    },
 	    IntegrationTests: {
 		
@@ -138,7 +139,9 @@ node (){
 			try {
 			    wrap([$class: 'Xvfb']) {
 				sleep 20;
-				sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+				stage("Integration Tests") {
+				    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
+				}
 			    }
 			}
 			catch (err){

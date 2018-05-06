@@ -55,17 +55,18 @@ public class data_api {
     private String answer;
     private int incorrectGuessesAllowed;
     private Set<String> guessedLetters;
-    private String dbdriver="org.h2.Driver";
-    private String dburl="jdbc:h2:mem:country";
-    private String dbuser="speaker"; 
-    private String dbpassword=null;
-    private String hibernate_dialect=null;
+    private static String dbdriver="org.h2.Driver";
+    private static String dburl="jdbc:h2:mem:country";
+    private static String dbuser="speaker"; 
+    private static String dbpassword=null;
+    private static String hibernate_dialect=null;
 
     public data_api(final String answer, final int incorrectGuessesAllowed) {
 	this.answer = answer;
 	this.incorrectGuessesAllowed = incorrectGuessesAllowed;
 	this.guessedLetters = new LinkedHashSet<String>(NUM_LETTERS);
 	try {
+	    this.set_properties();
 	    this.flyway();
 	    System.out.println("Props1:" + this.dbdriver);
 	    System.out.println("Props2:" + this.dburl);
@@ -79,12 +80,35 @@ public class data_api {
     public data_api(final String answer) {
 	this(answer, DEFAULT_INCORRECT_GUESSES);
 	try {
+	    this.set_properties();
 	    this.flyway();
 	    System.out.println("Props1:" + this.dbdriver);
 	    System.out.println("Props2:" + this.dburl);
 	    System.out.println("Props3:" + this.dbuser);
 	    System.out.println("Props5:" + this.hibernate_dialect);
 	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
+
+    private void set_properties() {
+	try {
+	    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+	    InputStream input = classLoader.getResourceAsStream("env.properties");
+	    Properties properties = new Properties();
+	    if (input == null ){
+		input = this.getClass().getResourceAsStream("env.properties");
+	    }
+	    if (input != null ){
+		properties.load(input);
+		this.dbdriver=new String(properties.getProperty("db.driver"));
+		this.dburl=new String(properties.getProperty("db.url"));
+		this.hibernate_dialect=new String(properties.getProperty("hibernate.dialect"));
+		this.dbuser=new String(properties.getProperty("db.user"));
+		this.dbpassword=new String(properties.getProperty("db.password"));
+	    }
+	}
+	catch (Exception e) {
 	    e.printStackTrace();
 	}
     }
@@ -151,25 +175,14 @@ public class data_api {
 
     public Flyway flyway() {
 	Flyway flyway = new Flyway();
-	flyway.setBaselineOnMigrate(true);
 
-	flyway.setDataSource(dataSource());
-	flyway.clean();
-	flyway.repair();
-	flyway.migrate();
-	System.out.println("Flyway Migration Complete");
-	try {
-	    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-	    InputStream input = classLoader.getResourceAsStream("env.properties");
-	    Properties properties = new Properties();
-	    if (input != null ){
-		properties.load(input);
-		this.dbdriver=new String(properties.getProperty("db.driver"));
-		this.dburl=new String(properties.getProperty("db.url"));
-		this.hibernate_dialect=new String(properties.getProperty("hibernate.dialect"));
-		this.dbuser=new String(properties.getProperty("db.user"));
-		this.dbpassword=new String(properties.getProperty("db.password"));
-	    }
+	try{
+	    flyway.setBaselineOnMigrate(true);
+	    flyway.setDataSource(dataSource());
+	    flyway.clean();
+	    flyway.repair();
+	    flyway.migrate();
+	    System.out.println("Flyway Migration Complete");
 	}
 	catch (Exception e) {
 	    e.printStackTrace();

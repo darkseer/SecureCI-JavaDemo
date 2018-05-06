@@ -93,7 +93,7 @@ node (){
 			else {
 			    echo "Mysql is not listening on port 3306 yet"
 			    return false
-		}
+			}
 		    }// end of waitUntil
 		    env.MYSQLPORT=mysqlContainer.port(3306)
 		    
@@ -102,7 +102,7 @@ node (){
 		    sh "./dburl_change.sh target/env.properties ${MYSQLPORT} ${DOCKER_HOST_INTERNAL_IP}"
 		    
 		    
-		    tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp -v ${WORKSPACE}/target/hangman.war:/opt/tomcat9/webapps/ --link=mysql_${BUILD_NUMBER}:mysql --name=tomcat_${BUILD_NUMBER}')
+		    tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp --link=mysql_${BUILD_NUMBER}:mysql --name=tomcat_${BUILD_NUMBER}')
 		    env.TOMCATID=tomcatContainer.id
 		    
 		    // Wait for tomcat to be up

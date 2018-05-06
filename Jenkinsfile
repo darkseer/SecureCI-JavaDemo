@@ -56,7 +56,7 @@ node (){
 	    withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 		    stage ("build") {
-			sh "${MAVEN_HOME}/bin/mvn clean compile"
+			sh "${MAVEN_HOME}/bin/mvn clean package -DskipTests"
 		    }
 		}
 	    }
@@ -64,7 +64,7 @@ node (){
 	    parallel UnitTests: {
 		withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
-			sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false package"
+			sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false test"
 			junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
 		    }
 		}

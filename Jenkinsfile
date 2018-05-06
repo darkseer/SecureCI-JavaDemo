@@ -165,7 +165,6 @@ node (){
 		    stage("Stopping Containers"){
 			if (currentBuild.result == "FAILURE"){
 			    stage("state capture"){
-				sleep 240;
 				sh 'docker commit ${MYSQLID} secureci:8182/mysql:mysql_${BUILD_ID}'
 				sh 'docker commit ${TOMCATID} secureci:8182/tomcat:tomcat_${BUILD_ID}'
 				sh 'docker push secureci:8182/mysql:mysql_${BUILD_ID}'

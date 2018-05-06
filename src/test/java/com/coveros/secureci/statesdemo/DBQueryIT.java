@@ -21,13 +21,13 @@ package com.coveros.secureci.statesdemo;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 
-import com.coveros.secureci.statesdemo.Hangman;
+import com.coveros.secureci.statesdemo.data_api;
 
 import static org.junit.Assert.*;
 
 public class DBQueryIT {
 
-	private Hangman game;
+	private data_api game;
 
 	@Test
  	@Category(com.coveros.secureci.statesdemo.DBQueryIT.class)

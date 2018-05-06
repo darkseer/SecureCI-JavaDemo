@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <%@ page language="java" pageEncoding="utf-8"%>
 <%@ page
-	import="com.coveros.secureci.statesdemo.Hangman, java.io.*, java.util.*"%>
+	import="com.coveros.secureci.statesdemo.data_api, java.io.*, java.util.*"%>
 
 <!--
   sample - index.jsp
@@ -23,7 +23,7 @@
 
 <%
 	String status = "Please enter a letter please.";
-	Hangman hangman = new Hangman("test");
+	data_api data_api_resp = new data_api("test");
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -32,7 +32,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Hangman</title>
+<title>data_api</title>
 <link rel="stylesheet" href="stylesheets/screen.css" type="text/css"
 	media="screen" charset="utf-8" />
 <link rel="stylesheet" href="stylesheets/print.css" type="text/css"
@@ -42,14 +42,14 @@
 
 <body>
 
-	<h1>Hangman</h1>
+	<h1>data_api</h1>
 	<p>
 		<em>Not the coolest app in the world</em>
 	</p>
 
 
 
-	<p><%=hangman.states()%></p>
+	<p><%=data_api_resp.states()%></p>
 
 </body>
 </html>

@@ -1,5 +1,5 @@
 /*
- * sample - Class com.coveros.secureci.statesdemo.Hangman
+ * sample - Class com.coveros.secureci.statesdemo.data_api
  * 
  * Copyright 2010 Coveros, Inc.
  * 
@@ -40,12 +40,12 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 
 /**
- * This guessing game is similar to the "Hangman" game popular with children in
+ * This guessing game is similar to the "data_api" game popular with children in
  * the United States. The player tries to guess a word, one letter at a time.
  * The player guesses letters until they have either successfully guessed the
  * word or have reached the maximum number of incorrect guesses allowed.
  */
-public class Hangman {
+public class data_api {
 	// Help me
 	public static final int IN_PROGRESS = 0;
 	public static final int WON = 1;
@@ -61,7 +61,7 @@ public class Hangman {
 	private String dbpassword="test123";
 	private String hibernate_dialect=null;
 
-	public Hangman(final String answer, final int incorrectGuessesAllowed) {
+	public data_api(final String answer, final int incorrectGuessesAllowed) {
 		this.answer = answer;
 		this.incorrectGuessesAllowed = incorrectGuessesAllowed;
 		this.guessedLetters = new LinkedHashSet<String>(NUM_LETTERS);
@@ -77,7 +77,7 @@ public class Hangman {
 		}
 	}
 
-	public Hangman(final String answer) {
+	public data_api(final String answer) {
 		this(answer, DEFAULT_INCORRECT_GUESSES);
 		try {
 			this.flyway();

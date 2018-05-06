@@ -102,7 +102,7 @@ node (){
 		    sh "./dburl_change.sh target/env.properties ${MYSQLPORT} ${DOCKER_HOST_INTERNAL_IP}"
 		    
 		    
-		    tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp --link=mysql_${BUILD_NUMBER}:mysql','/bin/cat')
+		    tomcatContainer = docker.image("secureci:8182/tomcat:latest").run('-p 8080 -v ${WORKSPACE}/target:/home/tomcat/tmp --link=mysql_${BUILD_NUMBER}:mysql','/start.sh')
 		    env.TOMCATID=tomcatContainer.id
 		    
 		    // Wait for tomcat to be up

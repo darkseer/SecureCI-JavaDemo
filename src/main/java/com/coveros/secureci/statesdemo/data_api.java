@@ -46,134 +46,134 @@ import java.io.FileInputStream;
  * word or have reached the maximum number of incorrect guesses allowed.
  */
 public class data_api {
-	// Help me
-	public static final int IN_PROGRESS = 0;
-	public static final int WON = 1;
-	public static final int LOST = -1;
-	private static final int NUM_LETTERS = 26;
-	private static final int DEFAULT_INCORRECT_GUESSES = 6;
-	private String answer;
-	private int incorrectGuessesAllowed;
-	private Set<String> guessedLetters;
-	private String dbdriver="org.h2.Driver";
-	private String dburl="jdbc:h2:mem:country";
-	private String dbuser="speaker"; 
-	private String dbpassword="test123";
-	private String hibernate_dialect=null;
+    // Help me
+    public static final int IN_PROGRESS = 0;
+    public static final int WON = 1;
+    public static final int LOST = -1;
+    private static final int NUM_LETTERS = 26;
+    private static final int DEFAULT_INCORRECT_GUESSES = 6;
+    private String answer;
+    private int incorrectGuessesAllowed;
+    private Set<String> guessedLetters;
+    private String dbdriver="org.h2.Driver";
+    private String dburl="jdbc:h2:mem:country";
+    private String dbuser="speaker"; 
+    private String dbpassword="test123";
+    private String hibernate_dialect=null;
 
-	public data_api(final String answer, final int incorrectGuessesAllowed) {
-		this.answer = answer;
-		this.incorrectGuessesAllowed = incorrectGuessesAllowed;
-		this.guessedLetters = new LinkedHashSet<String>(NUM_LETTERS);
-		try {
-			this.flyway();
-			System.out.println("Props1:" + this.dbdriver);
-			System.out.println("Props2:" + this.dburl);
-			System.out.println("Props3:" + this.dbuser);
-			System.out.println("Props4:" + this.dbpassword);
-			System.out.println("Props5:" + this.hibernate_dialect);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    public data_api(final String answer, final int incorrectGuessesAllowed) {
+	this.answer = answer;
+	this.incorrectGuessesAllowed = incorrectGuessesAllowed;
+	this.guessedLetters = new LinkedHashSet<String>(NUM_LETTERS);
+	try {
+	    this.flyway();
+	    System.out.println("Props1:" + this.dbdriver);
+	    System.out.println("Props2:" + this.dburl);
+	    System.out.println("Props3:" + this.dbuser);
+	    System.out.println("Props4:" + this.dbpassword);
+	    System.out.println("Props5:" + this.hibernate_dialect);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
+
+    public data_api(final String answer) {
+	this(answer, DEFAULT_INCORRECT_GUESSES);
+	try {
+	    this.flyway();
+	    System.out.println("Props1:" + this.dbdriver);
+	    System.out.println("Props2:" + this.dburl);
+	    System.out.println("Props3:" + this.dbuser);
+	    System.out.println("Props4:" + this.dbpassword);
+	    System.out.println("Props5:" + this.hibernate_dialect);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+    }
+
+    public String states() throws Exception {
+
+	Statement stmt = null;
+	String query = "select id,state_name,capital_name from states;";
+	String states = new String();
+
+	try {
+	    Connection con = null;
+	    Properties connectionProps = new Properties();
+	    connectionProps.put("user", this.dbuser);
+	    connectionProps.put("password", this.dbpassword);
+
+	    // con =
+	    // DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country",
+	    // connectionProps);
+	    con = DriverManager.getConnection(this.dburl, connectionProps);
+
+	    stmt = con.createStatement();
+	    ResultSet rs = stmt.executeQuery(query);
+	    while (rs.next()) {
+		String state_name = rs.getString("state_name");
+		String capital_name = rs.getString("capital_name");
+		int id = rs.getInt("id");
+
+		states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id + "</p>";
+	    }
+	} catch (Exception e) {
+	    e.printStackTrace();
+	} finally {
+	    if (stmt != null) {
+		stmt.close();
+	    }
 	}
 
-	public data_api(final String answer) {
-		this(answer, DEFAULT_INCORRECT_GUESSES);
-		try {
-			this.flyway();
-			System.out.println("Props1:" + this.dbdriver);
-			System.out.println("Props2:" + this.dburl);
-			System.out.println("Props3:" + this.dbuser);
-			System.out.println("Props4:" + this.dbpassword);
-			System.out.println("Props5:" + this.hibernate_dialect);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	return states;
+    }
+
+    public BasicDataSource dataSource() {
+	BasicDataSource ds = new BasicDataSource();
+	/*
+	 * ds.setDriverClassName(env.getProperty("db.driver"));
+	 * ds.setUrl(env.getProperty("db.url"));
+	 * LOGGER.info("PROPERTIES: Loaded property: db.url" +
+	 * env.getProperty("db.url"));
+	 * 
+	 * ds.setUsername(env.getProperty("db.user"));
+	 * ds.setPassword(env.getProperty("db.password"));
+	 */
+
+	ds.setDriverClassName(this.dbdriver);
+	// ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
+	ds.setUrl(this.dburl);
+	ds.setUsername(this.dbuser);
+	ds.setPassword(this.dbpassword);
+	return ds;
+    }
+
+    public Flyway flyway() {
+	Flyway flyway = new Flyway();
+	flyway.setBaselineOnMigrate(true);
+
+	flyway.setDataSource(dataSource());
+	flyway.clean();
+	flyway.repair();
+	flyway.migrate();
+	System.out.println("Flyway Migration Complete");
+	try {
+	    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+	    InputStream input = classLoader.getResourceAsStream("env.properties");
+	    Properties properties = new Properties();
+	    if (input != null ){
+		properties.load(input);
+		this.dbdriver=new String(properties.getProperty("db.driver"));
+		this.dburl=new String(properties.getProperty("db.url"));
+		this.hibernate_dialect=new String(properties.getProperty("hibernate.dialect"));
+		this.dbuser=new String(properties.getProperty("db.user"));
+		this.dbpassword=new String(properties.getProperty("db.password"));
+	    }
 	}
-
-	public String states() throws Exception {
-
-		Statement stmt = null;
-		String query = "select id,state_name,capital_name from states;";
-		String states = new String();
-
-		try {
-			Connection con = null;
-			Properties connectionProps = new Properties();
-			connectionProps.put("user", this.dbuser);
-			connectionProps.put("password", this.dbpassword);
-
-			// con =
-			// DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country",
-			// connectionProps);
-			con = DriverManager.getConnection(this.dburl, connectionProps);
-
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			while (rs.next()) {
-				String state_name = rs.getString("state_name");
-				String capital_name = rs.getString("capital_name");
-				int id = rs.getInt("id");
-
-				states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id + "</p>";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (stmt != null) {
-				stmt.close();
-			}
-		}
-
-		return states;
+	catch (Exception e) {
+	    e.printStackTrace();
 	}
-
-	public BasicDataSource dataSource() {
-		BasicDataSource ds = new BasicDataSource();
-		/*
-		 * ds.setDriverClassName(env.getProperty("db.driver"));
-		 * ds.setUrl(env.getProperty("db.url"));
-		 * LOGGER.info("PROPERTIES: Loaded property: db.url" +
-		 * env.getProperty("db.url"));
-		 * 
-		 * ds.setUsername(env.getProperty("db.user"));
-		 * ds.setPassword(env.getProperty("db.password"));
-		 */
-
-		ds.setDriverClassName(this.dbdriver);
-		// ds.setUrl("jdbc:h2:tcp://127.0.0.1:9902/mem:country");
-		ds.setUrl(this.dburl);
-		ds.setUsername(this.dbuser);
-		ds.setPassword(this.dbpassword);
-		return ds;
-	}
-
-	public Flyway flyway() {
-		Flyway flyway = new Flyway();
-		flyway.setBaselineOnMigrate(true);
-
-		flyway.setDataSource(dataSource());
-		flyway.clean();
-		flyway.repair();
-		flyway.migrate();
-		System.out.println("Flyway Migration Complete");
-		try {
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			InputStream input = classLoader.getResourceAsStream("env.properties");
-		    Properties properties = new Properties();
-		    if (input != null ){
-		      properties.load(input);
-		      this.dbdriver=new String(properties.getProperty("db.driver"));
-		      this.dburl=new String(properties.getProperty("db.url"));
-		      this.hibernate_dialect=new String(properties.getProperty("hibernate.dialect"));
-		      this.dbuser=new String(properties.getProperty("db.user"));
-		      this.dbpassword=new String(properties.getProperty("db.password"));
-		    }
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return flyway;
-	}
+	return flyway;
+    }
 
 }

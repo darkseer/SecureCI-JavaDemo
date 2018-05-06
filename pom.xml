@@ -13,11 +13,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.coveros</groupId>
-	<artifactId>hangman</artifactId>
+	<artifactId>data_api</artifactId>
 	<version>0.0.3</version>
 	<packaging>war</packaging>
 
-	<name>Hangman</name>
+	<name>data_api</name>
 	<description>A simple word game.</description>
 	<url>http://www.coveros.com</url>
 	<inceptionYear>2009</inceptionYear>
@@ -113,7 +113,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>hangman</finalName>
+		<finalName>data_api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>

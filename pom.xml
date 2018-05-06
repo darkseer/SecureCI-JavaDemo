@@ -406,17 +406,4 @@
 		<url>scm:git:ssh://git@github.com:darkseer/SecureCI-JavaDemo.git</url>
 	</scm>
 
-<distributionManagement>
-    <repository>
-      <id>nexus</id>
-      <name>Releases</name>
-      <url>http://192.168.1.150:8081/repository/vibranttest</url>
-    </repository>
-    <snapshotRepository>
-      <id>nexus</id>
-      <name>Snapshot</name>
-      <url>http://192.168.1.150:8081/repository/vibranttest</url>
-    </snapshotRepository>
-  </distributionManagement>
-
 </project>

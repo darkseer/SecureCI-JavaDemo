@@ -70,7 +70,6 @@ public class data_api {
 	    System.out.println("Props1:" + this.dbdriver);
 	    System.out.println("Props2:" + this.dburl);
 	    System.out.println("Props3:" + this.dbuser);
-	    System.out.println("Props4:" + this.dbpassword);
 	    System.out.println("Props5:" + this.hibernate_dialect);
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -84,7 +83,6 @@ public class data_api {
 	    System.out.println("Props1:" + this.dbdriver);
 	    System.out.println("Props2:" + this.dburl);
 	    System.out.println("Props3:" + this.dbuser);
-	    System.out.println("Props4:" + this.dbpassword);
 	    System.out.println("Props5:" + this.hibernate_dialect);
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -96,20 +94,17 @@ public class data_api {
 	Statement stmt = null;
 	String query = "select id,state_name,capital_name from states;";
 	String states = new String();
-
+	Connection con = null;
+	ResultSet rs = null;
 	try {
-	    Connection con = null;
 	    Properties connectionProps = new Properties();
 	    connectionProps.put("user", this.dbuser);
 	    connectionProps.put("password", this.dbpassword);
 
-	    // con =
-	    // DriverManager.getConnection("jdbc:h2:tcp://127.0.0.1:9902/mem:country",
-	    // connectionProps);
 	    con = DriverManager.getConnection(this.dburl, connectionProps);
 
 	    stmt = con.createStatement();
-	    ResultSet rs = stmt.executeQuery(query);
+	    rs = stmt.executeQuery(query);
 	    while (rs.next()) {
 		String state_name = rs.getString("state_name");
 		String capital_name = rs.getString("capital_name");
@@ -117,11 +112,15 @@ public class data_api {
 
 		states = states + "<p>" + state_name + "\t" + capital_name + "\t" + id + "</p>";
 	    }
-	    rs.close();
-	    con.close();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	} finally {
+	    if (rs != null) {
+		rs.close();
+	    }
+	    if (con != null){ 
+		con.close();
+	    }
 	    if (stmt != null) {
 		stmt.close();
 	    }

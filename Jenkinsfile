@@ -20,7 +20,7 @@ node (){
 	    
 	    //Set the maven variables for this project
 	    env.MAVEN_OPTS="-Dmaven.repo.local=${env.WORKSPACE}/.m2"
-	    env.MAVEN_HOME="/opt/apache-maven-3.5.2"
+	    env.MAVEN_HOME="/opt/apache-maven-3.5.4"
 	    env.PATH="${MAVEN_HOME}/bin:" + env.PATH
 	},
 	Checkout: {

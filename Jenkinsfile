@@ -1,10 +1,18 @@
+/*
+ Allocate any available build node for pipeline
+*/
 node (){
 
     currentBuild.result = "SUCCESS"
     
     try {
-
+/*
+ Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 
+*/        
 	parallel MVNSetup: {
+            /*
+             Setting up the path and environment variables for maven and obtaining the local ip address for the docker interface 
+             */
 	    env.DOCKER_HOST_INTERNAL_IP = sh (
 		script: 'ip route show dev docker0',
 		returnStdout: true
@@ -24,6 +32,9 @@ node (){
 	    env.PATH="${MAVEN_HOME}/bin:" + env.PATH
 	},
 	Checkout: {
+            /*
+             Checking out the code and saving the pertiant variables about commit hash and revision
+             */
 	    checkout scm
 	    def imageId
 	    env.BRANCH_NAME="securecidemo"
@@ -52,6 +63,9 @@ node (){
 	    sh 'rm -f commit-id'
 	    
 	}
+        /*
+         Build and package the code without unit tests using a docker container with the maven tool set
+         */
 	docker.withRegistry('http://secureci:8182','docker') {
 	    withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 		withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
@@ -60,9 +74,15 @@ node (){
 		    }
 		}
 	    }
-
+            /*
+             Parallel block that runs unit and integration tests at the same time. This is an overall time savings allowing 
+             integration tests
+             */
 	    parallel UnitTests: {
 		stage("Unit Tests"){
+                    /*
+                     Run unit tests in the maven container against already built code. 
+                     */
 		    withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {			  
 			    sh "${MAVEN_HOME}/bin/mvn -Dmaven.test.failure.ignore=false test"
@@ -72,7 +92,11 @@ node (){
 		}
 	    },
 	    IntegrationTests: {
-		
+		/*
+                 Set up a mysql and tomcat container and run the API level database tests.
+                 This simulates a scaled down version of the application that has all of
+                 its architectual compents expressed as docker containers. 
+                 */
 		def tomcatContainer
 		def mysqlContainer
 		def testContainer
@@ -134,7 +158,9 @@ node (){
 		    sh "echo Mysql running on port: ${MYSQLPORT}"
 		    
 		    echo 'Two Minutes to test'
-		    
+		    /* 
+                     In a special test container run the database API tests and the chrome broser UI tests. 
+                     */
 		    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
 			try {
 			    wrap([$class: 'Xvfb']) {
@@ -149,6 +175,10 @@ node (){
 			    throw err
 			}
 		    }
+                    /*
+                     The Int and unit tests produce coverage reslults. We run the static analysis at the end so that
+                     the coverage results can be uploaded at the same time the static analysis reslults are. 
+                     */
 		    stage("StaticAnalysis") {
 			stage ("Upload results") {	
 			    sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
@@ -176,6 +206,11 @@ node (){
 		    }
 		}
 	    }
+            /*
+             This is a mock of where different broswer tests should run. In the real world these would be 
+             different containers for each test suite running in parallel possibly running on different nodes. 
+             
+             */
 	    parallel TestLinuxChrome: {
 		sleep 30;
 	    },

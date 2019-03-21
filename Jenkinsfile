@@ -10,6 +10,9 @@ node (){
 /*
  Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 
 */        
+
+    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "log-parser-rules", useProjectRule: false])
+
 	parallel MVNSetup: {
             /*
              Setting up the path and environment variables for maven and obtaining the local ip address for the docker interface 
@@ -185,12 +188,10 @@ node (){
 			    sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
 			    withDockerContainer(args: '--net=\"host\"', image:'secureci:8182/centos:latest') {
 			    
-			    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false]) {
-                    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
-                        //Gather the it tests Gather the int coverage results
-                        sh "${MAVEN_HOME}/bin/mvn sonar:sonar"              
-                    }			    
-			    }
+				withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+				    //Gather the it tests Gather the int coverage results
+				    sh "${MAVEN_HOME}/bin/mvn sonar:sonar"				
+				}
 			    }
 			}
 		    }

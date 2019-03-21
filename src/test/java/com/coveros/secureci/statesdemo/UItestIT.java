@@ -58,11 +58,11 @@ public class UItestIT {
 		File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
 		FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
  
-		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Puerto Rico" + "')]"));
-		assertTrue("Puerto Rico not found!", list.size() > 0);
+		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Connecticut" + "')]"));
+		assertTrue("Connecticut not found!", list.size() > 0);
 		
-		list = driver.findElements(By.xpath("//*[contains(text(),'" + "San Juan" + "')]"));
-		assertTrue("Puerto Rico's Capital not found!", list.size() > 0);
+		list = driver.findElements(By.xpath("//*[contains(text(),'" + "Hartford" + "')]"));
+		assertTrue("Connecticut's Capital not found!", list.size() > 0);
 		
         
 		//Wait for 5 Sec

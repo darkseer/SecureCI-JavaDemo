@@ -56,7 +56,7 @@ public class UItestIT {
 		// Adding comment to trigger build.
 		// Adding another comment.
 		File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
+		FileUtils.copyFile(screenshotFile, new File("screenshots/second-int-test-screenshot.png"));
  
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Connecticut" + "')]"));
 		assertTrue("Connecticut not found!", list.size() > 0);

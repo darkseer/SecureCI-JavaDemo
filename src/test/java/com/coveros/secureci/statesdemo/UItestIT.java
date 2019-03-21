@@ -18,12 +18,16 @@
 
 package com.coveros.secureci.statesdemo;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import static org.junit.Assert.*;
 
@@ -32,7 +36,7 @@ public class UItestIT {
 
 	@Test
  	@Category(com.coveros.secureci.statesdemo.UItestIT.class)
-	public void SecondIntTest()  throws InterruptedException {
+	public void SecondIntTest()  throws InterruptedException, IOException {
 		//System.setProperty("webdriver.gecko.driver", "/home/buckholz/gecko/geckodriver");
 		String URL=new String("http://"+ System.getProperty( "tomcat.ip" ) + ":" + System.getProperty( "tomcat.port" ) + "/data_api/index.jsp");
 		
@@ -45,6 +49,10 @@ public class UItestIT {
 		
         // Print a Log In message to the screen
         System.out.println("Successfully opened the website" + URL);
+
+        // Take a screenshot of the page.
+		File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
+		FileUtils.copyFile(screenshotFile, new File("second-int-test-screenshot.png"));
  
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Puerto Rico" + "')]"));
 		assertTrue("Puerto Rico not found!", list.size() > 0);

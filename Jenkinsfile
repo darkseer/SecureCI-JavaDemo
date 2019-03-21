@@ -176,7 +176,6 @@ node() {
              The Int and unit tests produce coverage reslults. We run the static analysis at the end so that
              the coverage results can be uploaded at the same time the static analysis reslults are. 
              */
-             /*
             stage("StaticAnalysis") {
               stage("Upload results") {
                 sh "docker exec -t ${TOMCATID} /opt/tomcat9/bin/catalina.sh stop"
@@ -190,7 +189,6 @@ node() {
                 }
               }
             }
-            */
           } finally {
             stage("Stopping Containers") {
               if (currentBuild.result == "FAILURE") {

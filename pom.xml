@@ -59,8 +59,10 @@
 		<inmem.daemon>true</inmem.daemon>
 		<junit.version>4.11</junit.version>
 		<jdk.version>1.8</jdk.version>
-		<sonar.host.url>http://secureci:9000/sonar</sonar.host.url>
-		<sonar.login>admin</sonar.login>
+<!-- 		<sonar.host.url>http://secureci:9000/sonar</sonar.host.url>
+ -->		
+        <sonar.host.url>https://18.222.216.73/sonar</sonar.host.url>
+        <sonar.login>admin</sonar.login>
 		<sonar.password>admin</sonar.password>
 		<maven.test.failure.ignore>false</maven.test.failure.ignore>
 	</properties>

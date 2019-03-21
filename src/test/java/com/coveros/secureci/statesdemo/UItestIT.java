@@ -46,11 +46,11 @@ public class UItestIT {
         // Print a Log In message to the screen
         System.out.println("Successfully opened the website" + URL);
  
-		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Alaska" + "')]"));
-		assertTrue("Alaska not found!", list.size() > 0);
+		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Puerto Rico" + "')]"));
+		assertTrue("Puerto Rico not found!", list.size() > 0);
 		
-		list = driver.findElements(By.xpath("//*[contains(text(),'" + "Juneau" + "')]"));
-		assertTrue("Alaska's Capital not found!", list.size() > 0);
+		list = driver.findElements(By.xpath("//*[contains(text(),'" + "San Juan" + "')]"));
+		assertTrue("Puerto Rico's Capital not found!", list.size() > 0);
 		
         
 		//Wait for 5 Sec

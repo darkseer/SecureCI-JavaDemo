@@ -74,19 +74,18 @@ node (){
 		    }
 		}
 	    }
-            /*
-             Parallel block that runs unit and integration tests at the same time. This is an overall time savings allowing 
-             integration tests
-             */
-	    parallel UnitTests: {
 	    
-	    
-	     stage("SonarQube Analysis") {
+	    stage("SonarQube Analysis") {
             withSonarQubeEnv('My SonarQube Server') {
                 // requires SonarQube Scanner for Maven 3.2+
                 sh "${MAVEN_HOME}/bin/mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar"
             }
         }
+            /*
+             Parallel block that runs unit and integration tests at the same time. This is an overall time savings allowing 
+             integration tests
+             */
+	    parallel UnitTests: {
 	    
 	    
 		stage("Unit Tests"){

@@ -9,9 +9,6 @@ node (){
 /*
  Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 
 */        
-
-   step([$class: 'LogParserPublisher', parsingRulesPath: '/var/lib/jenkins/jenkins-rule-logparser', useProjectRule: false])
-   echo 'Error: oh no'
    
 	parallel MVNSetup: {
             /*
@@ -194,7 +191,9 @@ node (){
 			    }
 			}
 		    }
-		}
+		}catch(all)
+
+{ print "ERROR: LogParserPublisher failed: \n" +all }
 		finally {
 		    stage("Stopping Containers"){
 			if (currentBuild.result == "FAILURE"){

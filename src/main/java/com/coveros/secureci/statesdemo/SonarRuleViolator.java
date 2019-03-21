@@ -7,7 +7,7 @@ public class SonarRuleViolator {
 
 	public void infiniteLoop() {
 		while (true) {
-			//Uncomment this to fix rule violation
+			/* Uncomment this to fix rule violation */
 //			break;
 		}
 	}
@@ -23,8 +23,8 @@ public class SonarRuleViolator {
 		      }
 		    }
 
-		    /* ... */
-		    return;      // Noncompliant - prevents the RuntimeException from being propagated
+		    /* Noncompliant - prevents the RuntimeException from being propagated */
+		    return;    
 		  }
 		}
 }

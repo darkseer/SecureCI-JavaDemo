@@ -7,7 +7,7 @@ node (){
     
     try {
     
- //   step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
+    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
     
 /*
  Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 

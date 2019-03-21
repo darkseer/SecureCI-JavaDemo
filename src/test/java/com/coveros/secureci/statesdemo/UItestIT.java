@@ -51,6 +51,7 @@ public class UItestIT {
 
         // Take a screenshot of the page.
 		// Adding comment to trigger build.
+		// Adding another comment.
 		//File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
 		//FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
  

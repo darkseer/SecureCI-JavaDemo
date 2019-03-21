@@ -1,5 +1,8 @@
 package com.coveros.secureci.statesdemo;
 
+import java.io.File;
+import java.io.IOException;
+
 public class SonarRuleViolator {
 
 	public void infiniteLoop() {
@@ -8,4 +11,20 @@ public class SonarRuleViolator {
 //			break;
 		}
 	}
+	
+	public static void doSomethingWhichThrowsException(int q) {
+		  try {
+		    throw new RuntimeException();
+		  } finally {
+		    for (int i = 0; i < 10; i ++) {
+		      //...
+		      if (q == i) {
+		        break; // ignored
+		      }
+		    }
+
+		    /* ... */
+		    return;      // Noncompliant - prevents the RuntimeException from being propagated
+		  }
+		}
 }

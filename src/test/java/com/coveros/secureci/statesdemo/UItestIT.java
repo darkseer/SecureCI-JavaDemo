@@ -18,6 +18,7 @@
 
 package com.coveros.secureci.statesdemo;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
@@ -55,7 +56,7 @@ public class UItestIT {
 		// Adding comment to trigger build.
 		// Adding another comment.
 		File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
-		//FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
+		FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
  
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Puerto Rico" + "')]"));
 		assertTrue("Puerto Rico not found!", list.size() > 0);

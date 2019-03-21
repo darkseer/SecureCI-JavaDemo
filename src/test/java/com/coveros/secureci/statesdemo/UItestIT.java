@@ -21,10 +21,12 @@ package com.coveros.secureci.statesdemo;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class UItestIT {
         // Take a screenshot of the page.
 		// Adding comment to trigger build.
 		// Adding another comment.
-		//File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
+		File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
 		//FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
  
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Puerto Rico" + "')]"));

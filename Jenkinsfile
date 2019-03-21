@@ -195,7 +195,7 @@ node (){
 		    }
 		}finally {
 		
-            step([$class: 'LogParserPublisher', parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
+            step([$class: 'LogParserPublisher', parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false, showGraphs: true])
   
 		    stage("Stopping Containers"){
 			if (currentBuild.result == "FAILURE"){

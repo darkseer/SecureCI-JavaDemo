@@ -11,8 +11,6 @@ node (){
  Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 
 */        
 
-    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
-
 	parallel MVNSetup: {
             /*
              Setting up the path and environment variables for maven and obtaining the local ip address for the docker interface 
@@ -195,8 +193,9 @@ node (){
 			    }
 			}
 		    }
-		}
-		finally {
+		}catch(err){
+		    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
+		}finally {
 		    stage("Stopping Containers"){
 			if (currentBuild.result == "FAILURE"){
 			    stage("state capture"){

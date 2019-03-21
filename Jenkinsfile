@@ -76,10 +76,16 @@ node (){
 	    }
 	    
 	    stage("SonarQube Analysis") {
-            withSonarQubeEnv('My SonarQube Server') {
-                // requires SonarQube Scanner for Maven 3.2+
-                sh "${MAVEN_HOME}/bin/mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar"
-            }
+	    
+	            withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker', passwordVariable: 'nexuspass', usernameVariable: 'nexususer']]) {
+                    //Gather the it tests Gather the int coverage results
+                    sh "${MAVEN_HOME}/bin/mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar"
+                }
+                
+//            withSonarQubeEnv('My SonarQube Server') {
+//                // requires SonarQube Scanner for Maven 3.2+
+//                sh "${MAVEN_HOME}/bin/mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar"
+//            }
         }
             /*
              Parallel block that runs unit and integration tests at the same time. This is an overall time savings allowing 

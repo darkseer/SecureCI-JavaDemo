@@ -244,7 +244,7 @@ node (){
     finally {
 
 	stage ("Archive UI Test Screenshots") {
-	    archiveArtifacts 'screenshots/*.png'
+	    archiveArtifacts artifacts: 'screenshots/*.png'
 	}
 
 	stage ("clean workspace") {

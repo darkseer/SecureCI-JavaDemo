@@ -4,7 +4,7 @@ INSERT INTO states (state_name,capital_name) VALUES('Arizona','Phoenix');
 INSERT INTO states (state_name,capital_name) VALUES('Arkansas Little','Rock');
 INSERT INTO states (state_name,capital_name) VALUES('California','Sacrameno');
 INSERT INTO states (state_name,capital_name) VALUES('Colorado','Denver');
-INSERT INTO states (state_name,capital_name) VALUES('Connecicu','Harford');
+INSERT INTO states (state_name,capital_name) VALUES('Connecticut','Hartford');
 INSERT INTO states (state_name,capital_name) VALUES('Delaware','Dover');
 INSERT INTO states (state_name,capital_name) VALUES('Florida','Tallahassee');
 INSERT INTO states (state_name,capital_name) VALUES('Georgia','Alana');

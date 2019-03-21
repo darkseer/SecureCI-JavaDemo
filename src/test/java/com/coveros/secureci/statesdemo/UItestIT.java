@@ -51,8 +51,8 @@ public class UItestIT {
         System.out.println("Successfully opened the website" + URL);
 
         // Take a screenshot of the page.
-		File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
-		FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
+		//File screenshotFile = ((ChromeDriver) driver).getScreenshotAs(OutputType.FILE);
+		//FileUtils.copyFile(screenshotFile, new File("./second-int-test-screenshot.png"));
  
 		List<WebElement> list = driver.findElements(By.xpath("//*[contains(text(),'" + "Puerto Rico" + "')]"));
 		assertTrue("Puerto Rico not found!", list.size() > 0);

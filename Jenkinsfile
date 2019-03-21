@@ -11,7 +11,7 @@ node (){
  Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 
 */        
 
-    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "log-parser-rules", useProjectRule: false])
+    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
 
 	parallel MVNSetup: {
             /*

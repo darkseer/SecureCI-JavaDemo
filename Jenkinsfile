@@ -193,9 +193,12 @@ node (){
 			    }
 			}
 		    }
-		}catch(err){
-		    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
 		}finally {
+		
+		    node {
+               step([$class: 'LogParserPublisher', parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
+            }
+  
 		    stage("Stopping Containers"){
 			if (currentBuild.result == "FAILURE"){
 			    stage("state capture"){

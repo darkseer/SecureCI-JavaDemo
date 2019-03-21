@@ -167,8 +167,6 @@ node (){
 				sleep 20;
 				stage("Integration Tests") {
 				    sh "mvn -Dwebdriver.chrome.driver=/usr/java/secureci-testing-framework-1.3.0/chromedriver -Dwebdriver.gecko.driver=/usr/local/bin/geckodriver -Dmaven.test.failure.ignore=false verify -Dtomcat.port=${TOMCATPORT} -Dtomcat.ip=${DOCKER_HOST_INTERNAL_IP}"
-				    // Archive the build output artifacts.
-                    archiveArtifacts artifacts: '*.png'
 				}
 			    }
 			}
@@ -244,6 +242,11 @@ node (){
 	}
     }
     finally {
+
+	stage ("Archive UI Test Screenshots") {
+	    archiveArtifacts artifacts: '*.png'
+	}
+
 	stage ("clean workspace") {
 	    //sh "mvn clean"
 	}

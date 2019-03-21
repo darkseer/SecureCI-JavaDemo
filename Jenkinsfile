@@ -9,6 +9,10 @@ node (){
 /*
  Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 
 */        
+
+   step([$class: 'LogParserPublisher', parsingRulesPath: '/var/lib/jenkins/jenkins-rule-logparser', useProjectRule: false])
+   echo 'Error: oh no'
+   
 	parallel MVNSetup: {
             /*
              Setting up the path and environment variables for maven and obtaining the local ip address for the docker interface 

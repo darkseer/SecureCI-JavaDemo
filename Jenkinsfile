@@ -6,10 +6,12 @@ node (){
     currentBuild.result = "SUCCESS"
     
     try {
+    
+    step([$class: 'LogParserPublisher', failBuildOnError: true, parsingRulesPath: "${env.WORKSPACE}/log-parser-rules", useProjectRule: false])
+    
 /*
  Begin parallel block to setup the build tools (Maven and Docker) and check out the source code 
 */        
-   
 	parallel MVNSetup: {
             /*
              Setting up the path and environment variables for maven and obtaining the local ip address for the docker interface 
@@ -191,9 +193,7 @@ node (){
 			    }
 			}
 		    }
-		}catch(all)
-
-{ print "ERROR: LogParserPublisher failed: \n" +all }
+		}
 		finally {
 		    stage("Stopping Containers"){
 			if (currentBuild.result == "FAILURE"){

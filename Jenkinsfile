@@ -79,6 +79,16 @@ node (){
              integration tests
              */
 	    parallel UnitTests: {
+	    
+	    
+	     stage("SonarQube Analysis") {
+            withSonarQubeEnv('My SonarQube Server') {
+                // requires SonarQube Scanner for Maven 3.2+
+                sh "${MAVEN_HOME}/bin/mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.2:sonar"
+            }
+        }
+	    
+	    
 		stage("Unit Tests"){
                     /*
                      Run unit tests in the maven container against already built code. 
